@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario Eventi Scolastici</title>
+    <title>Calendario Eventi Scolastici I.C. Alta Val di Sole</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -11,19 +11,6 @@
             margin: 0;
             padding: 0;
             color: #333;
-            background-image: url('sfondo.jpg');
-            background-size: cover;
-            background-position: center;
-        }
-
-        .logo-container {
-            text-align: left;
-            padding: 10px;
-        }
-
-        .logo-container img {
-            max-width: 100px;
-            height: auto;
         }
 
         #container {
@@ -32,7 +19,6 @@
             background-color: #fff;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
         }
 
         .nav {
@@ -60,7 +46,6 @@
             cursor: pointer;
             border-radius: 5px;
             transition: background-color 0.3s, color 0.3s;
-            font-family: 'Arial', sans-serif;
         }
 
         .filter-toggle:hover {
@@ -132,10 +117,6 @@
 </head>
 <body>
 
-    <div class="logo-container">
-        <img src="Logo.png" alt="Logo Scuola">
-    </div>
-
     <div id="container">
         <div class="nav">
             <h1>Calendario Eventi Scolastici</h1>
@@ -150,7 +131,7 @@
             </div>
         </div>
 
-        <div class="event-list">
+        <div class="event-list" id="eventList">
             <div class="event" data-date="Giugno 2025">
                 <img src="cccogolo.png" alt="Evento 1">
                 <div class="event-content">
