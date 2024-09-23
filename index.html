@@ -92,20 +92,22 @@
             padding: 10px 20px;
             font-size: 1em;
             color: #fff;
-            background-color: #20C997;
+            background-color: #007BFF; /* Nuovo colore */
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
         }
 
         .toggle-button:hover {
-            background-color: #17A589; /* Colore al passaggio del mouse */
+            background-color: #0056b3; /* Colore al passaggio del mouse */
+            transform: scale(1.05);
         }
     </style>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.it.js'></script> <!-- Aggiunta lingua italiana -->
 </head>
 <body>
 
@@ -252,7 +254,7 @@
             });
 
             // Mostra la vista elenco per default
-            $('.event-list').show();
+            $('#calendar').hide();
 
             // Cambio visualizzazione
             $('#toggleView').click(function() {
@@ -271,5 +273,4 @@
 
 </body>
 </html>
-
 
