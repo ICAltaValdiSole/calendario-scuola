@@ -27,22 +27,23 @@
         }
 
         #container {
-            display: flex;
             max-width: 900px;
             margin: 20px auto;
             background-color: #fff;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
         }
 
         .nav {
             padding: 20px;
-            border-right: 1px solid #eee;
-            width: 200px;
+            background-color: #20C997;
+            color: white;
         }
 
         .nav h2 {
-            color: #20C997;
+            margin: 0;
+            cursor: pointer;
         }
 
         .nav button {
@@ -51,7 +52,7 @@
             padding: 10px;
             font-size: 1em;
             color: #fff;
-            background-color: #20C997;
+            background-color: #17a2b8;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -59,12 +60,12 @@
         }
 
         .nav button:hover {
-            background-color: #17a2b8;
+            background-color: #138496;
         }
 
         .event-list {
             padding: 20px;
-            flex: 1;
+            display: none; /* Inizialmente nascosto */
         }
 
         h1 {
@@ -114,15 +115,16 @@
     </div>
 
     <div id="container">
-        <div class="nav">
+        <div class="nav" onclick="toggleMenu()">
             <h2>Filtra per Mese</h2>
+        </div>
+
+        <div class="event-list" id="eventList">
             <button onclick="filterEvents('Giugno 2025')">Giugno 2025</button>
             <button onclick="filterEvents('Luglio 2025')">Luglio 2025</button>
             <button onclick="filterEvents('Agosto 2025')">Agosto 2025</button>
             <button onclick="showAllEvents()">Mostra Tutti</button>
-        </div>
 
-        <div class="event-list" id="eventList">
             <h1>Calendario Eventi Scolastici</h1>
 
             <div class="event" data-date="Giugno 2025">
@@ -176,14 +178,15 @@
     </div>
 
     <script>
+        function toggleMenu() {
+            const eventList = document.getElementById('eventList');
+            eventList.style.display = eventList.style.display === 'none' ? 'block' : 'none';
+        }
+
         function filterEvents(month) {
             const events = document.querySelectorAll('.event');
             events.forEach(event => {
-                if (event.getAttribute('data-date') === month) {
-                    event.style.display = 'flex';
-                } else {
-                    event.style.display = 'none';
-                }
+                event.style.display = event.getAttribute('data-date') === month ? 'flex' : 'none';
             });
         }
 
