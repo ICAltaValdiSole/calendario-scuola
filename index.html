@@ -96,6 +96,11 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-button:hover {
+            background-color: #17A589; /* Colore al passaggio del mouse */
         }
     </style>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
@@ -110,13 +115,10 @@
     </div>
 
     <!-- Pulsante per cambiare visualizzazione -->
-    <button class="toggle-button" id="toggleView">Mostra come Elenco</button>
-
-    <!-- Calendario eventi -->
-    <div id='calendar'></div>
+    <button class="toggle-button" id="toggleView">Mostra come Calendario</button>
 
     <!-- Elenco eventi -->
-    <div class="event-list">
+    <div class="event-list" style="display: block;">
         <h1>Calendario Eventi Scolastici</h1>
 
         <!-- Evento 1 -->
@@ -184,7 +186,11 @@
                 <div class="event-description">Scrutinio per le classi 2A e 3A della sezione C.</div>
             </div>
         </div>
+    </div>
 
+    <!-- Calendario eventi -->
+    <div id='calendar'>
+        <h1>Calendario Eventi Scolastici</h1>
     </div>
 
     <script>
@@ -245,8 +251,8 @@
                 }
             });
 
-            // Mostra la vista calendario per default
-            $('#calendar').show();
+            // Mostra la vista elenco per default
+            $('.event-list').show();
 
             // Cambio visualizzazione
             $('#toggleView').click(function() {
@@ -265,4 +271,5 @@
 
 </body>
 </html>
+
 
