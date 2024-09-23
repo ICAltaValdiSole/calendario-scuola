@@ -119,7 +119,6 @@
     <div class="event-list" style="display: block;">
         <h1>Calendario Eventi Scolastici</h1>
 
-        <!-- Elenco eventi -->
         <div class="event">
             <img src="cccogolo.png" alt="Evento 1">
             <div class="event-content">
@@ -193,7 +192,7 @@
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
-                locale: 'it', // Imposta la lingua su italiano
+                locale: 'it',
                 events: [
                     {
                         title: 'Consigli di classe - SP COGOLO',
@@ -243,7 +242,6 @@
                 }
             });
 
-            // Cambia visualizzazione
             $('#toggleView').click(function() {
                 if ($('#calendar').is(':visible')) {
                     $('#calendar').hide();
