@@ -8,7 +8,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-image: url('sfondo.jpg'); /* Sostituisci con il percorso della tua immagine */
+            background-image: url('sfondo.jpg');
             background-size: cover;
             margin: 0;
             padding: 0;
@@ -21,18 +21,17 @@
         }
 
         .logo-container img {
-            max-width: 100px; /* Logo più piccolo */
+            max-width: 100px;
             height: auto;
         }
 
         #calendar, .event-list {
             max-width: 900px;
-            margin: 20px auto; /* Margine per il contenitore */
-            background-color: #fff; /* Sfondo bianco */
+            margin: 20px auto;
+            background-color: #fff;
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            display: none; /* Nascondi inizialmente */
         }
 
         .event {
@@ -62,7 +61,7 @@
         .event-date {
             font-weight: bold;
             font-size: 1.2em;
-            color: #20C997;  /* Colore aggiornato */
+            color: #20C997;
             margin-bottom: 5px;
         }
 
@@ -92,7 +91,7 @@
             padding: 10px 20px;
             font-size: 1em;
             color: #fff;
-            background-color: #20C997; /* Verde */
+            background-color: #20C997;
             border: none;
             border-radius: 5px;
             cursor: pointer;
@@ -100,30 +99,27 @@
         }
 
         .toggle-button:hover {
-            background-color: #17a2b8; /* Colore al passaggio del mouse */
+            background-color: #17a2b8;
             transform: scale(1.05);
         }
     </style>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.it.js'></script> <!-- Aggiunta lingua italiana -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.it.js'></script>
 </head>
 <body>
 
-    <!-- Logo della scuola -->
     <div class="logo-container">
         <img src="Logo.png" alt="Logo Scuola">
     </div>
 
-    <!-- Pulsante per cambiare visualizzazione -->
     <button class="toggle-button" id="toggleView">Mostra come Calendario</button>
 
-    <!-- Elenco eventi -->
     <div class="event-list" style="display: block;">
         <h1>Calendario Eventi Scolastici</h1>
 
-        <!-- Evento 1 -->
+        <!-- Elenco eventi -->
         <div class="event">
             <img src="cccogolo.png" alt="Evento 1">
             <div class="event-content">
@@ -134,7 +130,6 @@
             </div>
         </div>
 
-        <!-- Evento 2 -->
         <div class="event">
             <img src="cccommezzadura.png" alt="Evento 2">
             <div class="event-content">
@@ -145,7 +140,6 @@
             </div>
         </div>
 
-        <!-- Evento 3 -->
         <div class="event">
             <img src="immaginedaaggiungere.png" alt="Evento 3">
             <div class="event-content">
@@ -156,7 +150,6 @@
             </div>
         </div>
 
-        <!-- Evento 4 -->
         <div class="event">
             <img src="ccvermiglio.png" alt="Evento 4">
             <div class="event-content">
@@ -167,7 +160,6 @@
             </div>
         </div>
 
-        <!-- Evento 5 -->
         <div class="event">
             <img src="immaginedaaggiungere.png" alt="Evento 5">
             <div class="event-content">
@@ -178,7 +170,6 @@
             </div>
         </div>
 
-        <!-- Evento 6 -->
         <div class="event">
             <img src="immaginedaaggiungere.png" alt="Evento 6">
             <div class="event-content">
@@ -190,20 +181,19 @@
         </div>
     </div>
 
-    <!-- Calendario eventi -->
-    <div id='calendar'>
+    <div id='calendar' style="display: none;">
         <h1>Calendario Eventi Scolastici</h1>
     </div>
 
     <script>
         $(document).ready(function() {
-            // Inizializza il calendario
             $('#calendar').fullCalendar({
                 header: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'month,agendaWeek,agendaDay'
                 },
+                locale: 'it', // Imposta la lingua su italiano
                 events: [
                     {
                         title: 'Consigli di classe - SP COGOLO',
@@ -253,10 +243,7 @@
                 }
             });
 
-            // Mostra la vista elenco per default
-            $('#calendar').hide();
-
-            // Cambio visualizzazione
+            // Cambia visualizzazione
             $('#toggleView').click(function() {
                 if ($('#calendar').is(':visible')) {
                     $('#calendar').hide();
