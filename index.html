@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
-    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.css' rel='stylesheet' />
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -25,22 +24,18 @@
             height: auto;
         }
 
-        #calendar {
+        #calendar, .event-list {
             max-width: 900px;
             margin: 20px auto;
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.9);
             border-radius: 12px;
             padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .event-list {
-            max-width: 900px;
-            margin: 20px auto;
-            background-color: #fff;
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .event {
@@ -92,10 +87,46 @@
         .toggle-button:hover {
             background-color: #17a2b8;
         }
+
+        .month {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .day {
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 5px;
+            position: relative;
+            height: 100px;
+            background-color: #f8f9fa;
+            transition: background-color 0.3s;
+        }
+
+        .day:hover {
+            background-color: #e2f0d9;
+        }
+
+        .event-label {
+            position: absolute;
+            bottom: 5px;
+            left: 5px;
+            background-color: #20C997;
+            color: white;
+            padding: 3px;
+            border-radius: 3px;
+            font-size: 0.8em;
+        }
+
+        .month-header {
+            text-align: center;
+            font-size: 2em;
+            color: #20C997;
+            margin-bottom: 20px;
+        }
     </style>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/main.min.js'></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/5.10.1/locales/it.min.js'></script>
 </head>
 <body>
 
@@ -157,59 +188,50 @@
         </div>
     </div>
 
-    <div id='calendar' style="display: none;"></div>
+    <div id="calendar" style="display: none;">
+        <h1 class="month-header">Giugno 2025</h1>
+        <div class="month" id="month"></div>
+    </div>
 
     <script>
-        $(document).ready(function() {
-            var calendarEl = document.getElementById('calendar');
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                locale: 'it',
-                initialView: 'dayGridMonth',
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                events: [
-                    {
-                        title: 'Consigli di classe - SP COGOLO',
-                        start: '2025-06-04',
-                    },
-                    {
-                        title: 'Consigli di classe - SP COMMEZZADURA',
-                        start: '2025-06-05',
-                    },
-                    {
-                        title: 'Dipartimenti - SSdPG',
-                        start: '2025-06-05',
-                    },
-                    {
-                        title: 'Consigli di classe - SP Vermiglio',
-                        start: '2025-06-05',
-                    },
-                    {
-                        title: 'Scrutinio - SEZIONE B - CLASSE 1A',
-                        start: '2025-06-11',
-                    },
-                    {
-                        title: 'Scrutinio - SEZIONE C - CLASSI 2A e 3A',
-                        start: '2025-06-12',
-                    }
-                ]
-            });
-            calendar.render();
+        const events = [
+            { date: '2025-06-04', title: 'Consigli di classe - SP COGOLO' },
+            { date: '2025-06-05', title: 'Consigli di classe - SP COMMEZZADURA' },
+            { date: '2025-06-05', title: 'Dipartimenti - SSdPG' },
+            { date: '2025-06-05', title: 'Consigli di classe - SP Vermiglio' },
+            { date: '2025-06-11', title: 'Scrutinio - SEZIONE B - CLASSE 1A' },
+            { date: '2025-06-12', title: 'Scrutinio - SEZIONE C - CLASSI 2A e 3A' },
+        ];
 
-            $('#toggleView').click(function() {
-                if ($('#calendar').is(':visible')) {
-                    $('#calendar').hide();
-                    $('.event-list').show();
-                    $(this).text('Mostra come Calendario');
-                } else {
-                    $('#calendar').show();
-                    $('.event-list').hide();
-                    $(this).text('Mostra come Elenco');
-                }
-            });
+        function createCalendar() {
+            const monthDiv = document.getElementById('month');
+            monthDiv.innerHTML = '';
+            const daysInMonth = 30; // Giugno ha 30 giorni
+            for (let i = 1; i <= daysInMonth; i++) {
+                const date = `2025-06-${i.toString().padStart(2, '0')}`;
+                const dayDiv = document.createElement('div');
+                dayDiv.classList.add('day');
+                dayDiv.innerText = i;
+
+                events.forEach(event => {
+                    if (event.date === date) {
+                        const eventLabel = document.createElement('div');
+                        eventLabel.classList.add('event-label');
+                        eventLabel.innerText = event.title;
+                        dayDiv.appendChild(eventLabel);
+                    }
+                });
+
+                monthDiv.appendChild(dayDiv);
+            }
+        }
+
+        document.getElementById('toggleView').addEventListener('click', function() {
+            const isCalendarVisible = document.getElementById('calendar').style.display === 'block';
+            document.getElementById('calendar').style.display = isCalendarVisible ? 'none' : 'block';
+            document.querySelector('.event-list').style.display = isCalendarVisible ? 'block' : 'none';
+            this.textContent = isCalendarVisible ? 'Mostra come Calendario' : 'Mostra come Elenco';
+            if (!isCalendarVisible) createCalendar();
         });
     </script>
 </body>
