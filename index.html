@@ -26,13 +26,45 @@
             height: auto;
         }
 
-        #calendar, .event-list {
+        #container {
+            display: flex;
             max-width: 900px;
             margin: 20px auto;
             background-color: #fff;
             border-radius: 12px;
-            padding: 20px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav {
+            padding: 20px;
+            border-right: 1px solid #eee;
+            width: 200px;
+        }
+
+        .nav h2 {
+            color: #20C997;
+        }
+
+        .nav button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #20C997;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .nav button:hover {
+            background-color: #17a2b8;
+        }
+
+        .event-list {
+            padding: 20px;
+            flex: 1;
         }
 
         h1 {
@@ -73,80 +105,6 @@
             color: #333;
             margin: 0 0 5px;
         }
-
-        .toggle-button {
-            display: block;
-            margin: 20px auto;
-            padding: 10px 20px;
-            font-size: 1em;
-            color: #fff;
-            background-color: #20C997;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .toggle-button:hover {
-            background-color: #17a2b8;
-        }
-
-        .month {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            margin-top: 20px;
-        }
-
-        .day {
-            border: 1px solid #ddd;
-            padding: 10px;
-            border-radius: 5px;
-            position: relative;
-            height: 120px;
-            background-color: #fff;
-            transition: background-color 0.3s;
-            cursor: pointer;
-        }
-
-        .day:hover {
-            background-color: #e2f0d9;
-        }
-
-        .event-label {
-            position: absolute;
-            bottom: 5px;
-            left: 5px;
-            background-color: #20C997;
-            color: white;
-            padding: 5px;
-            border-radius: 3px;
-            font-size: 0.8em;
-        }
-
-        .event-tooltip {
-            display: none;
-            position: absolute;
-            bottom: 100%;
-            left: 0;
-            background-color: #333;
-            color: white;
-            padding: 5px;
-            border-radius: 3px;
-            font-size: 0.9em;
-            z-index: 10;
-        }
-
-        .day:hover .event-tooltip {
-            display: block;
-        }
-
-        .month-header {
-            text-align: center;
-            font-size: 2em;
-            color: #20C997;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body>
@@ -155,109 +113,86 @@
         <img src="Logo.png" alt="Logo Scuola">
     </div>
 
-    <button class="toggle-button" id="toggleView">Mostra come Calendario</button>
-
-    <div class="event-list" style="display: block;">
-        <h1>Calendario Eventi Scolastici</h1>
-
-        <div class="event">
-            <img src="cccogolo.png" alt="Evento 1">
-            <div class="event-content">
-                <div class="event-date">4 Giugno 2025</div>
-                <div class="event-title">Consigli di classe - SP COGOLO</div>
-            </div>
+    <div id="container">
+        <div class="nav">
+            <h2>Filtra per Mese</h2>
+            <button onclick="filterEvents('Giugno 2025')">Giugno 2025</button>
+            <button onclick="filterEvents('Luglio 2025')">Luglio 2025</button>
+            <button onclick="filterEvents('Agosto 2025')">Agosto 2025</button>
+            <button onclick="showAllEvents()">Mostra Tutti</button>
         </div>
 
-        <div class="event">
-            <img src="cccommezzadura.png" alt="Evento 2">
-            <div class="event-content">
-                <div class="event-date">5 Giugno 2025</div>
-                <div class="event-title">Consigli di classe - SP COMMEZZADURA</div>
+        <div class="event-list" id="eventList">
+            <h1>Calendario Eventi Scolastici</h1>
+
+            <div class="event" data-date="Giugno 2025">
+                <img src="cccogolo.png" alt="Evento 1">
+                <div class="event-content">
+                    <div class="event-date">4 Giugno 2025</div>
+                    <div class="event-title">Consigli di classe - SP COGOLO</div>
+                </div>
+            </div>
+
+            <div class="event" data-date="Giugno 2025">
+                <img src="cccommezzadura.png" alt="Evento 2">
+                <div class="event-content">
+                    <div class="event-date">5 Giugno 2025</div>
+                    <div class="event-title">Consigli di classe - SP COMMEZZADURA</div>
+                </div>
+            </div>
+
+            <div class="event" data-date="Giugno 2025">
+                <img src="immaginedaaggiungere.png" alt="Evento 3">
+                <div class="event-content">
+                    <div class="event-date">5 Giugno 2025</div>
+                    <div class="event-title">Dipartimenti - SSdPG</div>
+                </div>
+            </div>
+
+            <div class="event" data-date="Giugno 2025">
+                <img src="ccvermiglio.png" alt="Evento 4">
+                <div class="event-content">
+                    <div class="event-date">5 Giugno 2025</div>
+                    <div class="event-title">Consigli di classe - SP Vermiglio</div>
+                </div>
+            </div>
+
+            <div class="event" data-date="Giugno 2025">
+                <img src="immaginedaaggiungere.png" alt="Evento 5">
+                <div class="event-content">
+                    <div class="event-date">11 Giugno 2025</div>
+                    <div class="event-title">Scrutinio - SEZIONE B - CLASSE 1A</div>
+                </div>
+            </div>
+
+            <div class="event" data-date="Giugno 2025">
+                <img src="immaginedaaggiungere.png" alt="Evento 6">
+                <div class="event-content">
+                    <div class="event-date">12 Giugno 2025</div>
+                    <div class="event-title">Scrutinio - SEZIONE C - CLASSI 2A e 3A</div>
+                </div>
             </div>
         </div>
-
-        <div class="event">
-            <img src="immaginedaaggiungere.png" alt="Evento 3">
-            <div class="event-content">
-                <div class="event-date">5 Giugno 2025</div>
-                <div class="event-title">Dipartimenti - SSdPG</div>
-            </div>
-        </div>
-
-        <div class="event">
-            <img src="ccvermiglio.png" alt="Evento 4">
-            <div class="event-content">
-                <div class="event-date">5 Giugno 2025</div>
-                <div class="event-title">Consigli di classe - SP Vermiglio</div>
-            </div>
-        </div>
-
-        <div class="event">
-            <img src="immaginedaaggiungere.png" alt="Evento 5">
-            <div class="event-content">
-                <div class="event-date">11 Giugno 2025</div>
-                <div class="event-title">Scrutinio - SEZIONE B - CLASSE 1A</div>
-            </div>
-        </div>
-
-        <div class="event">
-            <img src="immaginedaaggiungere.png" alt="Evento 6">
-            <div class="event-content">
-                <div class="event-date">12 Giugno 2025</div>
-                <div class="event-title">Scrutinio - SEZIONE C - CLASSI 2A e 3A</div>
-            </div>
-        </div>
-    </div>
-
-    <div id="calendar" style="display: none;">
-        <h1 class="month-header">Giugno 2025</h1>
-        <div class="month" id="month"></div>
     </div>
 
     <script>
-        const events = [
-            { date: '2025-06-04', title: 'Consigli di classe - SP COGOLO' },
-            { date: '2025-06-05', title: 'Consigli di classe - SP COMMEZZADURA' },
-            { date: '2025-06-05', title: 'Dipartimenti - SSdPG' },
-            { date: '2025-06-05', title: 'Consigli di classe - SP Vermiglio' },
-            { date: '2025-06-11', title: 'Scrutinio - SEZIONE B - CLASSE 1A' },
-            { date: '2025-06-12', title: 'Scrutinio - SEZIONE C - CLASSI 2A e 3A' },
-        ];
-
-        function createCalendar() {
-            const monthDiv = document.getElementById('month');
-            monthDiv.innerHTML = '';
-            const daysInMonth = 30; // Giugno ha 30 giorni
-            for (let i = 1; i <= daysInMonth; i++) {
-                const date = `2025-06-${i.toString().padStart(2, '0')}`;
-                const dayDiv = document.createElement('div');
-                dayDiv.classList.add('day');
-                dayDiv.innerText = i;
-
-                const eventToday = events.filter(event => event.date === date);
-                eventToday.forEach(event => {
-                    const eventLabel = document.createElement('div');
-                    eventLabel.classList.add('event-label');
-                    eventLabel.innerText = event.title;
-                    dayDiv.appendChild(eventLabel);
-
-                    const tooltip = document.createElement('div');
-                    tooltip.classList.add('event-tooltip');
-                    tooltip.innerText = event.title;
-                    dayDiv.appendChild(tooltip);
-                });
-
-                monthDiv.appendChild(dayDiv);
-            }
+        function filterEvents(month) {
+            const events = document.querySelectorAll('.event');
+            events.forEach(event => {
+                if (event.getAttribute('data-date') === month) {
+                    event.style.display = 'flex';
+                } else {
+                    event.style.display = 'none';
+                }
+            });
         }
 
-        document.getElementById('toggleView').addEventListener('click', function() {
-            const isCalendarVisible = document.getElementById('calendar').style.display === 'block';
-            document.getElementById('calendar').style.display = isCalendarVisible ? 'none' : 'block';
-            document.querySelector('.event-list').style.display = isCalendarVisible ? 'block' : 'none';
-            this.textContent = isCalendarVisible ? 'Mostra come Calendario' : 'Mostra come Elenco';
-            if (!isCalendarVisible) createCalendar();
-        });
+        function showAllEvents() {
+            const events = document.querySelectorAll('.event');
+            events.forEach(event => {
+                event.style.display = 'flex';
+            });
+        }
     </script>
 </body>
 </html>
