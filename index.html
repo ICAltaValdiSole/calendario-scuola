@@ -11,7 +11,7 @@
             margin: 0;
             padding: 0;
             color: #333;
-            background-image: url('sfondo.jpg'); /* Sfondo visibile */
+            background-image: url('sfondo.jpg');
             background-size: cover;
             background-position: center;
         }
@@ -39,38 +39,61 @@
             padding: 20px;
             background-color: #20C997;
             color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .nav h2 {
+        .nav h1 {
             margin: 0;
-            cursor: default;
         }
 
-        .nav button {
-            display: block;
-            margin: 10px 0;
+        .filter-dropdown {
+            position: relative;
+        }
+
+        .filter-toggle {
+            background-color: white;
+            border: 1px solid #20C997;
+            color: #20C997;
             padding: 10px;
-            font-size: 1em;
-            color: #fff;
-            background-color: #17a2b8;
-            border: none;
-            border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+            font-family: 'Arial', sans-serif;
         }
 
-        .nav button:hover {
-            background-color: #138496;
+        .filter-toggle:hover {
+            background-color: #20C997;
+            color: white;
+        }
+
+        .filter-options {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            z-index: 1;
+            margin-top: 5px;
+        }
+
+        .filter-options button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            text-align: left;
+            color: #333;
+        }
+
+        .filter-options button:hover {
+            background-color: #e9f9f8;
         }
 
         .event-list {
             padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 20px;
-            color: #20C997;
         }
 
         .event {
@@ -115,16 +138,19 @@
 
     <div id="container">
         <div class="nav">
-            <h2>Filtra per Mese</h2>
-            <button onclick="filterEvents('Giugno 2025')">Giugno 2025</button>
-            <button onclick="filterEvents('Luglio 2025')">Luglio 2025</button>
-            <button onclick="filterEvents('Agosto 2025')">Agosto 2025</button>
-            <button onclick="showAllEvents()">Mostra Tutti</button>
+            <h1>Calendario Eventi Scolastici</h1>
+            <div class="filter-dropdown">
+                <button class="filter-toggle" onclick="toggleFilter()">Filtra per Mese</button>
+                <div class="filter-options" id="filterOptions">
+                    <button onclick="filterEvents('Giugno 2025')">Giugno 2025</button>
+                    <button onclick="filterEvents('Luglio 2025')">Luglio 2025</button>
+                    <button onclick="filterEvents('Agosto 2025')">Agosto 2025</button>
+                    <button onclick="showAllEvents()">Mostra Tutti</button>
+                </div>
+            </div>
         </div>
 
         <div class="event-list">
-            <h1>Calendario Eventi Scolastici</h1>
-
             <div class="event" data-date="Giugno 2025">
                 <img src="cccogolo.png" alt="Evento 1">
                 <div class="event-content">
@@ -176,11 +202,17 @@
     </div>
 
     <script>
+        function toggleFilter() {
+            const filterOptions = document.getElementById('filterOptions');
+            filterOptions.style.display = filterOptions.style.display === 'block' ? 'none' : 'block';
+        }
+
         function filterEvents(month) {
             const events = document.querySelectorAll('.event');
             events.forEach(event => {
                 event.style.display = event.getAttribute('data-date') === month ? 'flex' : 'none';
             });
+            toggleFilter(); // Chiudi il menu dopo il filtro
         }
 
         function showAllEvents() {
@@ -188,6 +220,7 @@
             events.forEach(event => {
                 event.style.display = 'flex';
             });
+            toggleFilter(); // Chiudi il menu dopo la visualizzazione di tutti
         }
     </script>
 </body>
