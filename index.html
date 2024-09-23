@@ -14,16 +14,19 @@
             background-image: url('sfondo.jpg'); /* Sfondo visibile */
             background-size: cover;
             background-position: center;
+            height: 100vh; /* Altezza della pagina */
+            overflow: hidden; /* Nascondi overflow di default */
         }
 
         #container {
             max-width: 900px;
-            margin: 20px auto;
-            background-color: #fff;
+            height: 100%; /* Prendi tutta l'altezza */
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.9); /* Sfondo bianco con trasparenza */
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 20px; /* Padding per l'area del contenuto */
-            position: relative;
+            padding: 20px;
+            overflow-y: auto; /* Aggiungi barra di scorrimento */
         }
 
         .logo-container {
@@ -153,7 +156,7 @@
 
         <div class="event-list" id="eventList">
             <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 1">
+                <img src="cccogolo.png" alt="Evento 1">
                 <div class="event-content">
                     <div class="event-date">4 Giugno 2025</div>
                     <div class="event-title">Consigli di classe - SP COGOLO</div>
@@ -161,7 +164,7 @@
             </div>
 
             <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 2">
+                <img src="cccommezzadura.png" alt="Evento 2">
                 <div class="event-content">
                     <div class="event-date">5 Giugno 2025</div>
                     <div class="event-title">Consigli di classe - SP COMMEZZADURA</div>
@@ -169,7 +172,7 @@
             </div>
 
             <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 3">
+                <img src="dipartimenti.png" alt="Evento 3">
                 <div class="event-content">
                     <div class="event-date">5 Giugno 2025</div>
                     <div class="event-title">Dipartimenti - SSdPG</div>
@@ -177,7 +180,7 @@
             </div>
 
             <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 4">
+                <img src="ccvermiglio.png" alt="Evento 4">
                 <div class="event-content">
                     <div class="event-date">5 Giugno 2025</div>
                     <div class="event-title">Consigli di classe - SP Vermiglio</div>
