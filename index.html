@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario Eventi Scolastici</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .calendar-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        h1 {
+            text-align: center;
+            color: #007BFF;
+        }
+        .event {
+            border-left: 5px solid #007BFF;
+            margin: 10px 0;
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .event:hover {
+            background-color: #e9f7fe;
+        }
+        .event-date {
+            font-weight: bold;
+            color: #007BFF;
+        }
+        .event-title {
+            margin: 5px 0 0;
+            font-size: 1.2em;
+        }
+        .event-description {
+            font-size: 0.9em;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="calendar-container">
+        <h1>Calendario Eventi Scolastici</h1>
+
+        <div class="event">
+            <div class="event-date">5 Ottobre 2024</div>
+            <div class="event-title">Consiglio di Classe</div>
+            <div class="event-description">Riunione per la classe 5A, ore 14:30.</div>
+        </div>
+
+        <div class="event">
+            <div class="event-date">10 Ottobre 2024</div>
+            <div class="event-title">Riunione Genitori</div>
+            <div class="event-description">Incontro con i genitori degli alunni della classe 3B, ore 16:00.</div>
+        </div>
+
+        <div class="event">
+            <div class="event-date">15 Ottobre 2024</div>
+            <div class="event-title">Esami di Recupero</div>
+            <div class="event-description">Sessione di recupero per gli studenti con debiti formativi, dalle ore 9:00.</div>
+        </div>
+    </div>
+</body>
+</html>
