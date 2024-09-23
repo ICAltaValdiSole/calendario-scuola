@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
+    <link href='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css' rel='stylesheet' />
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -12,73 +13,6 @@
             margin: 0;
             padding: 0;
             color: #333;
-        }
-
-        .calendar-container {
-            max-width: 900px;
-            margin: -20px auto 40px auto;
-            padding: 20px;
-            background-color: #fff; /* Sfondo bianco semi-trasparente */
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border-radius: 12px;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 2.4em;
-            color: #333;
-            margin-bottom: 40px;
-        }
-
-        .event {
-            display: flex;
-            border-bottom: 1px solid #eee;
-            padding: 20px 0;
-            align-items: center;
-            transition: transform 0.3s ease;
-        }
-
-        .event:hover {
-            transform: scale(1.02);
-        }
-
-        .event img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-right: 20px;
-        }
-
-        .event-content {
-            flex: 1;
-        }
-
-        .event-date {
-            font-weight: bold;
-            font-size: 1.2em;
-            color: #20C997;  /* Colore aggiornato */
-            margin-bottom: 5px;
-        }
-
-        .event-time {
-            font-size: 1em;
-            color: #555;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-
-        .event-title {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #333;
-            margin: 0 0 5px;
-        }
-
-        .event-description {
-            font-size: 1em;
-            color: #666;
-            margin: 0;
         }
 
         .logo-container {
@@ -90,7 +24,19 @@
             max-width: 100px; /* Logo più piccolo */
             height: auto;
         }
+
+        #calendar {
+            max-width: 900px;
+            margin: 20px auto; /* Margine per il calendario */
+            background-color: #fff; /* Sfondo bianco */
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
     </style>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js'></script>
 </head>
 <body>
 
@@ -100,75 +46,66 @@
     </div>
 
     <!-- Calendario eventi -->
-    <div class="calendar-container">
-        <h1>Calendario Eventi Scolastici</h1>
+    <div id='calendar'></div>
 
-        <!-- Evento 1 -->
-        <div class="event">
-            <img src="cccogolo.png" alt="Evento 1">
-            <div class="event-content">
-                <div class="event-date">4 Giugno 2024</div>
-                <div class="event-time">13:30 - 18:30</div>
-                <div class="event-title">Consigli di classe - SP COGOLO</div>
-                <div class="event-description">Riunione dei consigli di classe presso la Scuola Primaria COGOLO.</div>
-            </div>
-        </div>
-
-        <!-- Evento 2 -->
-        <div class="event">
-            <img src="cccommezzadura.png" alt="Evento 2">
-            <div class="event-content">
-                <div class="event-date">5 Giugno 2024</div>
-                <div class="event-time">13:30 - 18:30</div>
-                <div class="event-title">Consigli di classe - SP COMMEZZADURA</div>
-                <div class="event-description">Riunione dei consigli di classe presso la Scuola Primaria COMMEZZADURA.</div>
-            </div>
-        </div>
-
-        <!-- Evento 3 -->
-        <div class="event">
-            <img src="immaginedaaggiungere.png" alt="Evento 3">
-            <div class="event-content">
-                <div class="event-date">5 Giugno 2024</div>
-                <div class="event-time">14:30 - 17:30</div>
-                <div class="event-title">Dipartimenti - SSdPG</div>
-                <div class="event-description">Riunione dei dipartimenti presso la Scuola Secondaria di Primo Grado.</div>
-            </div>
-        </div>
-
-        <!-- Evento 4 -->
-        <div class="event">
-            <img src="ccvermiglio.png" alt="Evento 4">
-            <div class="event-content">
-                <div class="event-date">5 Giugno 2024</div>
-                <div class="event-time">13:30 - 17:30</div>
-                <div class="event-title">Consigli di classe - SP Vermiglio</div>
-                <div class="event-description">Riunione dei consigli di classe presso la Scuola Primaria Vermiglio.</div>
-            </div>
-        </div>
-
-        <!-- Evento 5 -->
-        <div class="event">
-            <img src="immaginedaaggiungere.png" alt="Evento 5">
-            <div class="event-content">
-                <div class="event-date">11 Giugno 2024</div>
-                <div class="event-time">14:30 - 18:15</div>
-                <div class="event-title">Scrutinio - SEZIONE B - CLASSE 1A</div>
-                <div class="event-description">Termine delle lezioni e scrutinio per la classe 1A della sezione B.</div>
-            </div>
-        </div>
-
-        <!-- Evento 6 -->
-        <div class="event">
-            <img src="immaginedaaggiungere.png" alt="Evento 6">
-            <div class="event-content">
-                <div class="event-date">12 Giugno 2024</div>
-                <div class="event-time">08:15 - 12:00</div>
-                <div class="event-title">Scrutinio - SEZIONE C - CLASSI 2A e 3A</div>
-                <div class="event-description">Scrutinio per le classi 2A e 3A della sezione C.</div>
-            </div>
-        </div>
-    </div>
+    <script>
+        $(document).ready(function() {
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                events: [
+                    {
+                        title: 'Consigli di classe - SP COGOLO',
+                        start: '2024-06-04T13:30:00',
+                        end: '2024-06-04T18:30:00',
+                        description: 'Riunione dei consigli di classe presso la Scuola Primaria COGOLO.'
+                    },
+                    {
+                        title: 'Consigli di classe - SP COMMEZZADURA',
+                        start: '2024-06-05T13:30:00',
+                        end: '2024-06-05T18:30:00',
+                        description: 'Riunione dei consigli di classe presso la Scuola Primaria COMMEZZADURA.'
+                    },
+                    {
+                        title: 'Dipartimenti - SSdPG',
+                        start: '2024-06-05T14:30:00',
+                        end: '2024-06-05T17:30:00',
+                        description: 'Riunione dei dipartimenti presso la Scuola Secondaria di Primo Grado.'
+                    },
+                    {
+                        title: 'Consigli di classe - SP Vermiglio',
+                        start: '2024-06-05T13:30:00',
+                        end: '2024-06-05T17:30:00',
+                        description: 'Riunione dei consigli di classe presso la Scuola Primaria Vermiglio.'
+                    },
+                    {
+                        title: 'Scrutinio - SEZIONE B - CLASSE 1A',
+                        start: '2024-06-11T14:30:00',
+                        end: '2024-06-11T18:15:00',
+                        description: 'Termine delle lezioni e scrutinio per la classe 1A della sezione B.'
+                    },
+                    {
+                        title: 'Scrutinio - SEZIONE C - CLASSI 2A e 3A',
+                        start: '2024-06-12T08:15:00',
+                        end: '2024-06-12T12:00:00',
+                        description: 'Scrutinio per le classi 2A e 3A della sezione C.'
+                    }
+                ],
+                eventRender: function(event, element) {
+                    element.qtip({
+                        content: event.description,
+                        position: {
+                            my: 'top center',
+                            at: 'bottom center'
+                        }
+                    });
+                }
+            });
+        });
+    </script>
 
 </body>
 </html>
