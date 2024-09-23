@@ -24,11 +24,19 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             position: relative;
             z-index: 1;
+            padding-top: 60px; /* Spazio per il logo */
         }
 
         .logo-container {
-            text-align: center;
-            padding: 20px;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+        }
+
+        .logo-container img {
+            max-width: 80px; /* Dimensioni ridotte */
+            height: auto;
         }
 
         .nav {
@@ -128,7 +136,7 @@
 <body>
 
     <div class="logo-container">
-        <img src="Logo.png" alt="Logo Scuola" style="max-width: 150px; height: auto;">
+        <img src="Logo.png" alt="Logo Scuola">
     </div>
 
     <div id="container">
@@ -220,3 +228,4 @@
     </script>
 </body>
 </html>
+
