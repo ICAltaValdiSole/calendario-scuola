@@ -9,7 +9,7 @@
         :root {
             --primary-color: #0A9396;
             --secondary-color: #94D2BD;
-            --background-image: url('sfondoo.png');
+            --background-image: url('sfondo.jpg');
             --text-color: #001219;
             --card-background: #FFFFFE;
             --accent-color: #EE9B00;
@@ -296,41 +296,71 @@
             cursor: pointer;
         }
 
-       /* Sezione Preferiti */
-#favoritesSection {
-    margin-top: 50px;
-}
+        /* Sezione Preferiti */
+        #favoritesSection {
+            margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.8); /* Sfondo leggero */
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
 
-.favorite-item {
-    background-color: var(--card-background); /* Usa lo stesso sfondo delle card eventi */
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 15px; /* Arrotonda i bordi come gli eventi */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Usa la stessa ombra delle card */
-}
+        #favoritesSection h2 {
+            color: var(--primary-color); /* Colore del testo più visibile */
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
 
-.favorite-item h4 {
-    margin: 0;
-    color: var(--primary-color); /* Colore del testo in linea con la palette */
-}
+        .favorite-item {
+            background-color: var(--card-background);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--card-shadow);
+        }
 
-.remove-favorite {
-    background-color: var(--accent-color); /* Usa l'arancione accento per i pulsanti */
-    border: none;
-    padding: 8px 12px;
-    border-radius: 20px;
-    cursor: pointer;
-    color: white;
-    font-size: 0.8rem;
-}
+        .favorite-item h4 {
+            margin: 0;
+            color: var(--primary-color);
+        }
 
-.remove-favorite:hover {
-    background-color: #d08400;
-}
+        .remove-favorite {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.8rem;
+        }
 
+        .remove-favorite:hover {
+            background-color: #d08400;
+        }
+
+        /* Pulsante Scarica Preferiti */
+        .download-favorites {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px 15px;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            display: block;
+            font-size: 1rem;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-favorites:hover {
+            background-color: #087b80;
+        }
 
         @media (max-width: 768px) {
             .nav {
@@ -380,69 +410,16 @@
             </div>
         </div>
 
-       <div class="event-list" id="eventList">
-    <!-- Evento: Consigli di classe - SP Vermiglio -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">5</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Consigli di classe - SP Vermiglio</div>
-            <button class="open-modal" onclick="openModal('Consigli di classe - SP Vermiglio', '5 Giugno 2025', 'Consigli di classe - SP Vermiglio')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP Vermiglio', '5 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Consigli di classe - SP Passo Tonale -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">7</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Consigli di classe - SP Passo Tonale</div>
-            <button class="open-modal" onclick="openModal('Consigli di classe - SP Passo Tonale', '7 Giugno 2025', 'Consigli di classe - SP Passo Tonale')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP Passo Tonale', '7 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Termine delle lezioni -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">11</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Termine delle lezioni</div>
-            <button class="open-modal" onclick="openModal('Termine delle lezioni', '11 Giugno 2025', 'Termine delle lezioni')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Termine delle lezioni', '11 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Scrutinio Sezione B - Classe 1A -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">11</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Scrutinio Sezione B - Classe 1A</div>
-            <button class="open-modal" onclick="openModal('Scrutinio Sezione B - Classe 1A', '11 Giugno 2025', 'Scrutinio Sezione B - Classe 1A')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Scrutinio Sezione B - Classe 1A', '11 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-</div>
-
-            
-            <!-- Aggiungi altri eventi qui -->
-
+        <div class="event-list" id="eventList">
+            <!-- Inserisci qui gli eventi -->
         </div>
 
         <!-- Sezione Preferiti -->
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
             <div id="favoritesList"></div>
+            <!-- Pulsante per scaricare la lista dei preferiti -->
+            <button class="download-favorites" onclick="downloadFavorites()">Scarica Lista Preferiti</button>
         </div>
     </div>
 
@@ -543,6 +520,26 @@
             renderFavorites();
         }
 
+        // Funzione per scaricare i preferiti in un file .txt
+        function downloadFavorites() {
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            if (favorites.length === 0) {
+                showNotification('Nessun evento nei preferiti da scaricare.');
+                return;
+            }
+
+            let content = 'I tuoi eventi preferiti:\n\n';
+            favorites.forEach(fav => {
+                content += `${fav.title} - ${fav.date}\n`;
+            });
+
+            const blob = new Blob([content], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = 'eventi_preferiti.txt';
+            link.click();
+        }
+
         // Funzione per mostrare il modal con i dettagli dell'evento
         function openModal(title, date, description) {
             document.getElementById('modalTitle').textContent = title;
@@ -561,4 +558,5 @@
     </script>
 </body>
 </html>
+
 
