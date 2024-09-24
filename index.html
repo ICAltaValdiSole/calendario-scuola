@@ -36,6 +36,28 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
+        /* Notifica visiva */
+        #notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: var(--card-shadow);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        #notification.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
         /* Logo e nome della scuola */
         .logo-container {
             display: flex;
@@ -274,6 +296,41 @@
             cursor: pointer;
         }
 
+        /* Sezione Preferiti */
+        #favoritesSection {
+            margin-top: 50px;
+        }
+
+        .favorite-item {
+            background-color: var(--secondary-color);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--card-shadow);
+        }
+
+        .favorite-item h4 {
+            margin: 0;
+            color: var(--primary-color);
+        }
+
+        .remove-favorite {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.8rem;
+        }
+
+        .remove-favorite:hover {
+            background-color: #d08400;
+        }
+
         @media (max-width: 768px) {
             .nav {
                 flex-direction: column;
@@ -300,6 +357,9 @@
     </style>
 </head>
 <body>
+    <!-- Notifica visiva -->
+    <div id="notification">Evento aggiunto ai preferiti!</div>
+
     <div id="container">
         <div class="logo-container">
             <img src="Logo.png" alt="Logo Scuola">
@@ -359,6 +419,12 @@
             <!-- Aggiungi altri eventi qui -->
 
         </div>
+
+        <!-- Sezione Preferiti -->
+        <div id="favoritesSection">
+            <h2>I tuoi Eventi Preferiti</h2>
+            <div id="favoritesList"></div>
+        </div>
     </div>
 
     <!-- Modal per i dettagli dell'evento -->
@@ -408,10 +474,54 @@
             if (!favorites.find(e => e.title === title && e.date === date)) {
                 favorites.push(event);
                 localStorage.setItem('favorites', JSON.stringify(favorites));
-                alert('Evento aggiunto ai preferiti!');
+                showNotification('Evento aggiunto ai preferiti!');
             } else {
-                alert('Evento già nei preferiti.');
+                showNotification('Evento già nei preferiti.');
             }
+
+            renderFavorites();
+        }
+
+        // Funzione per mostrare la notifica visiva
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000); // Nascondi dopo 3 secondi
+        }
+
+        // Funzione per mostrare i preferiti salvati
+        function renderFavorites() {
+            const favoritesList = document.getElementById('favoritesList');
+            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+
+            favoritesList.innerHTML = ''; // Svuota la lista
+
+            if (favorites.length === 0) {
+                favoritesList.innerHTML = '<p>Nessun evento nei preferiti.</p>';
+            } else {
+                favorites.forEach(fav => {
+                    const item = document.createElement('div');
+                    item.className = 'favorite-item';
+                    item.innerHTML = `
+                        <h4>${fav.title} - ${fav.date}</h4>
+                        <button class="remove-favorite" onclick="removeFromFavorites('${fav.title}', '${fav.date}')">Rimuovi</button>
+                    `;
+                    favoritesList.appendChild(item);
+                });
+            }
+        }
+
+        // Funzione per rimuovere un evento dai preferiti
+        function removeFromFavorites(title, date) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            favorites = favorites.filter(e => e.title !== title || e.date !== date);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            showNotification('Evento rimosso dai preferiti.');
+            renderFavorites();
         }
 
         // Funzione per mostrare il modal con i dettagli dell'evento
@@ -426,6 +536,9 @@
         function closeModal() {
             document.getElementById('eventModal').style.display = 'none';
         }
+
+        // Mostra i preferiti al caricamento della pagina
+        window.onload = renderFavorites;
     </script>
 </body>
 </html>
