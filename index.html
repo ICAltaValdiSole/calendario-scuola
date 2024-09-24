@@ -9,7 +9,7 @@
         :root {
             --primary-color: #0A9396;
             --secondary-color: #94D2BD;
-            --background-image: url('sfondoo.png');
+            --background-image: url('sfondo.jpg');
             --text-color: #001219;
             --card-background: #FFFFFE;
             --accent-color: #EE9B00;
@@ -297,7 +297,7 @@
             border: none;
             padding: 8px 15px;
             border-radius: 20px;
-            font-size: 0.9rem; /* Ripristino del font */
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s ease;
@@ -412,7 +412,7 @@
             </div>
         </div>
 
-       <div class="event-list" id="eventList">
+         <div class="event-list" id="eventList">
     <!-- Evento: Consigli di classe SP COGOLO -->
     <div class="event" data-date="Giugno 2025">
         <div class="event-date">
@@ -700,7 +700,6 @@
     </div>
 </div>
 
-
         <!-- Sezione Preferiti -->
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
@@ -818,10 +817,7 @@
 
         // Funzione per mostrare il modal con i dettagli dell'evento
         function openModal(title, date, description) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalDate').textContent = date;
-            document.getElementById('modalDescription').textContent = description;
-            document.getElementById('eventModal').style.display = 'block';
+            alert(`Dettagli Evento:\nTitolo: ${title}\nData: ${date}\nDescrizione: ${description}`);
         }
 
         // Funzione per chiudere il modal
