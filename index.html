@@ -35,8 +35,12 @@
             background-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
+
+        /* Modifica per logo e nome della scuola */
         .logo-container {
-            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 20px;
         }
 
@@ -44,10 +48,17 @@
             max-width: 120px;
             height: auto;
             transition: transform 0.3s ease;
+            margin-right: 10px;
         }
 
         .logo-container img:hover {
             transform: scale(1.1);
+        }
+
+        .school-name {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--primary-color);
         }
 
         .nav {
@@ -57,7 +68,7 @@
             margin-bottom: 30px;
             background-color: var(--card-background);
             padding: 15px 20px;
-            border-radius: 10px;
+            border-radius: 20px;
             box-shadow: var(--card-shadow);
         }
 
@@ -77,10 +88,10 @@
             color: var(--card-background);
             border: none;
             padding: 12px 24px;
-            cursor: pointer;
-            border-radius: 25px;
+            border-radius: 30px;
             font-size: 1rem;
             font-weight: 600;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
@@ -127,17 +138,17 @@
 
         .event {
             background-color: var(--card-background);
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: var(--card-shadow);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
         }
 
         .event:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
 
         .event-date {
@@ -215,6 +226,7 @@
     <div id="container">
         <div class="logo-container">
             <img src="Logo.png" alt="Logo Scuola">
+            <span class="school-name">I.C. Alta Val di Sole</span>
         </div>
 
         <div class="nav">
@@ -294,3 +306,4 @@
     </script>
 </body>
 </html>
+
