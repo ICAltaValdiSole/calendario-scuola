@@ -342,8 +342,8 @@
             background-color: #d08400;
         }
 
-        /* Pulsante Scarica Preferiti */
-        .download-favorites {
+        /* Pulsante Stampa Preferiti */
+        .print-favorites {
             background-color: var(--primary-color);
             border: none;
             padding: 10px 15px;
@@ -358,8 +358,50 @@
             transition: background-color 0.3s ease;
         }
 
-        .download-favorites:hover {
+        .print-favorites:hover {
             background-color: #087b80;
+        }
+
+        /* Stile per la stampa */
+        @media print {
+            body {
+                background: white;
+            }
+
+            #container {
+                box-shadow: none;
+            }
+
+            .favorite-item {
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            #favoritesSection h2 {
+                font-size: 2rem;
+                color: black;
+                text-align: left;
+                margin-bottom: 40px;
+            }
+
+            .favorite-item h4 {
+                color: black;
+                font-size: 1.4rem;
+            }
+
+            .remove-favorite {
+                display: none;
+            }
+
+            .print-favorites {
+                display: none;
+            }
+
+            /* Nascondiamo gli altri elementi non necessari per la stampa */
+            .nav, .event-list, .logo-container, .filter-dropdown, .add-to-favorites, .open-modal, #notification {
+                display: none;
+            }
         }
 
         @media (max-width: 768px) {
@@ -465,8 +507,8 @@
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
             <div id="favoritesList"></div>
-            <!-- Pulsante per scaricare la lista dei preferiti -->
-            <button class="download-favorites" onclick="downloadFavorites()">Scarica Lista Preferiti</button>
+            <!-- Pulsante per stampare la lista dei preferiti -->
+            <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
         </div>
     </div>
 
@@ -565,26 +607,6 @@
             localStorage.setItem('favorites', JSON.stringify(favorites));
             showNotification('Evento rimosso dai preferiti.');
             renderFavorites();
-        }
-
-        // Funzione per scaricare i preferiti in un file .txt
-        function downloadFavorites() {
-            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            if (favorites.length === 0) {
-                showNotification('Nessun evento nei preferiti da scaricare.');
-                return;
-            }
-
-            let content = 'I tuoi eventi preferiti:\n\n';
-            favorites.forEach(fav => {
-                content += `${fav.title} - ${fav.date}\n`;
-            });
-
-            const blob = new Blob([content], { type: 'text/plain' });
-            const link = document.createElement('a');
-            link.href = URL.createObjectURL(blob);
-            link.download = 'eventi_preferiti.txt';
-            link.click();
         }
 
         // Funzione per mostrare il modal con i dettagli dell'evento
