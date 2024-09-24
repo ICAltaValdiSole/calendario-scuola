@@ -296,40 +296,41 @@
             cursor: pointer;
         }
 
-        /* Sezione Preferiti */
-        #favoritesSection {
-            margin-top: 50px;
-        }
+       /* Sezione Preferiti */
+#favoritesSection {
+    margin-top: 50px;
+}
 
-        .favorite-item {
-            background-color: var(--secondary-color);
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--card-shadow);
-        }
+.favorite-item {
+    background-color: var(--card-background); /* Usa lo stesso sfondo delle card eventi */
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 15px; /* Arrotonda i bordi come gli eventi */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Usa la stessa ombra delle card */
+}
 
-        .favorite-item h4 {
-            margin: 0;
-            color: var(--primary-color);
-        }
+.favorite-item h4 {
+    margin: 0;
+    color: var(--primary-color); /* Colore del testo in linea con la palette */
+}
 
-        .remove-favorite {
-            background-color: var(--accent-color);
-            border: none;
-            padding: 8px 12px;
-            border-radius: 20px;
-            cursor: pointer;
-            color: white;
-            font-size: 0.8rem;
-        }
+.remove-favorite {
+    background-color: var(--accent-color); /* Usa l'arancione accento per i pulsanti */
+    border: none;
+    padding: 8px 12px;
+    border-radius: 20px;
+    cursor: pointer;
+    color: white;
+    font-size: 0.8rem;
+}
 
-        .remove-favorite:hover {
-            background-color: #d08400;
-        }
+.remove-favorite:hover {
+    background-color: #d08400;
+}
+
 
         @media (max-width: 768px) {
             .nav {
