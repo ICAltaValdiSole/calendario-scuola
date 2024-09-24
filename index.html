@@ -36,6 +36,24 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
+        /* Pulsante per visualizzare i preferiti */
+        .view-favorites {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 12px 24px;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-left: 15px;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-favorites:hover {
+            background-color: #d08400;
+        }
+
         /* Notifica visiva */
         #notification {
             position: fixed;
@@ -210,90 +228,30 @@
             color: var(--accent-color);
         }
 
-        /* Pulsante Aggiungi ai Preferiti */
-        .add-to-favorites {
-            background-color: var(--accent-color);
+        /* Pulsanti "Dettagli Evento" e "Aggiungi ai Preferiti" più piccoli */
+        .open-modal, .add-to-favorites {
+            background-color: var(--primary-color);
             color: var(--card-background);
             border: none;
-            padding: 10px 15px;
-            margin-top: 10px;
+            padding: 8px 12px;
             border-radius: 20px;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .add-to-favorites {
+            background-color: var(--accent-color);
+        }
+
+        .open-modal:hover, .add-to-favorites:hover {
+            background-color: #087b80;
         }
 
         .add-to-favorites:hover {
             background-color: #d08400;
-        }
-
-        /* Pulsante Dettagli Evento */
-        .open-modal {
-            background-color: var(--primary-color);
-            color: var(--card-background);
-            border: none;
-            padding: 10px 15px;
-            margin-top: 10px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .open-modal:hover {
-            background-color: #087b80;
-        }
-
-        /* Modal base */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 10;
-            padding-top: 100px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0,0,0,0.5);
-            animation: fadeIn 0.3s;
-        }
-
-        .modal-content {
-            background-color: var(--card-background);
-            margin: auto;
-            padding: 20px;
-            border-radius: 10px;
-            max-width: 500px;
-            box-shadow: var(--card-shadow);
-            animation: slideUp 0.4s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
         }
 
         /* Sezione Preferiti */
@@ -303,6 +261,7 @@
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: none; /* Nascondiamo la sezione preferiti per ora */
         }
 
         #favoritesSection h2 {
@@ -340,68 +299,6 @@
 
         .remove-favorite:hover {
             background-color: #d08400;
-        }
-
-        /* Pulsante Stampa Preferiti */
-        .print-favorites {
-            background-color: var(--primary-color);
-            border: none;
-            padding: 10px 15px;
-            color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            margin-top: 20px;
-            display: block;
-            font-size: 1rem;
-            margin-left: auto;
-            margin-right: auto;
-            transition: background-color 0.3s ease;
-        }
-
-        .print-favorites:hover {
-            background-color: #087b80;
-        }
-
-        /* Stile per la stampa */
-        @media print {
-            body {
-                background: white;
-            }
-
-            #container {
-                box-shadow: none;
-            }
-
-            .favorite-item {
-                page-break-inside: avoid;
-                margin-bottom: 20px;
-                border-bottom: 1px solid #ddd;
-            }
-
-            #favoritesSection h2 {
-                font-size: 2rem;
-                color: black;
-                text-align: left;
-                margin-bottom: 40px;
-            }
-
-            .favorite-item h4 {
-                color: black;
-                font-size: 1.4rem;
-            }
-
-            .remove-favorite {
-                display: none;
-            }
-
-            .print-favorites {
-                display: none;
-            }
-
-            /* Nascondiamo gli altri elementi non necessari per la stampa */
-            .nav, .event-list, .logo-container, .filter-dropdown, .add-to-favorites, .open-modal, #notification {
-                display: none;
-            }
         }
 
         @media (max-width: 768px) {
@@ -443,6 +340,7 @@
             <h1>Calendario Eventi Scolastici</h1>
             <div class="filter-dropdown">
                 <button class="filter-toggle" onclick="toggleFilter()">Filtra per Mese</button>
+                <button class="view-favorites" id="toggleFavoritesBtn" onclick="toggleFavorites()">Visualizza i Preferiti</button>
                 <div class="filter-options" id="filterOptions">
                     <button onclick="filterEvents('Giugno 2025')">Giugno 2025</button>
                     <button onclick="filterEvents('Luglio 2025')">Luglio 2025</button>
@@ -453,310 +351,26 @@
         </div>
 
         <div class="event-list" id="eventList">
-    <!-- Evento: Consigli di classe SP COGOLO -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">4</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Consigli di classe - SP COGOLO</div>
-            <button class="open-modal" onclick="openModal('Consigli di classe - SP COGOLO', '4 Giugno 2025', 'Consigli di classe - SP COGOLO')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP COGOLO', '4 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
+            <!-- Inserisci qui gli eventi -->
+            <div class="event" data-date="Giugno 2025">
+                <div class="event-date">
+                    <span class="day">4</span>
+                    <span class="month">Giugno</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">Consigli di classe - SP COGOLO</div>
+                    <button class="open-modal" onclick="openModal('Consigli di classe - SP COGOLO', '4 Giugno 2025', 'Consigli di classe - SP COGOLO')">Dettagli Evento</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP COGOLO', '4 Giugno 2025')">Aggiungi ai Preferiti</button>
+                </div>
+            </div>
 
-    <!-- Evento: Consigli di classe SP COMMEZZADURA -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">5</span>
-            <span class="month">Giugno</span>
+            <!-- Aggiungi altri eventi qui -->
         </div>
-        <div class="event-content">
-            <div class="event-title">Consigli di classe - SP COMMEZZADURA</div>
-            <button class="open-modal" onclick="openModal('Consigli di classe - SP COMMEZZADURA', '5 Giugno 2025', 'Consigli di classe - SP COMMEZZADURA')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP COMMEZZADURA', '5 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Dipartimenti SSdPG -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">5</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Dipartimenti - SSdPG</div>
-            <button class="open-modal" onclick="openModal('Dipartimenti - SSdPG', '5 Giugno 2025', 'Dipartimenti - SSdPG')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Dipartimenti - SSdPG', '5 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Consigli di classe SP Vermiglio -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">5</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Consigli di classe - SP Vermiglio</div>
-            <button class="open-modal" onclick="openModal('Consigli di classe - SP Vermiglio', '5 Giugno 2025', 'Consigli di classe - SP Vermiglio')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP Vermiglio', '5 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Consigli di classe SP PASSO TONALE -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">7</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Consigli di classe - SP PASSO TONALE</div>
-            <button class="open-modal" onclick="openModal('Consigli di classe - SP PASSO TONALE', '7 Giugno 2025', 'Consigli di classe - SP PASSO TONALE')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP PASSO TONALE', '7 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Termine delle lezioni -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">11</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Termine delle lezioni</div>
-            <button class="open-modal" onclick="openModal('Termine delle lezioni', '11 Giugno 2025', 'Termine delle lezioni')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Termine delle lezioni', '11 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Scrutinio SEZIONE B - CLASSE 1A -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">11</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Scrutinio SEZIONE B - CLASSE 1A</div>
-            <button class="open-modal" onclick="openModal('Scrutinio SEZIONE B - CLASSE 1A', '11 Giugno 2025', 'Scrutinio SEZIONE B - CLASSE 1A')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Scrutinio SEZIONE B - CLASSE 1A', '11 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Scrutinio SEZIONE C - CLASSI 2A e 3A -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">12</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Scrutinio SEZIONE C - CLASSI 2A e 3A</div>
-            <button class="open-modal" onclick="openModal('Scrutinio SEZIONE C - CLASSI 2A e 3A', '12 Giugno 2025', 'Scrutinio SEZIONE C - CLASSI 2A e 3A')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Scrutinio SEZIONE C - CLASSI 2A e 3A', '12 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Esami Riunione preliminare -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">12</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Esami - Riunione preliminare</div>
-            <button class="open-modal" onclick="openModal('Esami - Riunione preliminare', '12 Giugno 2025', 'Esami - Riunione preliminare')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Esami - Riunione preliminare', '12 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Scrutinio SP OSSANA -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">13</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Scrutinio - SP OSSANA</div>
-            <button class="open-modal" onclick="openModal('Scrutinio - SP OSSANA', '13 Giugno 2025', 'Scrutinio - SP OSSANA')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Scrutinio - SP OSSANA', '13 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Scrutinio SP Vermiglio -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">13</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Scrutinio - SP Vermiglio</div>
-            <button class="open-modal" onclick="openModal('Scrutinio - SP Vermiglio', '13 Giugno 2025', 'Scrutinio - SP Vermiglio')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Scrutinio - SP Vermiglio', '13 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Esami Prima prova scritta: italiano -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">13</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Esami - Prima prova scritta: italiano</div>
-            <button class="open-modal" onclick="openModal('Esami - Prima prova scritta: italiano', '13 Giugno 2025', 'Esami - Prima prova scritta: italiano')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Esami - Prima prova scritta: italiano', '13 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Scrutinio SP COMMEZZADURA -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">14</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Scrutinio - SP COMMEZZADURA</div>
-            <button class="open-modal" onclick="openModal('Scrutinio - SP COMMEZZADURA', '14 Giugno 2025', 'Scrutinio - SP COMMEZZADURA')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Scrutinio - SP COMMEZZADURA', '14 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Scrutinio SP PASSO TONALE -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">14</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Scrutinio - SP PASSO TONALE</div>
-            <button class="open-modal" onclick="openModal('Scrutinio - SP PASSO TONALE', '14 Giugno 2025', 'Scrutinio - SP PASSO TONALE')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Scrutinio - SP PASSO TONALE', '14 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Esami Seconda prova scritta: matematica -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">14</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Esami - Seconda prova scritta: matematica</div>
-            <button class="open-modal" onclick="openModal('Esami - Seconda prova scritta: matematica', '14 Giugno 2025', 'Esami - Seconda prova scritta: matematica')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Esami - Seconda prova scritta: matematica', '14 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Esami Terza prova scritta: lingue -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">15</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Esami - Terza prova scritta: lingue</div>
-            <button class="open-modal" onclick="openModal('Esami - Terza prova scritta: lingue', '15 Giugno 2025', 'Esami - Terza prova scritta: lingue')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Esami - Terza prova scritta: lingue', '15 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Scrutinio SP COGOLO -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">17</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Scrutinio - SP COGOLO</div>
-            <button class="open-modal" onclick="openModal('Scrutinio - SP COGOLO', '17 Giugno 2025', 'Scrutinio - SP COGOLO')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Scrutinio - SP COGOLO', '17 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Attività di fine anno SP (18 Giugno) -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">18</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Attività di fine anno - SP</div>
-            <button class="open-modal" onclick="openModal('Attività di fine anno - SP', '18 Giugno 2025', 'Attività di fine anno - SP')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Attività di fine anno - SP', '18 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Attività di fine anno SP (20 Giugno) -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">20</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Attività di fine anno - SP</div>
-            <button class="open-modal" onclick="openModal('Attività di fine anno - SP', '20 Giugno 2025', 'Attività di fine anno - SP')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Attività di fine anno - SP', '20 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Attività di fine anno SP (24 Giugno) -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">24</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Attività di fine anno - SP</div>
-            <button class="open-modal" onclick="openModal('Attività di fine anno - SP', '24 Giugno 2025', 'Attività di fine anno - SP')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Attività di fine anno - SP', '24 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Attività di fine anno SSdPG -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">25</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Attività di fine anno - SSdPG</div>
-            <button class="open-modal" onclick="openModal('Attività di fine anno - SSdPG', '25 Giugno 2025', 'Attività di fine anno - SSdPG')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Attività di fine anno - SSdPG', '25 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Evento: Attività di fine anno SP (26 Giugno) -->
-    <div class="event" data-date="Giugno 2025">
-        <div class="event-date">
-            <span class="day">26</span>
-            <span class="month">Giugno</span>
-        </div>
-        <div class="event-content">
-            <div class="event-title">Attività di fine anno - SP</div>
-            <button class="open-modal" onclick="openModal('Attività di fine anno - SP', '26 Giugno 2025', 'Attività di fine anno - SP')">Dettagli Evento</button>
-            <button class="add-to-favorites" onclick="addToFavorites('Attività di fine anno - SP', '26 Giugno 2025')">Aggiungi ai Preferiti</button>
-        </div>
-    </div>
-</div>
-
 
         <!-- Sezione Preferiti -->
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
             <div id="favoritesList"></div>
-            <!-- Pulsante per stampare la lista dei preferiti -->
-            <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
-        </div>
-    </div>
-
-    <!-- Modal per i dettagli dell'evento -->
-    <div id="eventModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle"></h2>
-            <p id="modalDate"></p>
-            <p id="modalDescription"></p>
         </div>
     </div>
 
@@ -767,25 +381,21 @@
             filterOptions.style.display = filterOptions.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Funzione per filtrare gli eventi
-        function filterEvents(month) {
-            const events = document.querySelectorAll('.event');
-            events.forEach(event => {
-                if (event.getAttribute('data-date') === month) {
-                    event.style.display = 'flex';
-                } else {
-                    event.style.display = 'none';
-                }
-            });
-            toggleFilter();
-        }
+        // Funzione per mostrare o nascondere i preferiti
+        function toggleFavorites() {
+            const eventList = document.getElementById('eventList');
+            const favoritesSection = document.getElementById('favoritesSection');
+            const toggleBtn = document.getElementById('toggleFavoritesBtn');
 
-        function showAllEvents() {
-            const events = document.querySelectorAll('.event');
-            events.forEach(event => {
-                event.style.display = 'flex';
-            });
-            toggleFilter();
+            if (favoritesSection.style.display === 'none') {
+                favoritesSection.style.display = 'block';
+                eventList.style.display = 'none';
+                toggleBtn.textContent = 'Torna alla Lista Eventi';
+            } else {
+                favoritesSection.style.display = 'none';
+                eventList.style.display = 'block';
+                toggleBtn.textContent = 'Visualizza i Preferiti';
+            }
         }
 
         // Funzione per aggiungere l'evento ai preferiti
@@ -865,5 +475,4 @@
     </script>
 </body>
 </html>
-
 
