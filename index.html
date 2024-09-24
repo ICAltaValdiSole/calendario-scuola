@@ -9,7 +9,7 @@
         :root {
             --primary-color: #0A9396;
             --secondary-color: #94D2BD;
-            --background-image: url('sfondo.jpg');
+            --background-image: url('sfondoo.png');
             --text-color: #001219;
             --card-background: #FFFFFE;
             --accent-color: #EE9B00;
@@ -299,14 +299,14 @@
         /* Sezione Preferiti */
         #favoritesSection {
             margin-top: 50px;
-            background-color: rgba(255, 255, 255, 0.8); /* Sfondo leggero */
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         #favoritesSection h2 {
-            color: var(--primary-color); /* Colore del testo più visibile */
+            color: var(--primary-color);
             font-size: 1.8rem;
             margin-bottom: 20px;
             text-align: center;
@@ -412,6 +412,53 @@
 
         <div class="event-list" id="eventList">
             <!-- Inserisci qui gli eventi -->
+            <div class="event" data-date="Giugno 2025">
+                <div class="event-date">
+                    <span class="day">5</span>
+                    <span class="month">Giugno</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">Consigli di classe - SP Vermiglio</div>
+                    <button class="open-modal" onclick="openModal('Consigli di classe - SP Vermiglio', '5 Giugno 2025', 'Consigli di classe - SP Vermiglio')">Dettagli Evento</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP Vermiglio', '5 Giugno 2025')">Aggiungi ai Preferiti</button>
+                </div>
+            </div>
+
+            <div class="event" data-date="Giugno 2025">
+                <div class="event-date">
+                    <span class="day">7</span>
+                    <span class="month">Giugno</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">Consigli di classe - SP Passo Tonale</div>
+                    <button class="open-modal" onclick="openModal('Consigli di classe - SP Passo Tonale', '7 Giugno 2025', 'Consigli di classe - SP Passo Tonale')">Dettagli Evento</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP Passo Tonale', '7 Giugno 2025')">Aggiungi ai Preferiti</button>
+                </div>
+            </div>
+
+            <div class="event" data-date="Giugno 2025">
+                <div class="event-date">
+                    <span class="day">11</span>
+                    <span class="month">Giugno</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">Termine delle lezioni</div>
+                    <button class="open-modal" onclick="openModal('Termine delle lezioni', '11 Giugno 2025', 'Termine delle lezioni')">Dettagli Evento</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('Termine delle lezioni', '11 Giugno 2025')">Aggiungi ai Preferiti</button>
+                </div>
+            </div>
+
+            <div class="event" data-date="Giugno 2025">
+                <div class="event-date">
+                    <span class="day">11</span>
+                    <span class="month">Giugno</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">Scrutinio Sezione B - Classe 1A</div>
+                    <button class="open-modal" onclick="openModal('Scrutinio Sezione B - Classe 1A', '11 Giugno 2025', 'Scrutinio Sezione B - Classe 1A')">Dettagli Evento</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('Scrutinio Sezione B - Classe 1A', '11 Giugno 2025')">Aggiungi ai Preferiti</button>
+                </div>
+            </div>
         </div>
 
         <!-- Sezione Preferiti -->
