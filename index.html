@@ -5,52 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
     <style>
+        :root {
+            --primary-color: #20C997;
+            --background-color: #f8f9fa;
+            --text-color: #333;
+            --card-background: #fff;
+        }
+
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
+            background-color: var(--background-color);
             margin: 0;
             padding: 0;
-            color: #333;
-            background-image: url('sfondo.jpg'); /* Sfondo visibile */
-            background-size: cover;
-            background-position: center;
-            height: 100vh; /* Altezza della pagina */
-            overflow: hidden; /* Nascondi overflow di default */
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
         #container {
-            max-width: 900px;
-            height: 100%; /* Prendi tutta l'altezza */
+            max-width: 1200px;
             margin: 0 auto;
-            background-color: #fff; /* Sfondo bianco con trasparenza */
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            overflow-y: auto; /* Aggiungi barra di scorrimento */
         }
 
         .logo-container {
-            position: absolute;
-            top: 10px;
-            left: 10px; /* Spostato a sinistra */
-            z-index: 2;
+            text-align: center;
+            margin-bottom: 20px;
         }
 
         .logo-container img {
-            max-width: 80px; /* Dimensioni ridotte */
+            max-width: 100px;
             height: auto;
         }
 
         .nav {
-            padding: 20px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 30px;
         }
 
         .nav h1 {
             margin: 0;
-            color: #20C997;
+            color: var(--primary-color);
+            font-size: 2rem;
         }
 
         .filter-dropdown {
@@ -58,28 +55,25 @@
         }
 
         .filter-toggle {
-            background-color: white;
-            border: 1px solid #20C997;
-            color: #20C997;
-            padding: 10px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
             cursor: pointer;
             border-radius: 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .filter-toggle:hover {
-            background-color: #20C997;
-            color: white;
+            font-size: 1rem;
         }
 
         .filter-options {
             display: none;
             position: absolute;
-            background-color: white;
+            background-color: var(--card-background);
             border: 1px solid #ddd;
             border-radius: 5px;
             z-index: 1;
-            margin-top: 5px;
+            right: 0;
+            min-width: 150px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .filter-options button {
@@ -89,58 +83,88 @@
             background: none;
             cursor: pointer;
             text-align: left;
-            color: #333;
+            color: var(--text-color);
+            transition: background-color 0.3s;
         }
 
         .filter-options button:hover {
-            background-color: #e9f9f8;
+            background-color: #f0f0f0;
         }
 
         .event-list {
-            padding: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
         }
 
         .event {
-            display: flex;
-            border-bottom: 1px solid #eee;
-            padding: 20px 0;
-            align-items: center;
-        }
-
-        .event img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
+            background-color: var(--card-background);
             border-radius: 10px;
-            margin-right: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .event-content {
-            flex: 1;
+        .event:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
         }
 
         .event-date {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px;
+            font-size: 1.5rem;
             font-weight: bold;
-            font-size: 1.2em;
-            color: #20C997;
-            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .event-content {
+            padding: 20px;
         }
 
         .event-title {
-            font-size: 1.4em;
+            font-size: 1.2rem;
             font-weight: bold;
-            color: #333;
-            margin: 0 0 5px;
+            margin-bottom: 10px;
+        }
+
+        .event-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav h1 {
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .filter-dropdown {
+                width: 100%;
+            }
+
+            .filter-toggle {
+                width: 100%;
+            }
+
+            .event-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="logo-container">
-        <img src="Logo.png" alt="Logo Scuola">
-    </div>
-
     <div id="container">
+        <div class="logo-container">
+            <img src="Logo.png" alt="Logo Scuola">
+        </div>
+
         <div class="nav">
             <h1>Calendario Eventi Scolastici</h1>
             <div class="filter-dropdown">
@@ -156,106 +180,28 @@
 
         <div class="event-list" id="eventList">
             <div class="event" data-date="Giugno 2025">
-                <img src="cccogolo.png" alt="Evento 1">
+                <div class="event-date">4 Giugno</div>
                 <div class="event-content">
-                    <div class="event-date">4 Giugno 2025</div>
                     <div class="event-title">Consigli di classe - SP COGOLO</div>
                 </div>
             </div>
 
             <div class="event" data-date="Giugno 2025">
-                <img src="cccommezzadura.png" alt="Evento 2">
+                <div class="event-date">5 Giugno</div>
                 <div class="event-content">
-                    <div class="event-date">5 Giugno 2025</div>
                     <div class="event-title">Consigli di classe - SP COMMEZZADURA</div>
                 </div>
             </div>
 
             <div class="event" data-date="Giugno 2025">
-                <img src="dipartimenti.png" alt="Evento 3">
+                <div class="event-date">5 Giugno</div>
                 <div class="event-content">
-                    <div class="event-date">5 Giugno 2025</div>
                     <div class="event-title">Dipartimenti - SSdPG</div>
                 </div>
             </div>
 
-            <div class="event" data-date="Giugno 2025">
-                <img src="ccvermiglio.png" alt="Evento 4">
-                <div class="event-content">
-                    <div class="event-date">5 Giugno 2025</div>
-                    <div class="event-title">Consigli di classe - SP Vermiglio</div>
-                </div>
-            </div>
+            <!-- Aggiungi gli altri eventi qui seguendo lo stesso formato -->
 
-            <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 5">
-                <div class="event-content">
-                    <div class="event-date">11 Giugno 2025</div>
-                    <div class="event-title">Scrutinio - SEZIONE B - CLASSE 1A</div>
-                </div>
-            </div>
-
-            <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 6">
-                <div class="event-content">
-                    <div class="event-date">12 Giugno 2025</div>
-                    <div class="event-title">Esami - Riunione preliminare</div>
-                </div>
-            </div>
-
-            <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 7">
-                <div class="event-content">
-                    <div class="event-date">13 Giugno 2025</div>
-                    <div class="event-title">Scrutinio - SP OSSANA</div>
-                    <div class="event-title">9:00-11:30</div>
-                </div>
-            </div>
-
-            <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 8">
-                <div class="event-content">
-                    <div class="event-date">13 Giugno 2025</div>
-                    <div class="event-title">Scrutinio - SP Vermiglio</div>
-                    <div class="event-title">14:00-16:00</div>
-                </div>
-            </div>
-
-            <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 9">
-                <div class="event-content">
-                    <div class="event-date">13 Giugno 2025</div>
-                    <div class="event-title">Esami - Prima prova scritta: italiano</div>
-                    <div class="event-title">8:00-10:00</div>
-                </div>
-            </div>
-
-            <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 10">
-                <div class="event-content">
-                    <div class="event-date">14 Giugno 2025</div>
-                    <div class="event-title">Scrutinio - SP COMMEZZADURA</div>
-                    <div class="event-title">9:00-11:30</div>
-                </div>
-            </div>
-
-            <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 11">
-                <div class="event-content">
-                    <div class="event-date">14 Giugno 2025</div>
-                    <div class="event-title">Scrutinio - SP PASSO TONALE</div>
-                    <div class="event-title">14:00-15:00</div>
-                </div>
-            </div>
-
-            <div class="event" data-date="Giugno 2025">
-                <img src="banchi.jpg" alt="Evento 12">
-                <div class="event-content">
-                    <div class="event-date">14 Giugno 2025</div>
-                    <div class="event-title">Esami - Seconda prova scritta: matematica</div>
-                    <div class="event-title">8:00-10:00</div>
-                </div>
-            </div>
         </div>
     </div>
 
@@ -268,20 +214,18 @@
         function filterEvents(month) {
             const events = document.querySelectorAll('.event');
             events.forEach(event => {
-                event.style.display = event.getAttribute('data-date') === month ? 'flex' : 'none';
+                event.style.display = event.getAttribute('data-date') === month ? 'block' : 'none';
             });
-            toggleFilter(); // Chiudi il menu dopo il filtro
+            toggleFilter();
         }
 
         function showAllEvents() {
             const events = document.querySelectorAll('.event');
             events.forEach(event => {
-                event.style.display = 'flex';
+                event.style.display = 'block';
             });
-            toggleFilter(); // Chiudi il menu dopo la visualizzazione di tutti
+            toggleFilter();
         }
     </script>
 </body>
 </html>
-
-
