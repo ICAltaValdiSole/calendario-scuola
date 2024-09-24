@@ -412,7 +412,7 @@
             </div>
         </div>
 
-         <div class="event-list" id="eventList">
+        <div class="event-list" id="eventList">
     <!-- Evento: Consigli di classe SP COGOLO -->
     <div class="event" data-date="Giugno 2025">
         <div class="event-date">
@@ -700,6 +700,9 @@
     </div>
 </div>
 
+            <!-- Aggiungi altri eventi qui -->
+        </div>
+
         <!-- Sezione Preferiti -->
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
@@ -722,13 +725,14 @@
             const favoritesSection = document.getElementById('favoritesSection');
             const toggleBtn = document.getElementById('toggleFavoritesBtn');
 
+            // Mostra la sezione preferiti e nasconde la lista eventi
             if (favoritesSection.style.display === 'none') {
                 favoritesSection.style.display = 'block';
                 eventList.style.display = 'none';
                 toggleBtn.textContent = 'Torna alla Lista Eventi';
             } else {
                 favoritesSection.style.display = 'none';
-                eventList.style.display = 'block';
+                eventList.style.display = 'grid';  // Corregge la visualizzazione degli eventi
                 toggleBtn.textContent = 'Visualizza i Preferiti';
             }
             renderFavorites(); // Rendi la lista aggiornata ogni volta
@@ -830,4 +834,5 @@
     </script>
 </body>
 </html>
+
 
