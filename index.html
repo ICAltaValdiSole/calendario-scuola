@@ -6,20 +6,23 @@
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Nuova palette di colori */
+       /* Palette di colori aggiornata */
        :root {
-            --primary-color: #0A9396;        /* Verde acqua */
-            --secondary-color: #94D2BD;      /* Verde chiaro */
-            --background-color: #E9D8A6;     /* Sabbia chiara */
-            --text-color: #001219;           /* Blu scuro */
-            --card-background: #FFFFFE;      /* Bianco per card */
-            --accent-color: #EE9B00;         /* Arancione accento */
+            --primary-color: #0A9396;         /* Verde acqua */
+            --secondary-color: #94D2BD;       /* Verde chiaro */
+            --background-image: url('sfondo.jpg'); /* Immagine di sfondo */
+            --text-color: #001219;            /* Blu scuro */
+            --card-background: #FFFFFE;       /* Bianco per card */
+            --accent-color: #EE9B00;          /* Arancione accento */
             --card-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Ombra leggera */
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--background-color);
+            background-image: var(--background-image);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
             margin: 0;
             padding: 0;
             color: var(--text-color);
@@ -30,11 +33,11 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.9); /* Sfondo leggero trasparente */
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
-        /* Logo più piccolo e senza animazione overlay */
+        /* Logo e nome della scuola */
         .logo-container {
             display: flex;
             align-items: center;
@@ -43,7 +46,7 @@
         }
 
         .logo-container img {
-            max-width: 80px;  /* Logo più piccolo */
+            max-width: 80px;  /* Logo ridotto */
             height: auto;
             margin-right: 10px;
         }
@@ -54,6 +57,7 @@
             color: var(--primary-color);
         }
 
+        /* Barra di navigazione */
         .nav {
             display: flex;
             justify-content: space-between;
@@ -185,6 +189,24 @@
             color: var(--accent-color);
         }
 
+        /* Pulsante Aggiungi al Calendario */
+        .add-to-calendar {
+            background-color: var(--accent-color);
+            color: var(--card-background);
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-to-calendar:hover {
+            background-color: #d08400;
+        }
+
         .event-description {
             font-size: 0.9rem;
             color: var(--text-color);
@@ -243,6 +265,7 @@
                 </div>
                 <div class="event-content">
                     <div class="event-title">Consigli di classe - SP COGOLO</div>
+                    <button class="add-to-calendar" onclick="addToCalendar('4 Giugno 2025', 'Consigli di classe - SP COGOLO')">Aggiungi al Calendario</button>
                 </div>
             </div>
 
@@ -253,6 +276,7 @@
                 </div>
                 <div class="event-content">
                     <div class="event-title">Consigli di classe - SP COMMEZZADURA</div>
+                    <button class="add-to-calendar" onclick="addToCalendar('5 Giugno 2025', 'Consigli di classe - SP COMMEZZADURA')">Aggiungi al Calendario</button>
                 </div>
             </div>
 
@@ -263,10 +287,11 @@
                 </div>
                 <div class="event-content">
                     <div class="event-title">Dipartimenti - SSdPG</div>
+                    <button class="add-to-calendar" onclick="addToCalendar('5 Giugno 2025', 'Dipartimenti - SSdPG')">Aggiungi al Calendario</button>
                 </div>
             </div>
 
-            <!-- Aggiungi altri eventi qui -->
+            <!-- Aggiungi gli altri eventi qui -->
 
         </div>
     </div>
@@ -295,6 +320,47 @@
                 event.style.display = 'flex';
             });
             toggleFilter();
+        }
+
+        // Funzione per aggiungere evento al calendario
+        function addToCalendar(date, title) {
+            const event = {
+                title: title,
+                start: date,
+                duration: '1 hour',
+                description: 'Evento scolastico',
+                location: 'I.C. Alta Val di Sole'
+            };
+
+            const icsFile = createICS(event);
+            const link = document.createElement('a');
+            link.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsFile);
+            link.download = `${title}.ics`;
+            link.click();
+        }
+
+        function createICS(event) {
+            return `
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//I.C. Alta Val di Sole//Eventi Scolastici//IT
+BEGIN:VEVENT
+UID:${Date.now()}@alta-val-di-sole.com
+DTSTAMP:${formatICSDate(new Date())}
+DTSTART:${formatICSDate(new Date(event.start))}
+DTEND:${formatICSDate(new Date(event.start).getTime() + 3600000)}  <!-- Durata di 1 ora -->
+SUMMARY:${event.title}
+DESCRIPTION:${event.description}
+LOCATION:${event.location}
+END:VEVENT
+END:VCALENDAR
+            `.trim();
+        }
+
+        function formatICSDate(date) {
+            const pad = num => String(num).padStart(2, '0');
+            return date.getUTCFullYear() + pad(date.getUTCMonth() + 1) + pad(date.getUTCDate()) + 'T' +
+                   pad(date.getUTCHours()) + pad(date.getUTCMinutes()) + pad(date.getUTCSeconds()) + 'Z';
         }
     </script>
 </body>
