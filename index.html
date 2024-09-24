@@ -9,7 +9,7 @@
         :root {
             --primary-color: #0A9396;
             --secondary-color: #94D2BD;
-            --background-image: url('sfondoo.png');
+            --background-image: url('sfondo.jpg');
             --text-color: #001219;
             --card-background: #FFFFFE;
             --accent-color: #EE9B00;
@@ -52,6 +52,68 @@
 
         .view-favorites:hover {
             background-color: #d08400;
+        }
+
+        /* Pulsante per stampare i preferiti */
+        .print-favorites {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px 15px;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .print-favorites:hover {
+            background-color: #087b80;
+        }
+
+        /* Stile per la stampa */
+        @media print {
+            body {
+                background: white;
+            }
+
+            #container {
+                box-shadow: none;
+            }
+
+            .favorite-item {
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            #favoritesSection h2 {
+                font-size: 2rem;
+                color: black;
+                text-align: left;
+                margin-bottom: 40px;
+            }
+
+            .favorite-item h4 {
+                color: black;
+                font-size: 1.4rem;
+            }
+
+            .remove-favorite {
+                display: none;
+            }
+
+            .print-favorites {
+                display: none;
+            }
+
+            /* Nascondiamo gli altri elementi non necessari per la stampa */
+            .nav, .event-list, .logo-container, .filter-dropdown, .add-to-favorites, .open-modal, #notification {
+                display: none;
+            }
         }
 
         /* Notifica visiva */
@@ -371,6 +433,8 @@
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
             <div id="favoritesList"></div>
+            <!-- Pulsante per stampare i preferiti -->
+            <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
         </div>
     </div>
 
@@ -396,6 +460,28 @@
                 eventList.style.display = 'block';
                 toggleBtn.textContent = 'Visualizza i Preferiti';
             }
+        }
+
+        // Funzione per filtrare gli eventi per mese
+        function filterEvents(month) {
+            const events = document.querySelectorAll('.event');
+            events.forEach(event => {
+                if (event.getAttribute('data-date').includes(month)) {
+                    event.style.display = 'flex';
+                } else {
+                    event.style.display = 'none';
+                }
+            });
+            toggleFilter();
+        }
+
+        // Funzione per mostrare tutti gli eventi
+        function showAllEvents() {
+            const events = document.querySelectorAll('.event');
+            events.forEach(event => {
+                event.style.display = 'flex';
+            });
+            toggleFilter();
         }
 
         // Funzione per aggiungere l'evento ai preferiti
