@@ -6,10 +6,10 @@
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
+       :root {
             --primary-color: #6246EA;
             --secondary-color: #D1D1E9;
-            --background-image: "sfondo.png";
+            --background-image: url('sfondo.png');
             --text-color: #2B2C34;
             --card-background: #FFFFFE;
             --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
@@ -18,7 +18,10 @@
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--background-color);
+            background-image: var(--background-image);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
             margin: 0;
             padding: 0;
             color: var(--text-color);
@@ -29,8 +32,9 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
-
         .logo-container {
             text-align: center;
             margin-bottom: 20px;
