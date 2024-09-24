@@ -6,7 +6,6 @@
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* Palette di colori aggiornata */
         :root {
             --primary-color: #0A9396;
             --secondary-color: #94D2BD;
@@ -127,31 +126,6 @@
             background-color: var(--secondary-color);
         }
 
-        /* Prossimi eventi in evidenza (carousel) */
-        #upcomingEvents {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .carousel {
-            display: flex;
-            overflow: hidden;
-            width: 100%;
-        }
-
-        .carousel-item {
-            min-width: 300px;
-            padding: 15px;
-            background-color: var(--secondary-color);
-            margin-right: 10px;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-
-        .carousel-item:hover {
-            transform: scale(1.05);
-        }
-
         .event-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -214,8 +188,8 @@
             color: var(--accent-color);
         }
 
-        /* Pulsante Aggiungi al Calendario */
-        .add-to-calendar {
+        /* Pulsante Aggiungi ai Preferiti */
+        .add-to-favorites {
             background-color: var(--accent-color);
             color: var(--card-background);
             border: none;
@@ -228,7 +202,7 @@
             transition: background-color 0.3s ease;
         }
 
-        .add-to-calendar:hover {
+        .add-to-favorites:hover {
             background-color: #d08400;
         }
 
@@ -345,15 +319,6 @@
             </div>
         </div>
 
-        <!-- Prossimi eventi -->
-        <div id="upcomingEvents">
-            <h2>Prossimi Eventi</h2>
-            <div class="carousel">
-                <div class="carousel-item">Evento 1: Consigli di classe - 5 Giugno 2025</div>
-                <div class="carousel-item">Evento 2: Dipartimenti - 6 Giugno 2025</div>
-            </div>
-        </div>
-
         <div class="event-list" id="eventList">
             <div class="event" data-date="Giugno 2025">
                 <div class="event-date">
@@ -363,7 +328,7 @@
                 <div class="event-content">
                     <div class="event-title">Consigli di classe - SP COGOLO</div>
                     <button class="open-modal" onclick="openModal('Consigli di classe - SP COGOLO', '4 Giugno 2025', 'Discussione sui progetti futuri.')">Dettagli Evento</button>
-                    <button class="add-to-calendar" onclick="addToCalendar('4 Giugno 2025', 'Consigli di classe - SP COGOLO')">Aggiungi al Calendario</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP COGOLO', '4 Giugno 2025')">Aggiungi ai Preferiti</button>
                 </div>
             </div>
 
@@ -375,7 +340,7 @@
                 <div class="event-content">
                     <div class="event-title">Consigli di classe - SP COMMEZZADURA</div>
                     <button class="open-modal" onclick="openModal('Consigli di classe - SP COMMEZZADURA', '5 Giugno 2025', 'Discussione su argomenti scolastici.')">Dettagli Evento</button>
-                    <button class="add-to-calendar" onclick="addToCalendar('5 Giugno 2025', 'Consigli di classe - SP COMMEZZADURA')">Aggiungi al Calendario</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('Consigli di classe - SP COMMEZZADURA', '5 Giugno 2025')">Aggiungi ai Preferiti</button>
                 </div>
             </div>
 
@@ -387,7 +352,7 @@
                 <div class="event-content">
                     <div class="event-title">Dipartimenti - SSdPG</div>
                     <button class="open-modal" onclick="openModal('Dipartimenti - SSdPG', '5 Giugno 2025', 'Aggiornamento dei dipartimenti.')">Dettagli Evento</button>
-                    <button class="add-to-calendar" onclick="addToCalendar('5 Giugno 2025', 'Dipartimenti - SSdPG')">Aggiungi al Calendario</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('Dipartimenti - SSdPG', '5 Giugno 2025')">Aggiungi ai Preferiti</button>
                 </div>
             </div>
 
@@ -434,26 +399,19 @@
             toggleFilter();
         }
 
-        // Funzione per aggiungere evento al calendario (corretto per GitHub Pages)
-        function addToCalendar(date, title) {
-            const icsFile = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//I.C. Alta Val di Sole//IT
-BEGIN:VEVENT
-UID:${Date.now()}@ic-altavaldisole.it
-DTSTAMP:${new Date().toISOString().replace(/-|:|\.\d\d\d/g,"")}
-DTSTART:${new Date(date).toISOString().replace(/-|:|\.\d\d\d/g,"")}
-DTEND:${new Date(new Date(date).getTime() + 60 * 60 * 1000).toISOString().replace(/-|:|\.\d\d\d/g,"")}
-SUMMARY:${title}
-DESCRIPTION:Evento scolastico
-LOCATION:I.C. Alta Val di Sole
-END:VEVENT
-END:VCALENDAR`;
+        // Funzione per aggiungere l'evento ai preferiti
+        function addToFavorites(title, date) {
+            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+            const event = { title, date };
 
-            const link = document.createElement('a');
-            link.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsFile);
-            link.download = `${title.replace(/\s+/g, '_')}.ics`;
-            link.click();
+            // Aggiungi solo se l'evento non è già nei preferiti
+            if (!favorites.find(e => e.title === title && e.date === date)) {
+                favorites.push(event);
+                localStorage.setItem('favorites', JSON.stringify(favorites));
+                alert('Evento aggiunto ai preferiti!');
+            } else {
+                alert('Evento già nei preferiti.');
+            }
         }
 
         // Funzione per mostrare il modal con i dettagli dell'evento
@@ -468,26 +426,6 @@ END:VCALENDAR`;
         function closeModal() {
             document.getElementById('eventModal').style.display = 'none';
         }
-
-        // Funzione per avviare lo scorrimento automatico dei prossimi eventi
-        function startCarousel() {
-            const carousel = document.querySelector('.carousel');
-            let scrollAmount = 0;
-
-            setInterval(() => {
-                scrollAmount += 300;
-                if (scrollAmount >= carousel.scrollWidth - carousel.clientWidth) {
-                    scrollAmount = 0;
-                }
-                carousel.scrollTo({
-                    top: 0,
-                    left: scrollAmount,
-                    behavior: 'smooth'
-                });
-            }, 2000);
-        }
-
-        window.onload = startCarousel;
     </script>
 </body>
 </html>
