@@ -6,15 +6,15 @@
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-       /* Palette di colori aggiornata */
-       :root {
-            --primary-color: #0A9396;         /* Verde acqua */
-            --secondary-color: #94D2BD;       /* Verde chiaro */
-            --background-image: url('sfondo.jpg'); /* Immagine di sfondo */
-            --text-color: #001219;            /* Blu scuro */
-            --card-background: #FFFFFE;       /* Bianco per card */
-            --accent-color: #EE9B00;          /* Arancione accento */
-            --card-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Ombra leggera */
+        /* Palette di colori aggiornata */
+        :root {
+            --primary-color: #0A9396;
+            --secondary-color: #94D2BD;
+            --background-image: url('sfondo.jpg');
+            --text-color: #001219;
+            --card-background: #FFFFFE;
+            --accent-color: #EE9B00;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         body {
@@ -33,7 +33,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9); /* Sfondo leggero trasparente */
+            background-color: rgba(255, 255, 255, 0.9);
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
@@ -46,7 +46,7 @@
         }
 
         .logo-container img {
-            max-width: 80px;  /* Logo ridotto */
+            max-width: 80px;
             height: auto;
             margin-right: 10px;
         }
@@ -125,6 +125,31 @@
 
         .filter-options button:hover {
             background-color: var(--secondary-color);
+        }
+
+        /* Prossimi eventi in evidenza (carousel) */
+        #upcomingEvents {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .carousel {
+            display: flex;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .carousel-item {
+            min-width: 300px;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            margin-right: 10px;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .carousel-item:hover {
+            transform: scale(1.05);
         }
 
         .event-list {
@@ -207,9 +232,72 @@
             background-color: #d08400;
         }
 
-        .event-description {
+        /* Pulsante Dettagli Evento */
+        .open-modal {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+            border: none;
+            padding: 10px 15px;
+            margin-top: 10px;
+            border-radius: 20px;
             font-size: 0.9rem;
-            color: var(--text-color);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .open-modal:hover {
+            background-color: #087b80;
+        }
+
+        /* Modal base */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 10;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-content {
+            background-color: var(--card-background);
+            margin: auto;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 500px;
+            box-shadow: var(--card-shadow);
+            animation: slideUp 0.4s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
 
         @media (max-width: 768px) {
@@ -257,6 +345,15 @@
             </div>
         </div>
 
+        <!-- Prossimi eventi -->
+        <div id="upcomingEvents">
+            <h2>Prossimi Eventi</h2>
+            <div class="carousel">
+                <div class="carousel-item">Evento 1: Consigli di classe - 5 Giugno 2025</div>
+                <div class="carousel-item">Evento 2: Dipartimenti - 6 Giugno 2025</div>
+            </div>
+        </div>
+
         <div class="event-list" id="eventList">
             <div class="event" data-date="Giugno 2025">
                 <div class="event-date">
@@ -265,6 +362,7 @@
                 </div>
                 <div class="event-content">
                     <div class="event-title">Consigli di classe - SP COGOLO</div>
+                    <button class="open-modal" onclick="openModal('Consigli di classe - SP COGOLO', '4 Giugno 2025', 'Discussione sui progetti futuri.')">Dettagli Evento</button>
                     <button class="add-to-calendar" onclick="addToCalendar('4 Giugno 2025', 'Consigli di classe - SP COGOLO')">Aggiungi al Calendario</button>
                 </div>
             </div>
@@ -276,6 +374,7 @@
                 </div>
                 <div class="event-content">
                     <div class="event-title">Consigli di classe - SP COMMEZZADURA</div>
+                    <button class="open-modal" onclick="openModal('Consigli di classe - SP COMMEZZADURA', '5 Giugno 2025', 'Discussione su argomenti scolastici.')">Dettagli Evento</button>
                     <button class="add-to-calendar" onclick="addToCalendar('5 Giugno 2025', 'Consigli di classe - SP COMMEZZADURA')">Aggiungi al Calendario</button>
                 </div>
             </div>
@@ -287,21 +386,34 @@
                 </div>
                 <div class="event-content">
                     <div class="event-title">Dipartimenti - SSdPG</div>
+                    <button class="open-modal" onclick="openModal('Dipartimenti - SSdPG', '5 Giugno 2025', 'Aggiornamento dei dipartimenti.')">Dettagli Evento</button>
                     <button class="add-to-calendar" onclick="addToCalendar('5 Giugno 2025', 'Dipartimenti - SSdPG')">Aggiungi al Calendario</button>
                 </div>
             </div>
 
-            <!-- Aggiungi gli altri eventi qui -->
+            <!-- Aggiungi altri eventi qui -->
 
         </div>
     </div>
 
+    <!-- Modal per i dettagli dell'evento -->
+    <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDate"></p>
+            <p id="modalDescription"></p>
+        </div>
+    </div>
+
     <script>
+        // Funzione per mostrare il filtro eventi
         function toggleFilter() {
             const filterOptions = document.getElementById('filterOptions');
             filterOptions.style.display = filterOptions.style.display === 'block' ? 'none' : 'block';
         }
 
+        // Funzione per filtrare gli eventi
         function filterEvents(month) {
             const events = document.querySelectorAll('.event');
             events.forEach(event => {
@@ -322,46 +434,61 @@
             toggleFilter();
         }
 
-        // Funzione per aggiungere evento al calendario
+        // Funzione per aggiungere evento al calendario (corretto per GitHub Pages)
         function addToCalendar(date, title) {
-            const event = {
-                title: title,
-                start: date,
-                duration: '1 hour',
-                description: 'Evento scolastico',
-                location: 'I.C. Alta Val di Sole'
-            };
+            const icsFile = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//I.C. Alta Val di Sole//IT
+BEGIN:VEVENT
+UID:${Date.now()}@ic-altavaldisole.it
+DTSTAMP:${new Date().toISOString().replace(/-|:|\.\d\d\d/g,"")}
+DTSTART:${new Date(date).toISOString().replace(/-|:|\.\d\d\d/g,"")}
+DTEND:${new Date(new Date(date).getTime() + 60 * 60 * 1000).toISOString().replace(/-|:|\.\d\d\d/g,"")}
+SUMMARY:${title}
+DESCRIPTION:Evento scolastico
+LOCATION:I.C. Alta Val di Sole
+END:VEVENT
+END:VCALENDAR`;
 
-            const icsFile = createICS(event);
             const link = document.createElement('a');
             link.href = 'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsFile);
-            link.download = `${title}.ics`;
+            link.download = `${title.replace(/\s+/g, '_')}.ics`;
             link.click();
         }
 
-        function createICS(event) {
-            return `
-BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//I.C. Alta Val di Sole//Eventi Scolastici//IT
-BEGIN:VEVENT
-UID:${Date.now()}@alta-val-di-sole.com
-DTSTAMP:${formatICSDate(new Date())}
-DTSTART:${formatICSDate(new Date(event.start))}
-DTEND:${formatICSDate(new Date(event.start).getTime() + 3600000)}  <!-- Durata di 1 ora -->
-SUMMARY:${event.title}
-DESCRIPTION:${event.description}
-LOCATION:${event.location}
-END:VEVENT
-END:VCALENDAR
-            `.trim();
+        // Funzione per mostrare il modal con i dettagli dell'evento
+        function openModal(title, date, description) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDate').textContent = date;
+            document.getElementById('modalDescription').textContent = description;
+            document.getElementById('eventModal').style.display = 'block';
         }
 
-        function formatICSDate(date) {
-            const pad = num => String(num).padStart(2, '0');
-            return date.getUTCFullYear() + pad(date.getUTCMonth() + 1) + pad(date.getUTCDate()) + 'T' +
-                   pad(date.getUTCHours()) + pad(date.getUTCMinutes()) + pad(date.getUTCSeconds()) + 'Z';
+        // Funzione per chiudere il modal
+        function closeModal() {
+            document.getElementById('eventModal').style.display = 'none';
         }
+
+        // Funzione per avviare lo scorrimento automatico dei prossimi eventi
+        function startCarousel() {
+            const carousel = document.querySelector('.carousel');
+            let scrollAmount = 0;
+
+            setInterval(() => {
+                scrollAmount += 300;
+                if (scrollAmount >= carousel.scrollWidth - carousel.clientWidth) {
+                    scrollAmount = 0;
+                }
+                carousel.scrollTo({
+                    top: 0,
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+            }, 2000);
+        }
+
+        window.onload = startCarousel;
     </script>
 </body>
 </html>
+
