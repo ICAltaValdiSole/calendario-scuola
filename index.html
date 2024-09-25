@@ -517,29 +517,30 @@
 
     // Funzione per mostrare gli eventi sulla pagina
     function displayEvents(events) {
-        const eventList = document.getElementById('eventList');
-        eventList.innerHTML = ''; // Puliamo la lista esistente
+    const eventList = document.getElementById('eventList');
+    eventList.innerHTML = ''; // Puliamo la lista esistente
 
-        events.slice(1).forEach(event => {
-            const [dateString, title, description] = event;
-            const [day, month] = parseDate(dateString);
+    events.slice(1).forEach(event => {
+        // Ora estraiamo tutti e 4 i campi: data, titolo, orario, dettagli evento
+        const [dateString, title, time, extraInfo] = event;
+        const [day, month] = parseDate(dateString);
 
-            const eventHtml = `
-                <div class="event" data-date="${month}">
-                    <div class="event-date">
-                        <span class="day">${day}</span>
-                        <span class="month">${month}</span>
-                    </div>
-                    <div class="event-content">
-                        <div class="event-title">${title}</div>
-                        <div class="event-time">Ora: ${description}</div>
-                        <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${description}')">Dettagli Evento</button>
-                        <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${description}')">Aggiungi ai Preferiti</button>
-                    </div>
-                </div>`;
-            eventList.innerHTML += eventHtml;
-        });
-    }
+        const eventHtml = `
+            <div class="event" data-date="${month}">
+                <div class="event-date">
+                    <span class="day">${day}</span>
+                    <span class="month">${month}</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">${title}</div>
+                    <div class="event-time">Ora: ${time}</div>
+                    <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
+                </div>
+            </div>`;
+        eventList.innerHTML += eventHtml;
+    });
+}
 
     // Funzione per parsare la data da "04/06/2025" o "4 Giugno 2025"
     function parseDate(dateString) {
@@ -658,14 +659,14 @@
 
     // Funzione per aprire il modal con i dettagli evento
 function openModal(title, date, time, extraInfo) {
-            const modal = document.getElementById('eventModal');
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalDate').textContent = `Data: ${date}`;
-            document.getElementById('modalTime').textContent = `Ora: ${time}`;
-            document.getElementById('modalExtra').textContent = extraInfo || 'Nessuna informazione aggiuntiva disponibile.';
+    const modal = document.getElementById('eventModal');
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalDate').textContent = `Data: ${date}`;
+    document.getElementById('modalTime').textContent = `Ora: ${time}`;
+    document.getElementById('modalExtra').textContent = extraInfo || 'Nessuna informazione aggiuntiva disponibile.';
 
-            modal.style.display = 'flex';
-        }
+    modal.style.display = 'flex';
+}
 
 // Funzione per chiudere il modal
 function closeModal() {
