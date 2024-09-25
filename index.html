@@ -434,12 +434,24 @@
             }
         }
 
+        function convertDate(rawDate) {
+            const parts = rawDate.split('-');
+            const monthMap = {
+                "gennaio": "01", "febbraio": "02", "marzo": "03", "aprile": "04", "maggio": "05", "giugno": "06",
+                "luglio": "07", "agosto": "08", "settembre": "09", "ottobre": "10", "novembre": "11", "dicembre": "12"
+            };
+            const day = parts[1];
+            const month = monthMap[parts[0].toLowerCase()];
+            const year = "2025";  // Specifica il tuo anno qui
+            return `${year}-${month}-${day}`;
+        }
+
         function displayEvents(events) {
             const eventList = document.getElementById('eventList');
             eventList.innerHTML = '';
-            events.slice(1).forEach(event => {  // Salta l'intestazione
-                const [title, date, description, time] = event;
-                const formattedDate = new Date(date);
+            events.slice(1).forEach(event => {
+                const [date, title, description] = event;
+                const formattedDate = new Date(convertDate(date));  // Conversione della data personalizzata
                 const eventHtml = `
                     <div class="event" data-date="${formattedDate.toLocaleString('it-IT', { month: 'long', year: 'numeric' })}">
                         <div class="event-date">
@@ -448,8 +460,7 @@
                         </div>
                         <div class="event-content">
                             <div class="event-title">${title}</div>
-                            <div class="event-time">Ora: ${time}</div>
-                            <div class="event-description">${description}</div>
+                            <div class="event-time">Ora: ${description}</div>
                             <button class="open-modal" onclick="openModal('${title}', '${formattedDate.toLocaleDateString()}', '${description}')">Dettagli Evento</button>
                             <button class="add-to-favorites" onclick="addToFavorites('${title}', '${formattedDate.toLocaleDateString()}')">Aggiungi ai Preferiti</button>
                         </div>
