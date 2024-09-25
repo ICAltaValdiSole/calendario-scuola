@@ -175,45 +175,43 @@
         const sheetId = '1FlofjQHN9fx8rTd0y70D7MmEudfMSMWka-R76rAwnnc';
         const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
 
-        const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sheet1?key=${apiKey}`;
+       const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sheet1?key=${apiKey}`;
 
-
-        // Funzione per ottenere i dati dal foglio e visualizzare gli eventi
-        fetch(sheetUrl)
-            .then(response => response.json())
-            .then(data => {
-                if (data.values) {
-                    const rows = data.values;
-                    const events = rows.slice(1).map(row => ({
-                        titolo: row[0], // Prima colonna: Titolo
-                        data: row[1],   // Seconda colonna: Data
-                        orario: row[2], // Terza colonna: Orario
-                        descrizione: row[3] // Quarta colonna: Descrizione
-                    }));
-                    renderEvents(events);
-                } else {
-                    console.error('Errore nel recupero dei dati: nessun evento trovato.');
-                }
-            })
-            .catch(error => console.error('Errore nel recupero dei dati:', error));
-
-        function renderEvents(events) {
-            const eventList = document.getElementById('eventList');
-            eventList.innerHTML = ''; // Pulisce la lista degli eventi
-
-            events.forEach(event => {
-                const eventDiv = document.createElement('div');
-                eventDiv.className = 'event';
-                eventDiv.innerHTML = `
-                    <h3>${event.titolo}</h3>
-                    <p><strong>Data:</strong> ${event.data}</p>
-                    <p><strong>Orario:</strong> ${event.orario}</p>
-                    <p>${event.descrizione}</p>
-                    <button class="open-modal" onclick="addToFavorites('${event.titolo}', '${event.data}', '${event.orario}')">Aggiungi ai Preferiti</button>
-                `;
-                eventList.appendChild(eventDiv);
-            });
+fetch(sheetUrl)
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`Errore nella richiesta: ${response.status}`);
         }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Dati ricevuti:', data);
+        const rows = data.values;
+        if (!rows || rows.length === 0) {
+            console.error('Nessun dato trovato.');
+            return;
+        }
+        renderEvents(rows.slice(1)); // Esegue la funzione di rendering eventi
+    })
+    .catch(error => {
+        console.error('Errore nel recupero dei dati:', error);
+    });
+
+function renderEvents(events) {
+    const eventList = document.getElementById('eventList');
+    eventList.innerHTML = '';
+    events.forEach(row => {
+        const eventDiv = document.createElement('div');
+        eventDiv.className = 'event';
+        eventDiv.innerHTML = `
+            <h3>${row[0]}</h3>
+            <p><strong>Data:</strong> ${row[1]}</p>
+            <p><strong>Orario:</strong> ${row[2]}</p>
+            <p>${row[3]}</p>
+        `;
+        eventList.appendChild(eventDiv);
+    });
+}
 
         // Funzione per gestire i preferiti (esempio: toggle tra eventi e preferiti)
         function toggleFavorites() {
