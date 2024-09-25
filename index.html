@@ -408,6 +408,18 @@
         height: 30px;
         font-weight: bold;
     }
+       /* Modal contenuti */
+.modal-content h2 {
+    font-size: 1.8rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: var(--text-color);
+}
 
     @media (max-width: 768px) {
         .nav {
@@ -470,7 +482,7 @@
             <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
         </div>
     </div>
-<!-- Finestra modale per i dettagli dell'evento -->
+    <!-- Finestra modale per i dettagli dell'evento -->
 <div id="eventModal" class="modal">
     <div class="modal-content">
         <button class="modal-close" onclick="closeModal()">×</button>
@@ -480,6 +492,7 @@
         <p id="modalExtra"></p>
     </div>
 </div>
+
 
     <script>
     const sheetId = '1OEhmKjkFOoBCYVCM5vETz8jsBD-uBdiSaOUc0UMSln4';
@@ -643,9 +656,22 @@
         renderFavorites();
     }
 
-    function openModal(title, date, description) {
-        alert(`Dettagli Evento:\nTitolo: ${title}\nData: ${date}\nDescrizione: ${description}`);
-    }
+    // Funzione per aprire il modal con i dettagli evento
+function openModal(title, date, time, extraInfo) {
+    const modal = document.getElementById('eventModal');
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalDate').textContent = date;
+    document.getElementById('modalTime').textContent = `Ora: ${time}`;
+    document.getElementById('modalExtra').textContent = extraInfo;
+
+    modal.style.display = 'flex';
+}
+
+// Funzione per chiudere il modal
+function closeModal() {
+    const modal = document.getElementById('eventModal');
+    modal.style.display = 'none';
+}
 
     function showNotification(message) {
         const notification = document.getElementById('notification');
