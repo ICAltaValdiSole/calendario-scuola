@@ -53,6 +53,25 @@
             background-color: #d08400;
         }
 
+        .print-favorites {
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px 15px;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s ease;
+        }
+
+        .print-favorites:hover {
+            background-color: #087b80;
+        }
+
         .event-list {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -86,7 +105,6 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
         }
 
-        /* Sezione Preferiti */
         #favoritesSection {
             margin-top: 50px;
             background-color: rgba(255, 255, 255, 0.8);
