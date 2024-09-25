@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
+   <style>
         :root {
             --primary-color: #0A9396;
             --secondary-color: #94D2BD;
@@ -246,7 +246,7 @@
             background-color: var(--primary-color);
             color: var(--card-background);
             padding: 20px;
-            font-size: 3rem;
+            font-size: 2rem;
             font-weight: 700;
             text-align: center;
             text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
@@ -258,12 +258,12 @@
         }
 
         .event-date span.day {
-            font-size: 3rem; /* Il giorno sarà grande */
+            font-size: 3rem; /* Ingrandire il giorno */
             line-height: 1;
         }
 
         .event-date span.month {
-            font-size: 1.4rem; /* Il mese sarà più piccolo */
+            font-size: 1.4rem; /* Ridurre la dimensione del mese */
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -277,6 +277,13 @@
             font-weight: 600;
             margin-bottom: 10px;
             color: var(--accent-color);
+        }
+
+        .event-time {
+            font-size: 1.2rem;  /* Ingrandire l'ora */
+            font-weight: bold;   /* Rendere l'ora in grassetto */
+            margin-bottom: 10px; /* Spazio sotto l'ora */
+            color: var(--text-color);
         }
 
         .open-modal, .add-to-favorites {
