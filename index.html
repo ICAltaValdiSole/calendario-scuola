@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -171,9 +172,9 @@
     </div>
 
     <script>
-        // Inserisci il tuo ID di Google Sheets e la chiave API
-        const sheetId = '1FlofjQHN9fx8rTd0y70D7MmEudfMSMWka-R76rAwnnc'; // Inserisci l'ID del foglio di Google Sheets
-        const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ'; // Inserisci la tua chiave API
+        // ID del foglio Google e API Key
+        const sheetId = '1FlofjQHN9fx8rTd0y70D7MmEudfMSMWka-R76rAwnnc';
+        const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
 
         const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/Sheet1?key=${apiKey}`;
 
@@ -181,14 +182,18 @@
         fetch(sheetUrl)
             .then(response => response.json())
             .then(data => {
-                const rows = data.values;
-                const events = rows.slice(1).map(row => ({
-                    titolo: row[0], // Prima colonna: Titolo
-                    data: row[1],   // Seconda colonna: Data
-                    orario: row[2], // Terza colonna: Orario
-                    descrizione: row[3] // Quarta colonna: Descrizione
-                }));
-                renderEvents(events);
+                if (data.values) {
+                    const rows = data.values;
+                    const events = rows.slice(1).map(row => ({
+                        titolo: row[0], // Prima colonna: Titolo
+                        data: row[1],   // Seconda colonna: Data
+                        orario: row[2], // Terza colonna: Orario
+                        descrizione: row[3] // Quarta colonna: Descrizione
+                    }));
+                    renderEvents(events);
+                } else {
+                    console.error('Errore nel recupero dei dati: nessun evento trovato.');
+                }
             })
             .catch(error => console.error('Errore nel recupero dei dati:', error));
 
@@ -278,4 +283,3 @@
     </script>
 </body>
 </html>
-
