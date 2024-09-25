@@ -13,7 +13,7 @@
         --text-color: #001219;
         --card-background: #FFFFFE;
         --accent-color: #EE9B00;
-        --card-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
         --modal-bg: rgba(0, 0, 0, 0.5);
     }
 
@@ -34,7 +34,7 @@
         margin: 0 auto;
         padding: 20px;
         background-color: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
 
     .view-favorites {
@@ -173,7 +173,8 @@
 
     .filter-dropdown {
         display: flex;
-        gap: 15px;  /* Spazio tra i pulsanti su desktop */
+        gap: 15px;
+        position: relative; /* Aggiunto per la corretta posizione del filtro */
     }
 
     .filter-toggle {
@@ -200,7 +201,8 @@
         border: none;
         border-radius: 10px;
         z-index: 1;
-        right: 0;
+        top: 50px; /* Aggiunto per evitare sovrapposizioni con il pulsante */
+        left: 0; /* Aggiunto per allineare il menu con il pulsante */
         min-width: 180px;
         box-shadow: var(--card-shadow);
         overflow: hidden;
@@ -285,7 +287,7 @@
     }
 
     .event-time {
-        font-size: 1.2rem;  
+        font-size: 1.2rem;
         font-weight: normal;
         margin-bottom: 10px;
         color: var(--text-color);
@@ -445,6 +447,7 @@
         }
     }
 </style>
+
 
 </head>
 <body>
