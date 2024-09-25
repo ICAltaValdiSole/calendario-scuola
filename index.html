@@ -482,16 +482,16 @@
             <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
         </div>
     </div>
-    <!-- Finestra modale per i dettagli dell'evento -->
-<div id="eventModal" class="modal">
-    <div class="modal-content">
-        <button class="modal-close" onclick="closeModal()">×</button>
-        <h2 id="modalTitle"></h2>
-        <p id="modalDate"></p>
-        <p id="modalTime"></p>
-        <p id="modalExtra"></p>
+    
+  <div id="eventModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <h2 id="modalTitle"></h2>
+            <p id="modalDate"></p>
+            <p id="modalTime"></p>
+            <p id="modalExtra"></p> <!-- Questo mostrerà il contenuto della colonna "Dettagli Evento" -->
+        </div>
     </div>
-</div>
 
 
     <script>
@@ -658,14 +658,14 @@
 
     // Funzione per aprire il modal con i dettagli evento
 function openModal(title, date, time, extraInfo) {
-    const modal = document.getElementById('eventModal');
-    document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalDate').textContent = date;
-    document.getElementById('modalTime').textContent = `Ora: ${time}`;
-    document.getElementById('modalExtra').textContent = extraInfo;
+            const modal = document.getElementById('eventModal');
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalDate').textContent = `Data: ${date}`;
+            document.getElementById('modalTime').textContent = `Ora: ${time}`;
+            document.getElementById('modalExtra').textContent = extraInfo || 'Nessuna informazione aggiuntiva disponibile.';
 
-    modal.style.display = 'flex';
-}
+            modal.style.display = 'flex';
+        }
 
 // Funzione per chiudere il modal
 function closeModal() {
