@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-   <style>
+    <style>
         :root {
             --primary-color: #0A9396;
             --secondary-color: #94D2BD;
@@ -36,7 +36,6 @@
             box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
-        /* Pulsante per visualizzare i preferiti */
         .view-favorites {
             background-color: var(--accent-color);
             border: none;
@@ -54,7 +53,6 @@
             background-color: #d08400;
         }
 
-        /* Pulsante per stampare i preferiti */
         .print-favorites {
             background-color: var(--primary-color);
             border: none;
@@ -74,7 +72,6 @@
             background-color: #087b80;
         }
 
-        /* Stile per la stampa */
         @media print {
             body {
                 background: white;
@@ -110,13 +107,11 @@
                 display: none;
             }
 
-            /* Nascondiamo gli altri elementi non necessari per la stampa */
             .nav, .event-list, .logo-container, .filter-dropdown, .add-to-favorites, .open-modal, #notification {
                 display: none;
             }
         }
 
-        /* Notifica visiva */
         #notification {
             position: fixed;
             top: 20px;
@@ -138,7 +133,6 @@
             visibility: visible;
         }
 
-        /* Logo e nome della scuola */
         .logo-container {
             display: flex;
             align-items: center;
@@ -158,7 +152,6 @@
             color: var(--primary-color);
         }
 
-        /* Barra di navigazione */
         .nav {
             display: flex;
             justify-content: space-between;
@@ -264,17 +257,13 @@
             min-height: 120px;
         }
 
-        .event-date span {
-            display: block;
-        }
-
-        .event-date .day {
-            font-size: 3rem;
+        .event-date span.day {
+            font-size: 3rem; /* Il giorno sarà grande */
             line-height: 1;
         }
 
-        .event-date .month {
-            font-size: 1.4rem;
+        .event-date span.month {
+            font-size: 1.4rem; /* Il mese sarà più piccolo */
             text-transform: uppercase;
             letter-spacing: 1px;
         }
@@ -290,7 +279,6 @@
             color: var(--accent-color);
         }
 
-        /* Pulsanti "Dettagli Evento" e "Aggiungi ai Preferiti" */
         .open-modal, .add-to-favorites {
             background-color: var(--primary-color);
             color: var(--card-background);
@@ -301,7 +289,6 @@
             font-weight: 600;
             cursor: pointer;
             transition: background-color 0.3s ease;
-            margin-top: 5px;
         }
 
         .add-to-favorites {
@@ -316,14 +303,13 @@
             background-color: #d08400;
         }
 
-        /* Sezione Preferiti */
         #favoritesSection {
             margin-top: 50px;
             background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            display: none; /* Nascondiamo la sezione preferiti per ora */
+            display: none;
         }
 
         #favoritesSection h2 {
@@ -387,7 +373,6 @@
             }
         }
     </style>
-
 </head>
 <body>
     <!-- Notifica visiva -->
@@ -415,7 +400,6 @@
 
         <div class="event-list" id="eventList"></div>
 
-        <!-- Sezione Preferiti -->
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
             <div id="favoritesList"></div>
@@ -424,11 +408,10 @@
     </div>
 
     <script>
-        const sheetId = '1OEhmKjkFOoBCYVCM5vETz8jsBD-uBdiSaOUc0UMSln4'; // Il tuo ID di Google Sheets
+        const sheetId = '1OEhmKjkFOoBCYVCM5vETz8jsBD-uBdiSaOUc0UMSln4';
         const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
         const sheetRange = 'calendarioicaltavaldisole';
 
-        // Funzione per ottenere gli eventi da Google Sheets
         async function fetchEvents() {
             try {
                 const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=${apiKey}`;
@@ -445,7 +428,6 @@
             }
         }
 
-        // Funzione per mostrare gli eventi
         function displayEvents(events) {
             const eventList = document.getElementById('eventList');
             eventList.innerHTML = '';
@@ -460,7 +442,7 @@
                         </div>
                         <div class="event-content">
                             <div class="event-title">${title}</div>
-                            <div class="event-time">${description}</div>
+                            <div class="event-time">Ora: ${description}</div>
                             <button class="open-modal" onclick="openModal('${title}', '${date}', '${description}')">Dettagli Evento</button>
                             <button class="add-to-favorites" onclick="addToFavorites('${title}', '${date}', '${description}')">Aggiungi ai Preferiti</button>
                         </div>
@@ -469,11 +451,10 @@
             });
         }
 
-        // Funzione per filtrare gli eventi per mese
         function filterEvents(month) {
             const events = document.querySelectorAll('.event');
             events.forEach(event => {
-                if (event.getAttribute('data-date').includes(month)) {
+                if (event.getAttribute('data-date').toLowerCase().includes(month.toLowerCase())) {
                     event.style.display = 'flex';
                 } else {
                     event.style.display = 'none';
@@ -482,7 +463,6 @@
             toggleFilter();
         }
 
-        // Funzione per visualizzare tutti gli eventi
         function showAllEvents() {
             const events = document.querySelectorAll('.event');
             events.forEach(event => {
@@ -491,13 +471,11 @@
             toggleFilter();
         }
 
-        // Funzione per mostrare o nascondere il filtro
         function toggleFilter() {
             const filterOptions = document.getElementById('filterOptions');
             filterOptions.style.display = filterOptions.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Funzione per visualizzare i preferiti
         function toggleFavorites() {
             const eventList = document.getElementById('eventList');
             const favoritesSection = document.getElementById('favoritesSection');
@@ -515,7 +493,6 @@
             renderFavorites();
         }
 
-        // Funzione per aggiungere un evento ai preferiti
         function addToFavorites(title, date, description) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             const event = { title, date, description };
@@ -531,7 +508,6 @@
             renderFavorites();
         }
 
-        // Funzione per visualizzare i preferiti salvati
         function renderFavorites() {
             const favoritesList = document.getElementById('favoritesList');
             const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -552,7 +528,6 @@
             }
         }
 
-        // Funzione per rimuovere un evento dai preferiti
         function removeFromFavorites(title, date) {
             let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
             favorites = favorites.filter(e => e.title !== title || e.date !== date);
@@ -561,12 +536,10 @@
             renderFavorites();
         }
 
-        // Funzione per mostrare il modal con i dettagli dell'evento
         function openModal(title, date, description) {
             alert(`Dettagli Evento:\nTitolo: ${title}\nData: ${date}\nDescrizione: ${description}`);
         }
 
-        // Funzione per mostrare la notifica visiva
         function showNotification(message) {
             const notification = document.getElementById('notification');
             notification.textContent = message;
@@ -576,19 +549,21 @@
             }, 3000);
         }
 
-        // Funzione per parsare la data
         function parseDate(dateString) {
             const [monthDay, month] = dateString.split('-');
-            return [monthDay, month];
+            return [monthDay, capitalizeFirstLetter(month)];
+        }
+
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
         }
 
         window.onload = function () {
             fetchEvents();
             renderFavorites();
 
-            setInterval(fetchEvents, 60000); // Aggiorna gli eventi ogni 60 secondi
+            setInterval(fetchEvents, 60000); 
         };
     </script>
 </body>
 </html>
-
