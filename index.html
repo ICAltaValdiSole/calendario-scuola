@@ -408,163 +408,183 @@
     </div>
 
     <script>
-        const sheetId = '1OEhmKjkFOoBCYVCM5vETz8jsBD-uBdiSaOUc0UMSln4';
-        const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
-        const sheetRange = 'calendarioicaltavaldisole';
+    const sheetId = '1OEhmKjkFOoBCYVCM5vETz8jsBD-uBdiSaOUc0UMSln4';
+    const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
+    const sheetRange = 'calendarioicaltavaldisole';
 
-        async function fetchEvents() {
-            try {
-                const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=${apiKey}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                if (data.values && data.values.length > 0) {
-                    displayEvents(data.values);
-                } else {
-                    document.getElementById('eventList').innerHTML = '<p>Nessun evento trovato.</p>';
-                }
-            } catch (error) {
-                console.error('Errore nel recupero dei dati:', error);
-                document.getElementById('eventList').innerHTML = '<p>Errore nel recupero dei dati.</p>';
+    async function fetchEvents() {
+        try {
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=${apiKey}`;
+            const response = await fetch(url);
+            const data = await response.json();
+            if (data.values && data.values.length > 0) {
+                displayEvents(data.values);
+            } else {
+                document.getElementById('eventList').innerHTML = '<p>Nessun evento trovato.</p>';
             }
+        } catch (error) {
+            console.error('Errore nel recupero dei dati:', error);
+            document.getElementById('eventList').innerHTML = '<p>Errore nel recupero dei dati.</p>';
+        }
+    }
+
+    // Funzione per mostrare gli eventi sulla pagina
+    function displayEvents(events) {
+        const eventList = document.getElementById('eventList');
+        eventList.innerHTML = ''; // Puliamo la lista esistente
+
+        events.slice(1).forEach(event => {
+            const [dateString, title, description] = event;
+            const [day, month] = parseDate(dateString);
+
+            const eventHtml = `
+                <div class="event" data-date="${month}">
+                    <div class="event-date">
+                        <span class="day">${day}</span>
+                        <span class="month">${month}</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">${title}</div>
+                        <div class="event-time">Ora: ${description}</div>
+                        <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${description}')">Dettagli Evento</button>
+                        <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${description}')">Aggiungi ai Preferiti</button>
+                    </div>
+                </div>`;
+            eventList.innerHTML += eventHtml;
+        });
+    }
+
+    // Funzione per parsare la data da "04/06/2025" o "4 Giugno 2025"
+    function parseDate(dateString) {
+        // Se la data è in formato standard DD/MM/YYYY, possiamo usare Date()
+        const dateParts = dateString.split('/');
+
+        if (dateParts.length === 3) {
+            const day = dateParts[0];
+            const month = getMonthName(parseInt(dateParts[1]));
+            return [day, month];
         }
 
-        function displayEvents(events) {
-            const eventList = document.getElementById('eventList');
-            eventList.innerHTML = '';
-            events.slice(1).forEach(event => {
-                const [date, title, description] = event;
-                const [day, month] = parseDate(date);
-                const eventHtml = `
-                    <div class="event" data-date="${month}">
-                        <div class="event-date">
-                            <span class="day">${day}</span>
-                            <span class="month">${month}</span>
-                        </div>
-                        <div class="event-content">
-                            <div class="event-title">${title}</div>
-                            <div class="event-time">Ora: ${description}</div>
-                            <button class="open-modal" onclick="openModal('${title}', '${date}', '${description}')">Dettagli Evento</button>
-                            <button class="add-to-favorites" onclick="addToFavorites('${title}', '${date}', '${description}')">Aggiungi ai Preferiti</button>
-                        </div>
-                    </div>`;
-                eventList.innerHTML += eventHtml;
-            });
-        }
+        // Se è in formato testuale come "4 Giugno 2025"
+        const [day, month] = dateString.split(' ');
+        return [day, capitalizeFirstLetter(month)];
+    }
 
-        function filterEvents(month) {
-            const events = document.querySelectorAll('.event');
-            events.forEach(event => {
-                if (event.getAttribute('data-date').toLowerCase().includes(month.toLowerCase())) {
-                    event.style.display = 'flex';
-                } else {
-                    event.style.display = 'none';
-                }
-            });
-            toggleFilter();
-        }
+    // Restituisce il nome del mese basato sul numero
+    function getMonthName(monthNumber) {
+        const months = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+        return months[monthNumber - 1];
+    }
 
-        function showAllEvents() {
-            const events = document.querySelectorAll('.event');
-            events.forEach(event => {
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    function filterEvents(month) {
+        const events = document.querySelectorAll('.event');
+        events.forEach(event => {
+            if (event.getAttribute('data-date').toLowerCase().includes(month.toLowerCase())) {
                 event.style.display = 'flex';
-            });
-            toggleFilter();
-        }
-
-        function toggleFilter() {
-            const filterOptions = document.getElementById('filterOptions');
-            filterOptions.style.display = filterOptions.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function toggleFavorites() {
-            const eventList = document.getElementById('eventList');
-            const favoritesSection = document.getElementById('favoritesSection');
-            const toggleBtn = document.getElementById('toggleFavoritesBtn');
-
-            if (favoritesSection.style.display === 'none') {
-                favoritesSection.style.display = 'block';
-                eventList.style.display = 'none';
-                toggleBtn.textContent = 'Torna alla Lista Eventi';
             } else {
-                favoritesSection.style.display = 'none';
-                eventList.style.display = 'grid';
-                toggleBtn.textContent = 'Visualizza i Preferiti';
+                event.style.display = 'none';
             }
-            renderFavorites();
+        });
+        toggleFilter();
+    }
+
+    function showAllEvents() {
+        const events = document.querySelectorAll('.event');
+        events.forEach(event => {
+            event.style.display = 'flex';
+        });
+        toggleFilter();
+    }
+
+    function toggleFilter() {
+        const filterOptions = document.getElementById('filterOptions');
+        filterOptions.style.display = filterOptions.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function toggleFavorites() {
+        const eventList = document.getElementById('eventList');
+        const favoritesSection = document.getElementById('favoritesSection');
+        const toggleBtn = document.getElementById('toggleFavoritesBtn');
+
+        if (favoritesSection.style.display === 'none') {
+            favoritesSection.style.display = 'block';
+            eventList.style.display = 'none';
+            toggleBtn.textContent = 'Torna alla Lista Eventi';
+        } else {
+            favoritesSection.style.display = 'none';
+            eventList.style.display = 'grid';
+            toggleBtn.textContent = 'Visualizza i Preferiti';
         }
+        renderFavorites();
+    }
 
-        function addToFavorites(title, date, description) {
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            const event = { title, date, description };
+    function addToFavorites(title, date, description) {
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const event = { title, date, description };
 
-            if (!favorites.find(e => e.title === title && e.date === date)) {
-                favorites.push(event);
-                localStorage.setItem('favorites', JSON.stringify(favorites));
-                showNotification('Evento aggiunto ai preferiti!');
-            } else {
-                showNotification('Evento già nei preferiti.');
-            }
-
-            renderFavorites();
-        }
-
-        function renderFavorites() {
-            const favoritesList = document.getElementById('favoritesList');
-            const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            favoritesList.innerHTML = '';
-
-            if (favorites.length === 0) {
-                favoritesList.innerHTML = '<p>Nessun evento nei preferiti.</p>';
-            } else {
-                favorites.forEach(fav => {
-                    const item = document.createElement('div');
-                    item.className = 'favorite-item';
-                    item.innerHTML = `
-                        <h4>${fav.title} - ${fav.date}</h4>
-                        <button class="remove-favorite" onclick="removeFromFavorites('${fav.title}', '${fav.date}')">Rimuovi</button>
-                    `;
-                    favoritesList.appendChild(item);
-                });
-            }
-        }
-
-        function removeFromFavorites(title, date) {
-            let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-            favorites = favorites.filter(e => e.title !== title || e.date !== date);
+        if (!favorites.find(e => e.title === title && e.date === date)) {
+            favorites.push(event);
             localStorage.setItem('favorites', JSON.stringify(favorites));
-            showNotification('Evento rimosso dai preferiti.');
-            renderFavorites();
+            showNotification('Evento aggiunto ai preferiti!');
+        } else {
+            showNotification('Evento già nei preferiti.');
         }
 
-        function openModal(title, date, description) {
-            alert(`Dettagli Evento:\nTitolo: ${title}\nData: ${date}\nDescrizione: ${description}`);
+        renderFavorites();
+    }
+
+    function renderFavorites() {
+        const favoritesList = document.getElementById('favoritesList');
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        favoritesList.innerHTML = '';
+
+        if (favorites.length === 0) {
+            favoritesList.innerHTML = '<p>Nessun evento nei preferiti.</p>';
+        } else {
+            favorites.forEach(fav => {
+                const item = document.createElement('div');
+                item.className = 'favorite-item';
+                item.innerHTML = `
+                    <h4>${fav.title} - ${fav.date}</h4>
+                    <button class="remove-favorite" onclick="removeFromFavorites('${fav.title}', '${fav.date}')">Rimuovi</button>
+                `;
+                favoritesList.appendChild(item);
+            });
         }
+    }
 
-        function showNotification(message) {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.classList.add('show');
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
+    function removeFromFavorites(title, date) {
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        favorites = favorites.filter(e => e.title !== title || e.date !== date);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        showNotification('Evento rimosso dai preferiti.');
+        renderFavorites();
+    }
 
-        function parseDate(dateString) {
-            const [monthDay, month] = dateString.split('-');
-            return [monthDay, capitalizeFirstLetter(month)];
-        }
+    function openModal(title, date, description) {
+        alert(`Dettagli Evento:\nTitolo: ${title}\nData: ${date}\nDescrizione: ${description}`);
+    }
 
-        function capitalizeFirstLetter(string) {
-            return string.charAt(0).toUpperCase() + string.slice(1);
-        }
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.classList.add('show');
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
 
-        window.onload = function () {
-            fetchEvents();
-            renderFavorites();
+    window.onload = function () {
+        fetchEvents();
+        renderFavorites();
 
-            setInterval(fetchEvents, 60000); 
-        };
-    </script>
+        setInterval(fetchEvents, 60000); // Ricarica gli eventi ogni 60 secondi
+    };
+</script>
 </body>
 </html>
 
