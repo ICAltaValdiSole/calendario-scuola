@@ -416,7 +416,7 @@
     <script>
         const sheetId = '1OEhmKjkFOoBCYVCM5vETz8jsBD-uBdiSaOUc0UMSln4'; // Il tuo ID di Google Sheets
         const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
-        const sheetRange = 'calendarioicaltavaldisole';
+        const sheetRange = 'Sheet1';
 
         async function fetchEvents() {
             try {
@@ -438,21 +438,37 @@
             const eventList = document.getElementById('eventList');
             eventList.innerHTML = '';
             events.slice(1).forEach(event => {  // Salta l'intestazione
-                const [date, title, description] = event;
+                const [date, title, description, time] = event;
+                const formattedDate = new Date(date);
                 const eventHtml = `
-                    <div class="event" data-date="${new Date(date).toLocaleString('it-IT', { month: 'long', year: 'numeric' })}">
+                    <div class="event" data-date="${formattedDate.toLocaleString('it-IT', { month: 'long', year: 'numeric' })}">
                         <div class="event-date">
-                            <span class="day">${new Date(date).getDate()}</span>
-                            <span class="month">${new Date(date).toLocaleString('it-IT', { month: 'long' })}</span>
+                            <span class="day">${formattedDate.getDate()}</span>
+                            <span class="month">${formattedDate.toLocaleString('it-IT', { month: 'long' })}</span>
                         </div>
                         <div class="event-content">
                             <div class="event-title">${title}</div>
-                            <button class="open-modal" onclick="openModal('${title}', '${date}', '${description}')">Dettagli Evento</button>
-                            <button class="add-to-favorites" onclick="addToFavorites('${title}', '${date}')">Aggiungi ai Preferiti</button>
+                            <div class="event-description">${description}</div>
+                            <div class="event-time">Ora: ${time}</div>
+                            <button class="open-modal" onclick="openModal('${title}', '${formattedDate.toLocaleDateString()}', '${description}')">Dettagli Evento</button>
+                            <button class="add-to-favorites" onclick="addToFavorites('${title}', '${formattedDate.toLocaleDateString()}')">Aggiungi ai Preferiti</button>
                         </div>
                     </div>`;
                 eventList.innerHTML += eventHtml;
             });
+        }
+
+        // Funzione per filtrare gli eventi per mese
+        function filterEvents(month) {
+            const events = document.querySelectorAll('.event');
+            events.forEach(event => {
+                if (event.getAttribute('data-date').includes(month)) {
+                    event.style.display = 'flex';
+                } else {
+                    event.style.display = 'none';
+                }
+            });
+            toggleFilter();
         }
 
         // Altre funzioni JavaScript rimangono invariate (toggleFilter, toggleFavorites, addToFavorites, ecc.)
@@ -464,4 +480,5 @@
     </script>
 </body>
 </html>
+
 
