@@ -506,21 +506,25 @@
     }
 
     function toggleFavorites() {
-        const eventList = document.getElementById('eventList');
-        const favoritesSection = document.getElementById('favoritesSection');
-        const toggleBtn = document.getElementById('toggleFavoritesBtn');
+    const eventList = document.getElementById('eventList');
+    const favoritesSection = document.getElementById('favoritesSection');
+    const toggleBtn = document.getElementById('toggleFavoritesBtn');
 
-        if (favoritesSection.style.display === 'none') {
-            favoritesSection.style.display = 'block';
-            eventList.style.display = 'none';
-            toggleBtn.textContent = 'Torna alla Lista Eventi';
-        } else {
-            favoritesSection.style.display = 'none';
-            eventList.style.display = 'grid';
-            toggleBtn.textContent = 'Visualizza i Preferiti';
-        }
-        renderFavorites();
+    // Prima di tutto, renderizza i preferiti
+    renderFavorites();
+
+    // Poi mostra o nascondi la sezione preferiti
+    if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
+        favoritesSection.style.display = 'block';
+        eventList.style.display = 'none';
+        toggleBtn.textContent = 'Torna alla Lista Eventi';
+    } else {
+        favoritesSection.style.display = 'none';
+        eventList.style.display = 'grid';
+        toggleBtn.textContent = 'Visualizza i Preferiti';
     }
+}
+
 
     function addToFavorites(title, date, description) {
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
