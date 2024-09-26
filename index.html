@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.css' rel='stylesheet' />
-   <style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanilla-calendar@1.4.0/build/vanilla-calendar.min.css">
+    <style>
     :root {
         --primary-color: #0A9396;
         --secondary-color: #94D2BD;
@@ -38,7 +38,7 @@
         box-shadow: 0 0 20px rgba(0,0,0,0.1);
     }
 
-    .view-favorites {
+    .view-favorites, .calendar-toggle {
         background-color: var(--accent-color);
         border: none;
         padding: 12px 24px;
@@ -51,436 +51,57 @@
         transition: background-color 0.3s ease;
     }
 
-    .view-favorites:hover {
-        background-color: #d08400;
-    }
-
-    .calendar-toggle {
-        background-color: var(--primary-color);
-        border: none;
-        padding: 12px 24px;
-        color: white;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 1rem;
-        font-weight: 600;
-        margin-left: 15px;
-        transition: background-color 0.3s ease;
-    }
-
-    .calendar-toggle:hover {
-        background-color: #087b80;
-    }
-
-    .print-favorites {
-        background-color: var(--primary-color);
-        border: none;
-        padding: 10px 15px;
-        color: white;
-        border-radius: 20px;
-        cursor: pointer;
-        margin-top: 20px;
-        font-size: 1rem;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        transition: background-color 0.3s ease;
-    }
-
-    .print-favorites:hover {
-        background-color: #087b80;
-    }
-
-    @media print {
-        body {
-            background: white;
-        }
-
-        #container {
-            box-shadow: none;
-        }
-
-        .favorite-item {
-            page-break-inside: avoid;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        #favoritesSection h2 {
-            font-size: 2rem;
-            color: black;
-            text-align: left;
-            margin-bottom: 40px;
-        }
-
-        .favorite-item h4 {
-            color: black;
-            font-size: 1.4rem;
-        }
-
-        .remove-favorite {
-            display: none;
-        }
-
-        .print-favorites {
-            display: none;
-        }
-
-        .nav, .event-list, .logo-container, .filter-dropdown, .add-to-favorites, .open-modal, #notification {
-            display: none;
-        }
-    }
-
-    #notification {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: var(--accent-color);
-        color: white;
-        padding: 15px;
-        border-radius: 5px;
-        box-shadow: var(--card-shadow);
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        z-index: 1000;
-    }
-
-    #notification.show {
-        opacity: 1;
-        visibility: visible;
-    }
-
-    .logo-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
-
-    .logo-container img {
-        max-width: 80px;
-        height: auto;
-        margin-right: 10px;
-    }
-
-    .school-name {
-        font-size: 1.6rem;
-        font-weight: 600;
-        color: var(--primary-color);
-    }
-
-    .nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        background-color: var(--card-background);
-        padding: 15px 20px;
-        border-radius: 20px;
-        box-shadow: var(--card-shadow);
-    }
-
-    .nav h1 {
-        margin: 0;
-        color: var(--primary-color);
-        font-size: 2.2rem;
-        font-weight: 700;
-    }
-
-    .filter-dropdown {
-        display: flex;
-        gap: 15px;
-        position: relative; /* Aggiunto per la corretta posizione del filtro */
-    }
-
-    .filter-toggle {
-        background-color: var(--primary-color);
-        color: var(--card-background);
-        border: none;
-        padding: 12px 24px;
-        border-radius: 30px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-
-    .filter-toggle:hover {
-        background-color: #087b80;
-        transform: translateY(-2px);
-    }
-
-    .filter-options {
-        display: none;
-        position: absolute;
-        background-color: var(--card-background);
-        border: none;
-        border-radius: 10px;
-        z-index: 1;
-        top: 50px; /* Aggiunto per evitare sovrapposizioni con il pulsante */
-        left: 0; /* Aggiunto per allineare il menu con il pulsante */
-        min-width: 180px;
-        box-shadow: var(--card-shadow);
-        overflow: hidden;
-    }
-
-    .filter-options button {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        background: none;
-        cursor: pointer;
-        text-align: left;
-        color: var(--text-color);
-        transition: background-color 0.3s;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    .filter-options button:hover {
-        background-color: var(--secondary-color);
-    }
-
-    .event-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 25px;
-    }
-
-    .event {
-        background-color: var(--card-background);
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .event:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .event-date {
-        background-color: var(--primary-color);
-        color: var(--card-background);
-        padding: 20px;
-        font-size: 3rem;
-        font-weight: 700;
-        text-align: center;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-height: 120px;
-    }
-
-    .event-date span.day {
-        font-size: 3rem;
-        line-height: 1;
-    }
-
-    .event-date span.month {
-        font-size: 1.4rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .event-content {
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .event-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 10px;
-        color: var(--accent-color);
-    }
-
-    .event-time {
-        font-size: 1.2rem;
-        font-weight: normal;
-        margin-bottom: 10px;
-        color: var(--text-color);
-    }
-
-    .open-modal, .add-to-favorites {
-        background-color: var(--primary-color);
-        color: var(--card-background);
-        border: none;
-        padding: 8px 15px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .add-to-favorites {
-        background-color: var(--accent-color);
-    }
-
-    .open-modal:hover, .add-to-favorites:hover {
-        background-color: #087b80;
-    }
-
-    .add-to-favorites:hover {
+    .view-favorites:hover, .calendar-toggle:hover {
         background-color: #d08400;
     }
 
     #calendar {
-        background-color: rgba(255, 255, 255, 0.9); /* Sfondo semi-trasparente per il calendario */
+        background-color: rgba(255, 255, 255, 0.9);
         padding: 20px;
         border-radius: 15px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         margin-top: 20px;
-        display: none; /* Inizialmente nascosto */
     }
 
-    #favoritesSection {
-        margin-top: 50px;
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        display: none;
-    }
-
-    #favoritesSection h2 {
-        color: var(--primary-color);
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .favorite-item {
-        background-color: var(--card-background);
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: var(--card-shadow);
-    }
-
-    .favorite-item h4 {
-        margin: 0;
-        color: var(--primary-color);
-    }
-
-    .remove-favorite {
-        background-color: var(--accent-color);
-        border: none;
-        padding: 8px 12px;
-        border-radius: 20px;
-        cursor: pointer;
-        color: white;
-        font-size: 0.8rem;
-    }
-
-    .remove-favorite:hover {
-        background-color: #d08400;
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
+    /* Stile per il calendario di Vanilla Calendar */
+    .vanilla-calendar {
         width: 100%;
-        height: 100%;
-        background-color: var(--modal-bg);
-        justify-content: center;
-        align-items: center;
+        max-width: 1200px;
     }
 
-    .modal-content {
-        background-color: var(--card-background);
-        padding: 20px;
+    .vanilla-calendar__header,
+    .vanilla-calendar__days,
+    .vanilla-calendar__month {
+        background-color: var(--primary-color);
+        color: white;
         border-radius: 10px;
-        width: 90%;
-        max-width: 600px;
-        box-shadow: var(--card-shadow);
-        position: relative;
     }
 
-    .modal-close {
-        position: absolute;
-        top: 10px;
-        right: 10px;
+    .vanilla-calendar__day {
+        color: var(--text-color);
+        font-weight: 600;
+    }
+
+    .vanilla-calendar__day.vanilla-calendar__day--selected {
         background-color: var(--accent-color);
         color: white;
+    }
+
+    /* Pulsanti di navigazione */
+    .vanilla-calendar__header__button {
+        background-color: var(--primary-color);
         border: none;
-        border-radius: 50%;
+        color: white;
         cursor: pointer;
-        width: 30px;
-        height: 30px;
-        font-weight: bold;
     }
 
-    .modal-content h2 {
-        font-size: 1.8rem;
-        color: var(--primary-color);
-        margin-bottom: 15px;
+    .vanilla-calendar__header__button:hover {
+        background-color: #087b80;
     }
 
-    .modal-content p {
-        font-size: 1.2rem;
-        margin-bottom: 10px;
-        color: var(--text-color);
-    }
-
-    @media (max-width: 768px) {
-        .nav {
-            flex-direction: column;
-            align-items: stretch;
-        }
-
-        .nav h1 {
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .filter-dropdown {
-            flex-direction: column;
-            align-items: stretch;
-            width: 100%;
-        }
-
-        .filter-toggle, .view-favorites, .calendar-toggle {
-            width: 100%;
-            margin-bottom: 10px;
-        }
-
-        .event-list, #favoritesSection {
-            padding: 0 10px;
-        }
-
-        .event-list {
-            grid-template-columns: 1fr;
-        }
-
-        .open-modal, .add-to-favorites {
-            width: 100%;
-        }
-    }
-</style>
-
-
+    </style>
 </head>
 <body>
-    <!-- Notifica visiva -->
-    <div id="notification">Evento aggiunto ai preferiti!</div>
-
     <div id="container">
         <div class="logo-container">
             <img src="Logo.png" alt="Logo Scuola">
@@ -490,39 +111,16 @@
         <div class="nav">
             <h1>Calendario Eventi Scolastici</h1>
             <div class="filter-dropdown">
-                <button class="filter-toggle" onclick="toggleFilter()">Filtra per Mese</button>
-                <button class="view-favorites" id="toggleFavoritesBtn" onclick="toggleFavorites()">Visualizza i Preferiti</button>
-                <button class="calendar-toggle" id="toggleCalendarBtn" onclick="toggleCalendar()">Visualizza Calendario</button>
-                <div class="filter-options" id="filterOptions">
-                    <button onclick="filterEvents('Giugno')">Giugno</button>
-                    <button onclick="filterEvents('Luglio')">Luglio</button>
-                    <button onclick="filterEvents('Agosto')">Agosto</button>
-                    <button onclick="showAllEvents()">Mostra Tutti</button>
-                </div>
+                <button class="calendar-toggle" id="toggleCalendarBtn">Visualizza Calendario</button>
+                <button class="view-favorites" id="toggleFavoritesBtn">Visualizza i Preferiti</button>
             </div>
         </div>
 
         <div class="event-list" id="eventList"></div>
-        <div id="calendar"></div> <!-- Calendario nascosto inizialmente -->
-
-        <div id="favoritesSection">
-            <h2>I tuoi Eventi Preferiti</h2>
-            <div id="favoritesList"></div>
-            <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
-        </div>
-    </div>
-    
-    <div id="eventModal" class="modal">
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeModal()">×</button>
-            <h2 id="modalTitle"></h2>
-            <p id="modalDate"></p>
-            <p id="modalTime"></p>
-            <p id="modalExtra"></p> <!-- Questo mostrerà il contenuto della colonna "Dettagli Evento" -->
-        </div>
+        <div id="calendar"></div> <!-- Calendario visualizzato qui -->
     </div>
 
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanilla-calendar@1.4.0/build/vanilla-calendar.min.js"></script>
     <script>
     const sheetId = '1JI_R-ziVZHsrJB3xC6zPpuqzTacVewoldqUETIftK1o';
     const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
@@ -546,14 +144,17 @@
 
     function displayEvents(events) {
         const eventList = document.getElementById('eventList');
-        eventList.innerHTML = ''; // Puliamo la lista esistente
+        eventList.innerHTML = ''; // Pulisce la lista esistente
+
+        const calendarEvents = []; // Lista per eventi del calendario
 
         events.slice(1).forEach(event => {
-            const [dateString, title, time, extraInfo] = event;
-            const [day, month] = parseDate(dateString);
+            const [dateString, title, time] = event;
+            const [day, month, year] = parseDate(dateString);
 
+            // Eventi per la visualizzazione nella lista
             const eventHtml = `
-                <div class="event" data-date="${month}">
+                <div class="event">
                     <div class="event-date">
                         <span class="day">${day}</span>
                         <span class="month">${month}</span>
@@ -561,191 +162,57 @@
                     <div class="event-content">
                         <div class="event-title">${title}</div>
                         <div class="event-time">Ora: ${time}</div>
-                        <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
-                        <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
                     </div>
                 </div>`;
             eventList.innerHTML += eventHtml;
+
+            // Aggiunta degli eventi per il calendario
+            calendarEvents.push({
+                date: `${year}-${month}-${day}`,
+                title: title,
+                description: `Ora: ${time}`,
+            });
         });
 
-        // Aggiungere eventi al calendario
-        initCalendar(events);
+        initCalendar(calendarEvents);
     }
 
     function parseDate(dateString) {
         const dateParts = dateString.split('/');
-        if (dateParts.length === 3) {
-            const day = dateParts[0];
-            const month = getMonthName(parseInt(dateParts[1]));
-            return [day, month];
-        }
-        const [day, month] = dateString.split(' ');
-        return [day, capitalizeFirstLetter(month)];
-    }
-
-    function getMonthName(monthNumber) {
-        const months = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
-        return months[monthNumber - 1];
-    }
-
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    function filterEvents(month) {
-        const events = document.querySelectorAll('.event');
-        events.forEach(event => {
-            if (event.getAttribute('data-date').toLowerCase().includes(month.toLowerCase())) {
-                event.style.display = 'flex';
-            } else {
-                event.style.display = 'none';
-            }
-        });
-        toggleFilter();
-    }
-
-    function showAllEvents() {
-        const events = document.querySelectorAll('.event');
-        events.forEach(event => {
-            event.style.display = 'flex';
-        });
-        toggleFilter();
-    }
-
-    function toggleFilter() {
-        const filterOptions = document.getElementById('filterOptions');
-        filterOptions.style.display = filterOptions.style.display === 'block' ? 'none' : 'block';
-    }
-
-    function toggleFavorites() {
-        const eventList = document.getElementById('eventList');
-        const favoritesSection = document.getElementById('favoritesSection');
-        const toggleBtn = document.getElementById('toggleFavoritesBtn');
-        renderFavorites();
-
-        if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
-            favoritesSection.style.display = 'block';
-            eventList.style.display = 'none';
-            toggleBtn.textContent = 'Torna alla Lista Eventi';
-        } else {
-            favoritesSection.style.display = 'none';
-            eventList.style.display = 'grid';
-            toggleBtn.textContent = 'Visualizza i Preferiti';
-        }
-    }
-
-    function toggleCalendar() {
-        const calendarEl = document.getElementById('calendar');
-        const eventList = document.getElementById('eventList');
-        const toggleCalendarBtn = document.getElementById('toggleCalendarBtn');
-
-        if (calendarEl.style.display === 'none') {
-            calendarEl.style.display = 'block';
-            eventList.style.display = 'none';
-            toggleCalendarBtn.textContent = 'Nascondi Calendario';
-        } else {
-            calendarEl.style.display = 'none';
-            eventList.style.display = 'grid';
-            toggleCalendarBtn.textContent = 'Visualizza Calendario';
-        }
-    }
-
-    function addToFavorites(title, date, description) {
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        const event = { title, date, description };
-
-        if (!favorites.find(e => e.title === title && e.date === date)) {
-            favorites.push(event);
-            localStorage.setItem('favorites', JSON.stringify(favorites));
-            showNotification('Evento aggiunto ai preferiti!');
-        } else {
-            showNotification('Evento già nei preferiti.');
-        }
-
-        renderFavorites();
-    }
-
-    function renderFavorites() {
-        const favoritesList = document.getElementById('favoritesList');
-        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        favoritesList.innerHTML = '';
-
-        if (favorites.length === 0) {
-            favoritesList.innerHTML = '<p>Nessun evento nei preferiti.</p>';
-        } else {
-            favorites.forEach(fav => {
-                const item = document.createElement('div');
-                item.className = 'favorite-item';
-                item.innerHTML = `
-                    <h4>${fav.title} - ${fav.date}</h4>
-                    <button class="remove-favorite" onclick="removeFromFavorites('${fav.title}', '${fav.date}')">Rimuovi</button>
-                `;
-                favoritesList.appendChild(item);
-            });
-        }
-    }
-
-    function removeFromFavorites(title, date) {
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        favorites = favorites.filter(e => e.title !== title || e.date !== date);
-        localStorage.setItem('favorites', JSON.stringify(favorites));
-        showNotification('Evento rimosso dai preferiti.');
-        renderFavorites();
-    }
-
-    function openModal(title, date, time, extraInfo) {
-        const modal = document.getElementById('eventModal');
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalDate').textContent = `Data: ${date}`;
-        document.getElementById('modalTime').textContent = `Ora: ${time}`;
-        document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' ? extraInfo : 'Nessun\'altra informazione disponibile.';
-        modal.style.display = 'flex';
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('eventModal');
-        modal.style.display = 'none';
-    }
-
-    function showNotification(message) {
-        const notification = document.getElementById('notification');
-        notification.textContent = message;
-        notification.classList.add('show');
-        setTimeout(() => {
-            notification.classList.remove('show');
-        }, 3000);
+        const day = dateParts[0];
+        const month = ('0' + dateParts[1]).slice(-2); // Aggiunge uno 0 se necessario
+        const year = dateParts[2];
+        return [day, month, year];
     }
 
     function initCalendar(events) {
-        var calendarEl = document.getElementById('calendar');
-        var calendarEvents = events.slice(1).map(event => {
-            const [dateString, title, time] = event;
-            return {
-                title: title,
-                start: new Date(dateString.split('/').reverse().join('-') + 'T' + time.replace('-', ':')),
-                allDay: false
-            };
+        const calendar = new VanillaCalendar({
+            selector: "#calendar",
+            months: ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"],
+            shortWeekday: ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
+            onSelect: (data, elem) => {
+                console.log(data, elem);
+            },
+            settings: {
+                lang: 'it',
+                selection: {
+                    day: false
+                }
+            },
+            datesFilter: events.map(event => ({
+                date: new Date(event.date),
+                title: event.title,
+                description: event.description,
+            })),
         });
 
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            locale: 'it', // Traduzione in italiano
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            events: calendarEvents
-        });
-        calendar.render();
+        calendar.init();
     }
 
     window.onload = function () {
         fetchEvents();
-        renderFavorites();
     };
-</script>
-
+    </script>
 </body>
 </html>
 
