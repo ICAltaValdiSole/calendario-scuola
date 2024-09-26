@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
    <style>
     :root {
         --primary-color: #0A9396;
@@ -446,6 +448,23 @@
             width: 100%;
         }
     }
+       .view-calendar {
+    background-color: var(--primary-color);
+    border: none;
+    padding: 12px 24px;
+    color: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-left: 15px;
+    transition: background-color 0.3s ease;
+}
+
+.view-calendar:hover {
+    background-color: #087b80;
+}
+
 </style>
 
 
@@ -482,6 +501,9 @@
             <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
         </div>
     </div>
+    
+    <button class="view-calendar" id="viewCalendarBtn" onclick="toggleCalendarView()">Visualizza Calendario</button>
+    <div id="calendar" style="display:none;"></div> <!-- Aggiungi il calendario nascosto -->
     
   <div id="eventModal" class="modal">
         <div class="modal-content">
@@ -694,6 +716,57 @@ function closeModal() {
 
         setInterval(fetchEvents, 60000); // Ricarica gli eventi ogni 60 secondi
     };
+        let calendar; // Variabile per il calendario
+
+function toggleCalendarView() {
+    const calendarEl = document.getElementById('calendar');
+    const eventList = document.getElementById('eventList');
+    const calendarBtn = document.getElementById('viewCalendarBtn');
+
+    if (calendarEl.style.display === 'none') {
+        calendarEl.style.display = 'block';
+        eventList.style.display = 'none';
+        calendarBtn.textContent = 'Torna alla Lista Eventi';
+
+        if (!calendar) {
+            // Inizializza il calendario la prima volta che viene visualizzato
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                locale: 'it',
+                events: fetchEventsForCalendar,
+            });
+            calendar.render();
+        }
+    } else {
+        calendarEl.style.display = 'none';
+        eventList.style.display = 'grid';
+        calendarBtn.textContent = 'Visualizza Calendario';
+    }
+}
+
+// Funzione per caricare gli eventi nel calendario
+function fetchEventsForCalendar(fetchInfo, successCallback, failureCallback) {
+    fetch(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.values && data.values.length > 0) {
+                const events = data.values.slice(1).map(event => {
+                    const [dateString, title, time] = event;
+                    const [day, month, year] = dateString.split('/');
+
+                    return {
+                        title: `${title} - ${time}`,
+                        start: `${year}-${month}-${day}`,
+                    };
+                });
+                successCallback(events); // Invia gli eventi al calendario
+            }
+        })
+        .catch(error => {
+            console.error('Errore nel recupero dei dati:', error);
+            failureCallback(error);
+        });
+}
 </script>
 </body>
 </html>
