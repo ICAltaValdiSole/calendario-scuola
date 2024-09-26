@@ -1,16 +1,15 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.css' rel='stylesheet' />
-    <style>
+   <style>
     :root {
         --primary-color: #0A9396;
         --secondary-color: #94D2BD;
-        --background-image: url('sfondo.jpg');
+        --background-image: url('sfondoo.png');
         --text-color: #001219;
         --card-background: #FFFFFE;
         --accent-color: #EE9B00;
@@ -39,7 +38,7 @@
     }
 
     .view-favorites {
-        background-color: var(--accent-color); /* Colore arancione */
+        background-color: var(--accent-color);
         border: none;
         padding: 12px 24px;
         color: white;
@@ -52,32 +51,316 @@
     }
 
     .view-favorites:hover {
-        background-color: #d08400; /* Scurisci l'arancione al passaggio del mouse */
+        background-color: #d08400;
     }
 
-    .calendar-toggle {
+    .print-favorites {
         background-color: var(--primary-color);
         border: none;
-        padding: 12px 24px;
+        padding: 10px 15px;
         color: white;
         border-radius: 20px;
         cursor: pointer;
+        margin-top: 20px;
         font-size: 1rem;
-        font-weight: 600;
-        margin-left: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
         transition: background-color 0.3s ease;
     }
 
-    .calendar-toggle:hover {
+    .print-favorites:hover {
         background-color: #087b80;
     }
 
-    #calendar {
-        background-color: rgba(255, 255, 255, 0.9); /* Sfondo semi-trasparente per il calendario */
+    @media print {
+        body {
+            background: white;
+        }
+
+        #container {
+            box-shadow: none;
+        }
+
+        .favorite-item {
+            page-break-inside: avoid;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #favoritesSection h2 {
+            font-size: 2rem;
+            color: black;
+            text-align: left;
+            margin-bottom: 40px;
+        }
+
+        .favorite-item h4 {
+            color: black;
+            font-size: 1.4rem;
+        }
+
+        .remove-favorite {
+            display: none;
+        }
+
+        .print-favorites {
+            display: none;
+        }
+
+        .nav, .event-list, .logo-container, .filter-dropdown, .add-to-favorites, .open-modal, #notification {
+            display: none;
+        }
+    }
+
+    #notification {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: var(--accent-color);
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: var(--card-shadow);
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    #notification.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .logo-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+    }
+
+    .logo-container img {
+        max-width: 80px;
+        height: auto;
+        margin-right: 10px;
+    }
+
+    .school-name {
+        font-size: 1.6rem;
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 30px;
+        background-color: var(--card-background);
+        padding: 15px 20px;
+        border-radius: 20px;
+        box-shadow: var(--card-shadow);
+    }
+
+    .nav h1 {
+        margin: 0;
+        color: var(--primary-color);
+        font-size: 2.2rem;
+        font-weight: 700;
+    }
+
+    .filter-dropdown {
+        display: flex;
+        gap: 15px;
+        position: relative; /* Aggiunto per la corretta posizione del filtro */
+    }
+
+    .filter-toggle {
+        background-color: var(--primary-color);
+        color: var(--card-background);
+        border: none;
+        padding: 12px 24px;
+        border-radius: 30px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .filter-toggle:hover {
+        background-color: #087b80;
+        transform: translateY(-2px);
+    }
+
+    .filter-options {
+        display: none;
+        position: absolute;
+        background-color: var(--card-background);
+        border: none;
+        border-radius: 10px;
+        z-index: 1;
+        top: 50px; /* Aggiunto per evitare sovrapposizioni con il pulsante */
+        left: 0; /* Aggiunto per allineare il menu con il pulsante */
+        min-width: 180px;
+        box-shadow: var(--card-shadow);
+        overflow: hidden;
+    }
+
+    .filter-options button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        text-align: left;
+        color: var(--text-color);
+        transition: background-color 0.3s;
+        font-size: 0.9rem;
+        font-weight: 500;
+    }
+
+    .filter-options button:hover {
+        background-color: var(--secondary-color);
+    }
+
+    .event-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .event {
+        background-color: var(--card-background);
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .event:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .event-date {
+        background-color: var(--primary-color);
+        color: var(--card-background);
+        padding: 20px;
+        font-size: 3rem;
+        font-weight: 700;
+        text-align: center;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 120px;
+    }
+
+    .event-date span.day {
+        font-size: 3rem;
+        line-height: 1;
+    }
+
+    .event-date span.month {
+        font-size: 1.4rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .event-content {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .event-title {
+        font-size: 1.2rem;
+        font-weight: 600;
+        margin-bottom: 10px;
+        color: var(--accent-color);
+    }
+
+    .event-time {
+        font-size: 1.2rem;
+        font-weight: normal;
+        margin-bottom: 10px;
+        color: var(--text-color);
+    }
+
+    .open-modal, .add-to-favorites {
+        background-color: var(--primary-color);
+        color: var(--card-background);
+        border: none;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .add-to-favorites {
+        background-color: var(--accent-color);
+    }
+
+    .open-modal:hover, .add-to-favorites:hover {
+        background-color: #087b80;
+    }
+
+    .add-to-favorites:hover {
+        background-color: #d08400;
+    }
+
+    #favoritesSection {
+        margin-top: 50px;
+        background-color: rgba(255, 255, 255, 0.8);
         padding: 20px;
         border-radius: 15px;
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
+        display: none;
+    }
+
+    #favoritesSection h2 {
+        color: var(--primary-color);
+        font-size: 1.8rem;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .favorite-item {
+        background-color: var(--card-background);
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: var(--card-shadow);
+    }
+
+    .favorite-item h4 {
+        margin: 0;
+        color: var(--primary-color);
+    }
+
+    .remove-favorite {
+        background-color: var(--accent-color);
+        border: none;
+        padding: 8px 12px;
+        border-radius: 20px;
+        cursor: pointer;
+        color: white;
+        font-size: 0.8rem;
+    }
+
+    .remove-favorite:hover {
+        background-color: #d08400;
     }
 
     .modal {
@@ -116,9 +399,57 @@
         height: 30px;
         font-weight: bold;
     }
-    </style>
-</head>
 
+    .modal-content h2 {
+        font-size: 1.8rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+    }
+
+    .modal-content p {
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+        color: var(--text-color);
+    }
+
+    @media (max-width: 768px) {
+        .nav {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .nav h1 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .filter-dropdown {
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .filter-toggle, .view-favorites {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .event-list, #favoritesSection {
+            padding: 0 10px;
+        }
+
+        .event-list {
+            grid-template-columns: 1fr;
+        }
+
+        .open-modal, .add-to-favorites {
+            width: 100%;
+        }
+    }
+</style>
+
+
+</head>
 <body>
     <!-- Notifica visiva -->
     <div id="notification">Evento aggiunto ai preferiti!</div>
@@ -134,7 +465,6 @@
             <div class="filter-dropdown">
                 <button class="filter-toggle" onclick="toggleFilter()">Filtra per Mese</button>
                 <button class="view-favorites" id="toggleFavoritesBtn" onclick="toggleFavorites()">Visualizza i Preferiti</button>
-                <button class="calendar-toggle" id="toggleCalendarBtn" onclick="toggleCalendar()">Visualizza Calendario</button>
                 <div class="filter-options" id="filterOptions">
                     <button onclick="filterEvents('Giugno')">Giugno</button>
                     <button onclick="filterEvents('Luglio')">Luglio</button>
@@ -145,7 +475,6 @@
         </div>
 
         <div class="event-list" id="eventList"></div>
-        <div id="calendar" style="display:none;"></div> <!-- Calendario nascosto inizialmente -->
 
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
@@ -153,8 +482,8 @@
             <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
         </div>
     </div>
-
-    <div id="eventModal" class="modal">
+    
+  <div id="eventModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
             <h2 id="modalTitle"></h2>
@@ -164,9 +493,9 @@
         </div>
     </div>
 
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
+
     <script>
-    const sheetId = '1JI_R-ziVZHsrJB3xC6zPpuqzTacVewoldqUETIftK1o';
+    const sheetId = '1OEhmKjkFOoBCYVCM5vETz8jsBD-uBdiSaOUc0UMSln4';
     const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
     const sheetRange = 'calendarioicaltavaldisole';
 
@@ -188,44 +517,48 @@
 
     // Funzione per mostrare gli eventi sulla pagina
     function displayEvents(events) {
-        const eventList = document.getElementById('eventList');
-        eventList.innerHTML = ''; // Puliamo la lista esistente
+    const eventList = document.getElementById('eventList');
+    eventList.innerHTML = ''; // Puliamo la lista esistente
 
-        events.slice(1).forEach(event => {
-            const [dateString, title, time, extraInfo] = event;
-            const [day, month] = parseDate(dateString);
+    events.slice(1).forEach(event => {
+        // Ora estraiamo tutti e 4 i campi: data, titolo, orario, dettagli evento
+        const [dateString, title, time, extraInfo] = event;
+        const [day, month] = parseDate(dateString);
 
-            const eventHtml = `
-                <div class="event" data-date="${month}">
-                    <div class="event-date">
-                        <span class="day">${day}</span>
-                        <span class="month">${month}</span>
-                    </div>
-                    <div class="event-content">
-                        <div class="event-title">${title}</div>
-                        <div class="event-time">Ora: ${time}</div>
-                        <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
-                        <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
-                    </div>
-                </div>`;
-            eventList.innerHTML += eventHtml;
-        });
+        const eventHtml = `
+            <div class="event" data-date="${month}">
+                <div class="event-date">
+                    <span class="day">${day}</span>
+                    <span class="month">${month}</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">${title}</div>
+                    <div class="event-time">Ora: ${time}</div>
+                    <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
+                </div>
+            </div>`;
+        eventList.innerHTML += eventHtml;
+    });
+}
 
-        // Aggiungere eventi al calendario
-        initCalendar(events);
-    }
-
+    // Funzione per parsare la data da "04/06/2025" o "4 Giugno 2025"
     function parseDate(dateString) {
+        // Se la data è in formato standard DD/MM/YYYY, possiamo usare Date()
         const dateParts = dateString.split('/');
+
         if (dateParts.length === 3) {
             const day = dateParts[0];
             const month = getMonthName(parseInt(dateParts[1]));
             return [day, month];
         }
+
+        // Se è in formato testuale come "4 Giugno 2025"
         const [day, month] = dateString.split(' ');
         return [day, capitalizeFirstLetter(month)];
     }
 
+    // Restituisce il nome del mese basato sul numero
     function getMonthName(monthNumber) {
         const months = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
         return months[monthNumber - 1];
@@ -261,21 +594,25 @@
     }
 
     function toggleFavorites() {
-        const eventList = document.getElementById('eventList');
-        const favoritesSection = document.getElementById('favoritesSection');
-        const toggleBtn = document.getElementById('toggleFavoritesBtn');
-        renderFavorites();
+    const eventList = document.getElementById('eventList');
+    const favoritesSection = document.getElementById('favoritesSection');
+    const toggleBtn = document.getElementById('toggleFavoritesBtn');
 
-        if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
-            favoritesSection.style.display = 'block';
-            eventList.style.display = 'none';
-            toggleBtn.textContent = 'Torna alla Lista Eventi';
-        } else {
-            favoritesSection.style.display = 'none';
-            eventList.style.display = 'grid';
-            toggleBtn.textContent = 'Visualizza i Preferiti';
-        }
+    // Prima di tutto, renderizza i preferiti
+    renderFavorites();
+
+    // Poi mostra o nascondi la sezione preferiti
+    if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
+        favoritesSection.style.display = 'block';
+        eventList.style.display = 'none';
+        toggleBtn.textContent = 'Torna alla Lista Eventi';
+    } else {
+        favoritesSection.style.display = 'none';
+        eventList.style.display = 'grid';
+        toggleBtn.textContent = 'Visualizza i Preferiti';
     }
+}
+
 
     function addToFavorites(title, date, description) {
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -320,19 +657,27 @@
         renderFavorites();
     }
 
-    function openModal(title, date, time, extraInfo) {
-        const modal = document.getElementById('eventModal');
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalDate').textContent = `Data: ${date}`;
-        document.getElementById('modalTime').textContent = `Ora: ${time}`;
-        document.getElementById('modalExtra').textContent = extraInfo ? extraInfo : 'Nessun\'altra informazione disponibile.';
-        modal.style.display = 'flex';
-    }
+    // Funzione per aprire il modal con i dettagli evento
+function openModal(title, date, time, extraInfo) {
+    const modal = document.getElementById('eventModal');
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalDate').textContent = `Data: ${date}`;
+    document.getElementById('modalTime').textContent = `Ora: ${time}`;
 
-    function closeModal() {
-        const modal = document.getElementById('eventModal');
-        modal.style.display = 'none';
-    }
+    // Se "extraInfo" è undefined o vuoto, mostra un messaggio predefinito
+    document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
+        ? extraInfo 
+        : 'Nessun\'altra informazione disponibile.';
+
+    modal.style.display = 'flex';
+}
+
+
+// Funzione per chiudere il modal
+function closeModal() {
+    const modal = document.getElementById('eventModal');
+    modal.style.display = 'none';
+}
 
     function showNotification(message) {
         const notification = document.getElementById('notification');
@@ -343,54 +688,15 @@
         }, 3000);
     }
 
-    function toggleCalendar() {
-        const calendarEl = document.getElementById('calendar');
-        const eventList = document.getElementById('eventList');
-        const toggleCalendarBtn = document.getElementById('toggleCalendarBtn');
-
-        if (calendarEl.style.display === 'none') {
-            calendarEl.style.display = 'block';
-            eventList.style.display = 'none';
-            toggleCalendarBtn.textContent = 'Nascondi Calendario';
-            initCalendar(); // Inizializza il calendario quando è visibile
-        } else {
-            calendarEl.style.display = 'none';
-            eventList.style.display = 'grid';
-            toggleCalendarBtn.textContent = 'Visualizza Calendario';
-        }
-    }
-
-    // Inizializzazione di FullCalendar
-    function initCalendar(events) {
-        const calendarEl = document.getElementById('calendar');
-        const calendar = new FullCalendar.Calendar(calendarEl, {
-            initialView: 'dayGridMonth',
-            locale: 'it', // Traduzione in italiano
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            events: events.slice(1).map(event => {
-                const [dateString, title] = event;
-                return {
-                    title: title,
-                    start: new Date(dateString.split('/').reverse().join('-')), // Converti la data in formato YYYY-MM-DD
-                    allDay: true
-                };
-            })
-        });
-        calendar.render();
-    }
-
     window.onload = function () {
         fetchEvents();
         renderFavorites();
+
         setInterval(fetchEvents, 60000); // Ricarica gli eventi ogni 60 secondi
     };
-    </script>
-
+</script>
 </body>
 </html>
+
 
 
