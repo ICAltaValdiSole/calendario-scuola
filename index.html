@@ -5,459 +5,452 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.css' rel='stylesheet' />
     <style>
-    :root {
-        --primary-color: #0A9396;
-        --secondary-color: #94D2BD;
-        --background-image: url('sfondo.jpg');
-        --text-color: #001219;
-        --card-background: #FFFFFE;
-        --accent-color: #EE9B00;
-        --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        --modal-bg: rgba(0, 0, 0, 0.5);
-    }
+        :root {
+            --primary-color: #0A9396;
+            --secondary-color: #94D2BD;
+            --background-image: url('sfondo.jpg');
+            --text-color: #001219;
+            --card-background: #FFFFFE;
+            --accent-color: #EE9B00;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --modal-bg: rgba(0, 0, 0, 0.5);
+        }
 
-    body {
-        font-family: 'Inter', sans-serif;
-        background-image: var(--background-image);
-        background-size: cover;
-        background-attachment: fixed;
-        background-position: center;
-        margin: 0;
-        padding: 0;
-        color: var(--text-color);
-        line-height: 1.6;
-    }
-
-    #container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: rgba(255, 255, 255, 0.9);
-        box-shadow: 0 0 20px rgba(0,0,0,0.1);
-    }
-
-    .view-favorites, .calendar-toggle {
-        background-color: var(--primary-color);
-        border: none;
-        padding: 12px 24px;
-        color: white;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 1rem;
-        font-weight: 600;
-        margin-left: 15px;
-        transition: background-color 0.3s ease;
-    }
-
-    .view-favorites:hover, .calendar-toggle:hover {
-        background-color: #087b80;
-    }
-
-    .print-favorites {
-        background-color: var(--primary-color);
-        border: none;
-        padding: 10px 15px;
-        color: white;
-        border-radius: 20px;
-        cursor: pointer;
-        margin-top: 20px;
-        font-size: 1rem;
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-        transition: background-color 0.3s ease;
-    }
-
-    .print-favorites:hover {
-        background-color: #087b80;
-    }
-
-    @media print {
         body {
-            background: white;
+            font-family: 'Inter', sans-serif;
+            background-image: var(--background-image);
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
         }
 
         #container {
-            box-shadow: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
-        .favorite-item {
-            page-break-inside: avoid;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ddd;
+        .view-favorites {
+            background-color: var(--accent-color); /* Torna arancione */
+            border: none;
+            padding: 12px 24px;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-left: 15px;
+            transition: background-color 0.3s ease;
         }
 
-        #favoritesSection h2 {
-            font-size: 2rem;
-            color: black;
-            text-align: left;
-            margin-bottom: 40px;
-        }
-
-        .favorite-item h4 {
-            color: black;
-            font-size: 1.4rem;
-        }
-
-        .remove-favorite {
-            display: none;
+        .view-favorites:hover {
+            background-color: #d08400;
         }
 
         .print-favorites {
-            display: none;
+            background-color: var(--primary-color);
+            border: none;
+            padding: 10px 15px;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 1rem;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            transition: background-color 0.3s ease;
         }
 
-        .nav, .event-list, .logo-container, .filter-dropdown, .add-to-favorites, .open-modal, #notification {
-            display: none;
+        .print-favorites:hover {
+            background-color: #087b80;
         }
-    }
 
-    #notification {
-        position: fixed;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: var(--accent-color);
-        color: white;
-        padding: 15px;
-        border-radius: 5px;
-        box-shadow: var(--card-shadow);
-        opacity: 0;
-        visibility: hidden;
-        transition: all 0.3s ease;
-        z-index: 1000;
-    }
+        @media print {
+            body {
+                background: white;
+            }
 
-    #notification.show {
-        opacity: 1;
-        visibility: visible;
-    }
+            #container {
+                box-shadow: none;
+            }
 
-    .logo-container {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 20px;
-    }
+            .favorite-item {
+                page-break-inside: avoid;
+                margin-bottom: 20px;
+                border-bottom: 1px solid #ddd;
+            }
 
-    .logo-container img {
-        max-width: 80px;
-        height: auto;
-        margin-right: 10px;
-    }
+            #favoritesSection h2 {
+                font-size: 2rem;
+                color: black;
+                text-align: left;
+                margin-bottom: 40px;
+            }
 
-    .school-name {
-        font-size: 1.6rem;
-        font-weight: 600;
-        color: var(--primary-color);
-    }
+            .favorite-item h4 {
+                color: black;
+                font-size: 1.4rem;
+            }
 
-    .nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 30px;
-        background-color: var(--card-background);
-        padding: 15px 20px;
-        border-radius: 20px;
-        box-shadow: var(--card-shadow);
-    }
+            .remove-favorite {
+                display: none;
+            }
 
-    .nav h1 {
-        margin: 0;
-        color: var(--primary-color);
-        font-size: 2.2rem;
-        font-weight: 700;
-    }
+            .print-favorites {
+                display: none;
+            }
 
-    .filter-dropdown {
-        display: flex;
-        gap: 15px;
-        position: relative; /* Per la corretta posizione del filtro */
-    }
+            .nav, .event-list, .logo-container, .filter-dropdown, .add-to-favorites, .open-modal, #notification {
+                display: none;
+            }
+        }
 
-    .filter-toggle {
-        background-color: var(--primary-color);
-        color: var(--card-background);
-        border: none;
-        padding: 12px 24px;
-        border-radius: 30px;
-        font-size: 1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+        #notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--accent-color);
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: var(--card-shadow);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
 
-    .filter-toggle:hover {
-        background-color: #087b80;
-        transform: translateY(-2px);
-    }
+        #notification.show {
+            opacity: 1;
+            visibility: visible;
+        }
 
-    .filter-options {
-        display: none;
-        position: absolute;
-        background-color: var(--card-background);
-        border: none;
-        border-radius: 10px;
-        z-index: 1;
-        top: 50px;
-        left: 0;
-        min-width: 180px;
-        box-shadow: var(--card-shadow);
-        overflow: hidden;
-    }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
 
-    .filter-options button {
-        width: 100%;
-        padding: 12px;
-        border: none;
-        background: none;
-        cursor: pointer;
-        text-align: left;
-        color: var(--text-color);
-        transition: background-color 0.3s;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
+        .logo-container img {
+            max-width: 80px;
+            height: auto;
+            margin-right: 10px;
+        }
 
-    .filter-options button:hover {
-        background-color: var(--secondary-color);
-    }
+        .school-name {
+            font-size: 1.6rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
 
-    .event-list {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 25px;
-    }
-
-    .event {
-        background-color: var(--card-background);
-        border-radius: 20px;
-        overflow: hidden;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .event:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .event-date {
-        background-color: var(--primary-color);
-        color: var(--card-background);
-        padding: 20px;
-        font-size: 3rem;
-        font-weight: 700;
-        text-align: center;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        min-height: 120px;
-    }
-
-    .event-date span.day {
-        font-size: 3rem;
-        line-height: 1;
-    }
-
-    .event-date span.month {
-        font-size: 1.4rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-    }
-
-    .event-content {
-        padding: 20px;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .event-title {
-        font-size: 1.2rem;
-        font-weight: 600;
-        margin-bottom: 10px;
-        color: var(--accent-color);
-    }
-
-    .event-time {
-        font-size: 1.2rem;
-        font-weight: normal;
-        margin-bottom: 10px;
-        color: var(--text-color);
-    }
-
-    .open-modal, .add-to-favorites {
-        background-color: var(--primary-color);
-        color: var(--card-background);
-        border: none;
-        padding: 8px 15px;
-        border-radius: 20px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .add-to-favorites {
-        background-color: var(--accent-color);
-    }
-
-    .open-modal:hover, .add-to-favorites:hover {
-        background-color: #087b80;
-    }
-
-    .add-to-favorites:hover {
-        background-color: #d08400;
-    }
-
-    #calendar {
-        background-color: rgba(255, 255, 255, 0.9); /* Sfondo semi-trasparente per il calendario */
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
-    }
-
-    #favoritesSection {
-        margin-top: 50px;
-        background-color: rgba(255, 255, 255, 0.8);
-        padding: 20px;
-        border-radius: 15px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        display: none;
-    }
-
-    #favoritesSection h2 {
-        color: var(--primary-color);
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-        text-align: center;
-    }
-
-    .favorite-item {
-        background-color: var(--card-background);
-        padding: 15px;
-        margin-bottom: 10px;
-        border-radius: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        box-shadow: var(--card-shadow);
-    }
-
-    .favorite-item h4 {
-        margin: 0;
-        color: var(--primary-color);
-    }
-
-    .remove-favorite {
-        background-color: var(--accent-color);
-        border: none;
-        padding: 8px 12px;
-        border-radius: 20px;
-        cursor: pointer;
-        color: white;
-        font-size: 0.8rem;
-    }
-
-    .remove-favorite:hover {
-        background-color: #d08400;
-    }
-
-    .modal {
-        display: none;
-        position: fixed;
-        z-index: 1000;
-        left: 0;
-        top: 0;
-        width: 100%;
-        height: 100%;
-        background-color: var(--modal-bg);
-        justify-content: center;
-        align-items: center;
-    }
-
-    .modal-content {
-        background-color: var(--card-background);
-        padding: 20px;
-        border-radius: 10px;
-        width: 90%;
-        max-width: 600px;
-        box-shadow: var(--card-shadow);
-        position: relative;
-    }
-
-    .modal-close {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        background-color: var(--accent-color);
-        color: white;
-        border: none;
-        border-radius: 50%;
-        cursor: pointer;
-        width: 30px;
-        height: 30px;
-        font-weight: bold;
-    }
-
-    .modal-content h2 {
-        font-size: 1.8rem;
-        color: var(--primary-color);
-        margin-bottom: 15px;
-    }
-
-    .modal-content p {
-        font-size: 1.2rem;
-        margin-bottom: 10px;
-        color: var(--text-color);
-    }
-
-    @media (max-width: 768px) {
         .nav {
-            flex-direction: column;
-            align-items: stretch;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background-color: var(--card-background);
+            padding: 15px 20px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
         }
 
         .nav h1 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            font-weight: 700;
+        }
+
+        .filter-dropdown {
+            display: flex;
+            gap: 15px;
+            position: relative;
+        }
+
+        .filter-toggle {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-toggle:hover {
+            background-color: #087b80;
+            transform: translateY(-2px);
+        }
+
+        .filter-options {
+            display: none;
+            position: absolute;
+            background-color: var(--card-background);
+            border: none;
+            border-radius: 10px;
+            z-index: 1;
+            top: 50px;
+            left: 0;
+            min-width: 180px;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
+        .filter-options button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            text-align: left;
+            color: var(--text-color);
+            transition: background-color 0.3s;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .filter-options button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .event-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .event {
+            background-color: var(--card-background);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .event-date {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+            padding: 20px;
+            font-size: 3rem;
+            font-weight: 700;
+            text-align: center;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 120px;
+        }
+
+        .event-date span.day {
+            font-size: 3rem;
+            line-height: 1;
+        }
+
+        .event-date span.month {
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .event-content {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .event-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+        }
+
+        .event-time {
+            font-size: 1.2rem;
+            font-weight: normal;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        .open-modal, .add-to-favorites {
+            background-color: var(--primary-color);
+            color: var(--card-background);
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .add-to-favorites {
+            background-color: var(--accent-color);
+        }
+
+        .open-modal:hover, .add-to-favorites:hover {
+            background-color: #087b80;
+        }
+
+        .add-to-favorites:hover {
+            background-color: #d08400;
+        }
+
+        #favoritesSection {
+            margin-top: 50px;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        #favoritesSection h2 {
+            color: var(--primary-color);
+            font-size: 1.8rem;
             margin-bottom: 20px;
             text-align: center;
         }
 
-        .filter-dropdown {
-            flex-direction: column;
-            align-items: stretch;
-            width: 100%;
-        }
-
-        .filter-toggle, .view-favorites, .calendar-toggle {
-            width: 100%;
+        .favorite-item {
+            background-color: var(--card-background);
+            padding: 15px;
             margin-bottom: 10px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--card-shadow);
         }
 
-        .event-list, #favoritesSection {
-            padding: 0 10px;
+        .favorite-item h4 {
+            margin: 0;
+            color: var(--primary-color);
         }
 
-        .event-list {
-            grid-template-columns: 1fr;
+        .remove-favorite {
+            background-color: var(--accent-color);
+            border: none;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.8rem;
         }
 
-        .open-modal, .add-to-favorites {
+        .remove-favorite:hover {
+            background-color: #d08400;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
             width: 100%;
+            height: 100%;
+            background-color: var(--modal-bg);
+            justify-content: center;
+            align-items: center;
         }
-    }
-</style>
-</head>
 
+        .modal-content {
+            background-color: var(--card-background);
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            box-shadow: var(--card-shadow);
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            font-weight: bold;
+        }
+
+        .modal-content h2 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .modal-content p {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .nav h1 {
+                margin-bottom: 20px;
+                text-align: center;
+            }
+
+            .filter-dropdown {
+                flex-direction: column;
+                align-items: stretch;
+                width: 100%;
+            }
+
+            .filter-toggle, .view-favorites {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .event-list, #favoritesSection {
+                padding: 0 10px;
+            }
+
+            .event-list {
+                grid-template-columns: 1fr;
+            }
+
+            .open-modal, .add-to-favorites {
+                width: 100%;
+            }
+        }
+    </style>
+
+    <!-- FullCalendar -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+</head>
 <body>
     <!-- Notifica visiva -->
     <div id="notification">Evento aggiunto ai preferiti!</div>
@@ -473,7 +466,7 @@
             <div class="filter-dropdown">
                 <button class="filter-toggle" onclick="toggleFilter()">Filtra per Mese</button>
                 <button class="view-favorites" id="toggleFavoritesBtn" onclick="toggleFavorites()">Visualizza i Preferiti</button>
-                <button class="calendar-toggle" id="toggleCalendarBtn" onclick="toggleCalendar()">Visualizza Calendario</button>
+                <button class="filter-toggle" id="toggleCalendarBtn" onclick="toggleCalendar()">Visualizza Calendario</button>
                 <div class="filter-options" id="filterOptions">
                     <button onclick="filterEvents('Giugno')">Giugno</button>
                     <button onclick="filterEvents('Luglio')">Luglio</button>
@@ -484,15 +477,19 @@
         </div>
 
         <div class="event-list" id="eventList"></div>
-        <div id="calendar" style="display:none;"></div> <!-- Calendario nascosto inizialmente -->
 
+        <!-- Sezione Preferiti -->
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
             <div id="favoritesList"></div>
             <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
         </div>
+
+        <!-- Sezione Calendario -->
+        <div id="calendar" style="display:none;"></div>
     </div>
-    
+
+    <!-- Modale Dettagli Evento -->
     <div id="eventModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
@@ -503,7 +500,9 @@
         </div>
     </div>
 
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/it.js"></script>
+
     <script>
     const sheetId = '1JI_R-ziVZHsrJB3xC6zPpuqzTacVewoldqUETIftK1o';
     const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
@@ -516,6 +515,7 @@
             const data = await response.json();
             if (data.values && data.values.length > 0) {
                 displayEvents(data.values);
+                populateCalendar(data.values);
             } else {
                 document.getElementById('eventList').innerHTML = '<p>Nessun evento trovato.</p>';
             }
@@ -563,6 +563,7 @@
         return [day, capitalizeFirstLetter(month)];
     }
 
+    // Restituisce il nome del mese basato sul numero
     function getMonthName(monthNumber) {
         const months = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
         return months[monthNumber - 1];
@@ -601,6 +602,7 @@
         const eventList = document.getElementById('eventList');
         const favoritesSection = document.getElementById('favoritesSection');
         const toggleBtn = document.getElementById('toggleFavoritesBtn');
+
         renderFavorites();
 
         if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
@@ -663,14 +665,11 @@
         document.getElementById('modalTitle').textContent = title;
         document.getElementById('modalDate').textContent = `Data: ${date}`;
         document.getElementById('modalTime').textContent = `Ora: ${time}`;
-
-        document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
-            ? extraInfo 
-            : 'Nessun\'altra informazione disponibile.';
-
+        document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' ? extraInfo : 'Nessun\'altra informazione disponibile.';
         modal.style.display = 'flex';
     }
 
+    // Funzione per chiudere il modal
     function closeModal() {
         const modal = document.getElementById('eventModal');
         modal.style.display = 'none';
@@ -685,46 +684,43 @@
         }, 3000);
     }
 
-    // Funzione per il pulsante "Visualizza Calendario"
-    function toggleCalendar() {
+    // Funzione per inizializzare e popolare il calendario
+    function populateCalendar(events) {
         const calendarEl = document.getElementById('calendar');
-        const eventList = document.getElementById('eventList');
-        const toggleCalendarBtn = document.getElementById('toggleCalendarBtn');
-
-        if (calendarEl.style.display === 'none') {
-            calendarEl.style.display = 'block';
-            eventList.style.display = 'none';
-            toggleCalendarBtn.textContent = 'Nascondi Calendario';
-            initCalendar(); // Inizializza il calendario quando è visibile
-        } else {
-            calendarEl.style.display = 'none';
-            eventList.style.display = 'grid';
-            toggleCalendarBtn.textContent = 'Visualizza Calendario';
-        }
-    }
-
-    // Inizializzazione di FullCalendar
-    function initCalendar() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
+        const calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
-            locale: 'it', // Traduzione in italiano
-            headerToolbar: {
-                left: 'prev,next today',
-                center: 'title',
-                right: 'dayGridMonth,timeGridWeek,timeGridDay'
-            },
-            events: [ /* Aggiungi eventi da Google Sheets qui */ ]
+            locale: 'it', // Imposta il calendario in italiano
+            events: events.slice(1).map(event => {
+                const [dateString, title, time, extraInfo] = event;
+                const [day, month] = parseDate(dateString);
+                const date = formatDateForCalendar(dateString);
+                return {
+                    title: title,
+                    start: date,
+                    description: extraInfo || 'Nessuna informazione aggiuntiva',
+                };
+            }),
+            eventColor: var(--primary-color), // Colore azzurrino
         });
         calendar.render();
+    }
+
+    function formatDateForCalendar(dateString) {
+        const [day, month, year] = dateString.split('/');
+        return `${year}-${month}-${day}`; // Restituiamo la data nel formato YYYY-MM-DD
+    }
+
+    function toggleCalendar() {
+        const calendarEl = document.getElementById('calendar');
+        calendarEl.style.display = calendarEl.style.display === 'none' ? 'block' : 'none';
     }
 
     window.onload = function () {
         fetchEvents();
         renderFavorites();
+
         setInterval(fetchEvents, 60000); // Ricarica gli eventi ogni 60 secondi
     };
-</script>
-
+    </script>
 </body>
 </html>
