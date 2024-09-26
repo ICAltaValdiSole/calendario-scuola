@@ -5,169 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.css" rel="stylesheet" />
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.css' rel='stylesheet' />
     <style>
-        :root {
-            --primary-color: #0A9396;
-            --secondary-color: #94D2BD;
-            --background-image: url('sfondo.jpg');
-            --text-color: #001219;
-            --card-background: #FFFFFE;
-            --accent-color: #EE9B00;
-            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            --modal-bg: rgba(0, 0, 0, 0.5);
-        }
+    :root {
+        --primary-color: #0A9396;
+        --secondary-color: #94D2BD;
+        --background-image: url('sfondo.jpg');
+        --text-color: #001219;
+        --card-background: #FFFFFE;
+        --accent-color: #EE9B00;
+        --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        --modal-bg: rgba(0, 0, 0, 0.5);
+    }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background-image: var(--background-image);
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            margin: 0;
-            padding: 0;
-            color: var(--text-color);
-            line-height: 1.6;
-        }
+    body {
+        font-family: 'Inter', sans-serif;
+        background-image: var(--background-image);
+        background-size: cover;
+        background-attachment: fixed;
+        background-position: center;
+        margin: 0;
+        padding: 0;
+        color: var(--text-color);
+        line-height: 1.6;
+    }
 
-        #container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
+    #container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
 
-        .view-favorites {
-            background-color: var(--accent-color);
-            border: none;
-            padding: 12px 24px;
-            color: white;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            margin-left: 15px;
-            transition: background-color 0.3s ease;
-        }
+    .view-favorites {
+        background-color: var(--accent-color); /* Colore arancione */
+        border: none;
+        padding: 12px 24px;
+        color: white;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-left: 15px;
+        transition: background-color 0.3s ease;
+    }
 
-        .view-favorites:hover {
-            background-color: #d08400;
-        }
+    .view-favorites:hover {
+        background-color: #d08400; /* Scurisci l'arancione al passaggio del mouse */
+    }
 
-        .filter-toggle {
-            background-color: var(--primary-color);
-            color: var(--card-background);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 30px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+    .calendar-toggle {
+        background-color: var(--primary-color);
+        border: none;
+        padding: 12px 24px;
+        color: white;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-left: 15px;
+        transition: background-color 0.3s ease;
+    }
 
-        .filter-toggle:hover {
-            background-color: #087b80;
-        }
+    .calendar-toggle:hover {
+        background-color: #087b80;
+    }
 
-        .event-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
+    #calendar {
+        background-color: rgba(255, 255, 255, 0.9); /* Sfondo semi-trasparente per il calendario */
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+    }
 
-        #calendar {
-            margin-top: 20px;
-            background-color: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 15px;
-            box-shadow: var(--card-shadow);
-        }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--modal-bg);
+        justify-content: center;
+        align-items: center;
+    }
 
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: var(--modal-bg);
-            justify-content: center;
-            align-items: center;
-        }
+    .modal-content {
+        background-color: var(--card-background);
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%;
+        max-width: 600px;
+        box-shadow: var(--card-shadow);
+        position: relative;
+    }
 
-        .modal-content {
-            background-color: var(--card-background);
-            padding: 20px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 600px;
-            box-shadow: var(--card-shadow);
-            position: relative;
-        }
+    .modal-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: var(--accent-color);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        width: 30px;
+        height: 30px;
+        font-weight: bold;
+    }
 
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            width: 30px;
-            height: 30px;
-            font-weight: bold;
-        }
-
-        .modal-content h2 {
-            font-size: 1.8rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        .modal-content p {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: var(--text-color);
-        }
+    /* Aggiungere qui eventuali altre sezioni di stile */
     </style>
 </head>
+
 <body>
     <!-- Notifica visiva -->
     <div id="notification">Evento aggiunto ai preferiti!</div>
 
     <div id="container">
+        <div class="logo-container">
+            <img src="Logo.png" alt="Logo Scuola">
+            <span class="school-name">I.C. Alta Val di Sole</span>
+        </div>
+
         <div class="nav">
             <h1>Calendario Eventi Scolastici</h1>
             <div class="filter-dropdown">
                 <button class="filter-toggle" onclick="toggleFilter()">Filtra per Mese</button>
                 <button class="view-favorites" id="toggleFavoritesBtn" onclick="toggleFavorites()">Visualizza i Preferiti</button>
-                <button class="filter-toggle" id="toggleCalendarBtn" onclick="toggleCalendar()">Visualizza Calendario</button>
+                <button class="calendar-toggle" id="toggleCalendarBtn" onclick="toggleCalendar()">Visualizza Calendario</button>
+                <div class="filter-options" id="filterOptions">
+                    <button onclick="filterEvents('Giugno')">Giugno</button>
+                    <button onclick="filterEvents('Luglio')">Luglio</button>
+                    <button onclick="filterEvents('Agosto')">Agosto</button>
+                    <button onclick="showAllEvents()">Mostra Tutti</button>
+                </div>
             </div>
         </div>
 
         <div class="event-list" id="eventList"></div>
+        <div id="calendar" style="display:none;"></div> <!-- Calendario nascosto inizialmente -->
 
-        <!-- Sezione Calendario -->
-        <div id="calendar" style="display:none;"></div>
+        <div id="favoritesSection">
+            <h2>I tuoi Eventi Preferiti</h2>
+            <div id="favoritesList"></div>
+            <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
+        </div>
     </div>
 
-    <!-- Modale Dettagli Evento -->
     <div id="eventModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
             <h2 id="modalTitle"></h2>
             <p id="modalDate"></p>
             <p id="modalTime"></p>
-            <p id="modalExtra"></p>
+            <p id="modalExtra"></p> <!-- Questo mostrerà il contenuto della colonna "Dettagli Evento" -->
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/main.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.0/locales/it.js"></script>
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
     <script>
     const sheetId = '1JI_R-ziVZHsrJB3xC6zPpuqzTacVewoldqUETIftK1o';
     const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
@@ -180,7 +179,6 @@
             const data = await response.json();
             if (data.values && data.values.length > 0) {
                 displayEvents(data.values);
-                populateCalendar(data.values);
             } else {
                 document.getElementById('eventList').innerHTML = '<p>Nessun evento trovato.</p>';
             }
@@ -190,12 +188,15 @@
         }
     }
 
+    // Funzione per mostrare gli eventi sulla pagina
     function displayEvents(events) {
         const eventList = document.getElementById('eventList');
-        eventList.innerHTML = '';
+        eventList.innerHTML = ''; // Puliamo la lista esistente
+
         events.slice(1).forEach(event => {
             const [dateString, title, time, extraInfo] = event;
             const [day, month] = parseDate(dateString);
+
             const eventHtml = `
                 <div class="event" data-date="${month}">
                     <div class="event-date">
@@ -211,41 +212,193 @@
                 </div>`;
             eventList.innerHTML += eventHtml;
         });
+
+        // Aggiungere eventi al calendario
+        initCalendar(events);
     }
 
-    function populateCalendar(events) {
+    // Funzione per parsare la data da "04/06/2025" o "4 Giugno 2025"
+    function parseDate(dateString) {
+        const dateParts = dateString.split('/');
+        if (dateParts.length === 3) {
+            const day = dateParts[0];
+            const month = getMonthName(parseInt(dateParts[1]));
+            return [day, month];
+        }
+        const [day, month] = dateString.split(' ');
+        return [day, capitalizeFirstLetter(month)];
+    }
+
+    function getMonthName(monthNumber) {
+        const months = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+        return months[monthNumber - 1];
+    }
+
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    function filterEvents(month) {
+        const events = document.querySelectorAll('.event');
+        events.forEach(event => {
+            if (event.getAttribute('data-date').toLowerCase().includes(month.toLowerCase())) {
+                event.style.display = 'flex';
+            } else {
+                event.style.display = 'none';
+            }
+        });
+        toggleFilter();
+    }
+
+    function showAllEvents() {
+        const events = document.querySelectorAll('.event');
+        events.forEach(event => {
+            event.style.display = 'flex';
+        });
+        toggleFilter();
+    }
+
+    function toggleFilter() {
+        const filterOptions = document.getElementById('filterOptions');
+        filterOptions.style.display = filterOptions.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function toggleFavorites() {
+        const eventList = document.getElementById('eventList');
+        const favoritesSection = document.getElementById('favoritesSection');
+        const toggleBtn = document.getElementById('toggleFavoritesBtn');
+        renderFavorites();
+
+        if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
+            favoritesSection.style.display = 'block';
+            eventList.style.display = 'none';
+            toggleBtn.textContent = 'Torna alla Lista Eventi';
+        } else {
+            favoritesSection.style.display = 'none';
+            eventList.style.display = 'grid';
+            toggleBtn.textContent = 'Visualizza i Preferiti';
+        }
+    }
+
+    function addToFavorites(title, date, description) {
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        const event = { title, date, description };
+
+        if (!favorites.find(e => e.title === title && e.date === date)) {
+            favorites.push(event);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            showNotification('Evento aggiunto ai preferiti!');
+        } else {
+            showNotification('Evento già nei preferiti.');
+        }
+
+        renderFavorites();
+    }
+
+    function renderFavorites() {
+        const favoritesList = document.getElementById('favoritesList');
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        favoritesList.innerHTML = '';
+
+        if (favorites.length === 0) {
+            favoritesList.innerHTML = '<p>Nessun evento nei preferiti.</p>';
+        } else {
+            favorites.forEach(fav => {
+                const item = document.createElement('div');
+                item.className = 'favorite-item';
+                item.innerHTML = `
+                    <h4>${fav.title} - ${fav.date}</h4>
+                    <button class="remove-favorite" onclick="removeFromFavorites('${fav.title}', '${fav.date}')">Rimuovi</button>
+                `;
+                favoritesList.appendChild(item);
+            });
+        }
+    }
+
+    function removeFromFavorites(title, date) {
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        favorites = favorites.filter(e => e.title !== title || e.date !== date);
+        localStorage.setItem('favorites', JSON.stringify(favorites));
+        showNotification('Evento rimosso dai preferiti.');
+        renderFavorites();
+    }
+
+    // Funzione per aprire il modal con i dettagli evento
+    function openModal(title, date, time, extraInfo) {
+        const modal = document.getElementById('eventModal');
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalDate').textContent = `Data: ${date}`;
+        document.getElementById('modalTime').textContent = `Ora: ${time}`;
+
+        document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
+            ? extraInfo 
+            : 'Nessun\'altra informazione disponibile.';
+
+        modal.style.display = 'flex';
+    }
+
+    function closeModal() {
+        const modal = document.getElementById('eventModal');
+        modal.style.display = 'none';
+    }
+
+    function showNotification(message) {
+        const notification = document.getElementById('notification');
+        notification.textContent = message;
+        notification.classList.add('show');
+        setTimeout(() => {
+            notification.classList.remove('show');
+        }, 3000);
+    }
+
+    // Funzione per il pulsante "Visualizza Calendario"
+    function toggleCalendar() {
         const calendarEl = document.getElementById('calendar');
-        const calendar = new FullCalendar.Calendar(calendarEl, {
+        const eventList = document.getElementById('eventList');
+        const toggleCalendarBtn = document.getElementById('toggleCalendarBtn');
+
+        if (calendarEl.style.display === 'none') {
+            calendarEl.style.display = 'block';
+            eventList.style.display = 'none';
+            toggleCalendarBtn.textContent = 'Nascondi Calendario';
+            initCalendar(); // Inizializza il calendario quando è visibile
+        } else {
+            calendarEl.style.display = 'none';
+            eventList.style.display = 'grid';
+            toggleCalendarBtn.textContent = 'Visualizza Calendario';
+        }
+    }
+
+    // Inizializzazione di FullCalendar
+    function initCalendar(events) {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
             initialView: 'dayGridMonth',
-            locale: 'it',
+            locale: 'it', // Traduzione in italiano
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
             events: events.slice(1).map(event => {
-                const [dateString, title, time, extraInfo] = event;
-                const date = formatDateForCalendar(dateString);
+                const [dateString, title, time] = event;
                 return {
                     title: title,
-                    start: date,
-                    description: extraInfo || 'Nessuna informazione aggiuntiva',
+                    start: new Date(dateString.split('/').reverse().join('-')), // Converti la data in formato YYYY-MM-DD
+                    description: time
                 };
-            }),
-            eventColor: '#0A9396',
+            })
         });
         calendar.render();
     }
 
-    function formatDateForCalendar(dateString) {
-        const [day, month, year] = dateString.split('/');
-        return `${year}-${month}-${day}`;
-    }
-
-    function toggleCalendar() {
-        const calendarEl = document.getElementById('calendar');
-        calendarEl.style.display = calendarEl.style.display === 'none' ? 'block' : 'none';
-    }
-
     window.onload = function () {
         fetchEvents();
+        renderFavorites();
+        setInterval(fetchEvents, 60000); // Ricarica gli eventi ogni 60 secondi
     };
     </script>
+
 </body>
 </html>
 
