@@ -9,7 +9,7 @@
     :root {
         --primary-color: #0A9396;
         --secondary-color: #94D2BD;
-        --background-image: url('sfondo.jpg');
+        --background-image: url('sfondoo.png');
         --text-color: #001219;
         --card-background: #FFFFFE;
         --accent-color: #EE9B00;
@@ -501,7 +501,7 @@
 
     async function fetchEvents() {
         try {
-            const url = https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=${apiKey};
+            const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=${apiKey}`;
             const response = await fetch(url);
             const data = await response.json();
             if (data.values && data.values.length > 0) {
@@ -525,7 +525,7 @@
         const [dateString, title, time, extraInfo] = event;
         const [day, month] = parseDate(dateString);
 
-        const eventHtml = 
+        const eventHtml = `
             <div class="event" data-date="${month}">
                 <div class="event-date">
                     <span class="day">${day}</span>
@@ -537,7 +537,7 @@
                     <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
                     <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
                 </div>
-            </div>;
+            </div>`;
         eventList.innerHTML += eventHtml;
     });
 }
@@ -640,10 +640,10 @@
             favorites.forEach(fav => {
                 const item = document.createElement('div');
                 item.className = 'favorite-item';
-                item.innerHTML = 
+                item.innerHTML = `
                     <h4>${fav.title} - ${fav.date}</h4>
                     <button class="remove-favorite" onclick="removeFromFavorites('${fav.title}', '${fav.date}')">Rimuovi</button>
-                ;
+                `;
                 favoritesList.appendChild(item);
             });
         }
@@ -661,8 +661,8 @@
 function openModal(title, date, time, extraInfo) {
     const modal = document.getElementById('eventModal');
     document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalDate').textContent = Data: ${date};
-    document.getElementById('modalTime').textContent = Ora: ${time};
+    document.getElementById('modalDate').textContent = `Data: ${date}`;
+    document.getElementById('modalTime').textContent = `Ora: ${time}`;
 
     // Se "extraInfo" è undefined o vuoto, mostra un messaggio predefinito
     document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
@@ -697,3 +697,4 @@ function closeModal() {
 </script>
 </body>
 </html>
+
