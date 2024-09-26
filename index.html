@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendario Eventi Scolastici</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.css' rel='stylesheet' />
    <style>
     :root {
         --primary-color: #0A9396;
@@ -52,6 +53,23 @@
 
     .view-favorites:hover {
         background-color: #d08400;
+    }
+
+    .calendar-toggle {
+        background-color: var(--primary-color);
+        border: none;
+        padding: 12px 24px;
+        color: white;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-left: 15px;
+        transition: background-color 0.3s ease;
+    }
+
+    .calendar-toggle:hover {
+        background-color: #087b80;
     }
 
     .print-favorites {
@@ -317,6 +335,15 @@
         background-color: #d08400;
     }
 
+    #calendar {
+        background-color: rgba(255, 255, 255, 0.9); /* Sfondo semi-trasparente per il calendario */
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        display: none; /* Inizialmente nascosto */
+    }
+
     #favoritesSection {
         margin-top: 50px;
         background-color: rgba(255, 255, 255, 0.8);
@@ -429,7 +456,7 @@
             width: 100%;
         }
 
-        .filter-toggle, .view-favorites {
+        .filter-toggle, .view-favorites, .calendar-toggle {
             width: 100%;
             margin-bottom: 10px;
         }
@@ -465,6 +492,7 @@
             <div class="filter-dropdown">
                 <button class="filter-toggle" onclick="toggleFilter()">Filtra per Mese</button>
                 <button class="view-favorites" id="toggleFavoritesBtn" onclick="toggleFavorites()">Visualizza i Preferiti</button>
+                <button class="calendar-toggle" id="toggleCalendarBtn" onclick="toggleCalendar()">Visualizza Calendario</button>
                 <div class="filter-options" id="filterOptions">
                     <button onclick="filterEvents('Giugno')">Giugno</button>
                     <button onclick="filterEvents('Luglio')">Luglio</button>
@@ -475,6 +503,7 @@
         </div>
 
         <div class="event-list" id="eventList"></div>
+        <div id="calendar"></div> <!-- Calendario nascosto inizialmente -->
 
         <div id="favoritesSection">
             <h2>I tuoi Eventi Preferiti</h2>
@@ -483,7 +512,7 @@
         </div>
     </div>
     
-  <div id="eventModal" class="modal">
+    <div id="eventModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
             <h2 id="modalTitle"></h2>
@@ -493,7 +522,7 @@
         </div>
     </div>
 
-
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.4/index.global.min.js'></script>
     <script>
     const sheetId = '1JI_R-ziVZHsrJB3xC6zPpuqzTacVewoldqUETIftK1o';
     const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
@@ -515,50 +544,45 @@
         }
     }
 
-    // Funzione per mostrare gli eventi sulla pagina
     function displayEvents(events) {
-    const eventList = document.getElementById('eventList');
-    eventList.innerHTML = ''; // Puliamo la lista esistente
+        const eventList = document.getElementById('eventList');
+        eventList.innerHTML = ''; // Puliamo la lista esistente
 
-    events.slice(1).forEach(event => {
-        // Ora estraiamo tutti e 4 i campi: data, titolo, orario, dettagli evento
-        const [dateString, title, time, extraInfo] = event;
-        const [day, month] = parseDate(dateString);
+        events.slice(1).forEach(event => {
+            const [dateString, title, time, extraInfo] = event;
+            const [day, month] = parseDate(dateString);
 
-        const eventHtml = `
-            <div class="event" data-date="${month}">
-                <div class="event-date">
-                    <span class="day">${day}</span>
-                    <span class="month">${month}</span>
-                </div>
-                <div class="event-content">
-                    <div class="event-title">${title}</div>
-                    <div class="event-time">Ora: ${time}</div>
-                    <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
-                    <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
-                </div>
-            </div>`;
-        eventList.innerHTML += eventHtml;
-    });
-}
+            const eventHtml = `
+                <div class="event" data-date="${month}">
+                    <div class="event-date">
+                        <span class="day">${day}</span>
+                        <span class="month">${month}</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">${title}</div>
+                        <div class="event-time">Ora: ${time}</div>
+                        <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
+                        <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
+                    </div>
+                </div>`;
+            eventList.innerHTML += eventHtml;
+        });
 
-    // Funzione per parsare la data da "04/06/2025" o "4 Giugno 2025"
+        // Aggiungere eventi al calendario
+        initCalendar(events);
+    }
+
     function parseDate(dateString) {
-        // Se la data è in formato standard DD/MM/YYYY, possiamo usare Date()
         const dateParts = dateString.split('/');
-
         if (dateParts.length === 3) {
             const day = dateParts[0];
             const month = getMonthName(parseInt(dateParts[1]));
             return [day, month];
         }
-
-        // Se è in formato testuale come "4 Giugno 2025"
         const [day, month] = dateString.split(' ');
         return [day, capitalizeFirstLetter(month)];
     }
 
-    // Restituisce il nome del mese basato sul numero
     function getMonthName(monthNumber) {
         const months = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
         return months[monthNumber - 1];
@@ -594,25 +618,37 @@
     }
 
     function toggleFavorites() {
-    const eventList = document.getElementById('eventList');
-    const favoritesSection = document.getElementById('favoritesSection');
-    const toggleBtn = document.getElementById('toggleFavoritesBtn');
+        const eventList = document.getElementById('eventList');
+        const favoritesSection = document.getElementById('favoritesSection');
+        const toggleBtn = document.getElementById('toggleFavoritesBtn');
+        renderFavorites();
 
-    // Prima di tutto, renderizza i preferiti
-    renderFavorites();
-
-    // Poi mostra o nascondi la sezione preferiti
-    if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
-        favoritesSection.style.display = 'block';
-        eventList.style.display = 'none';
-        toggleBtn.textContent = 'Torna alla Lista Eventi';
-    } else {
-        favoritesSection.style.display = 'none';
-        eventList.style.display = 'grid';
-        toggleBtn.textContent = 'Visualizza i Preferiti';
+        if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
+            favoritesSection.style.display = 'block';
+            eventList.style.display = 'none';
+            toggleBtn.textContent = 'Torna alla Lista Eventi';
+        } else {
+            favoritesSection.style.display = 'none';
+            eventList.style.display = 'grid';
+            toggleBtn.textContent = 'Visualizza i Preferiti';
+        }
     }
-}
 
+    function toggleCalendar() {
+        const calendarEl = document.getElementById('calendar');
+        const eventList = document.getElementById('eventList');
+        const toggleCalendarBtn = document.getElementById('toggleCalendarBtn');
+
+        if (calendarEl.style.display === 'none') {
+            calendarEl.style.display = 'block';
+            eventList.style.display = 'none';
+            toggleCalendarBtn.textContent = 'Nascondi Calendario';
+        } else {
+            calendarEl.style.display = 'none';
+            eventList.style.display = 'grid';
+            toggleCalendarBtn.textContent = 'Visualizza Calendario';
+        }
+    }
 
     function addToFavorites(title, date, description) {
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -657,27 +693,19 @@
         renderFavorites();
     }
 
-    // Funzione per aprire il modal con i dettagli evento
-function openModal(title, date, time, extraInfo) {
-    const modal = document.getElementById('eventModal');
-    document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalDate').textContent = `Data: ${date}`;
-    document.getElementById('modalTime').textContent = `Ora: ${time}`;
+    function openModal(title, date, time, extraInfo) {
+        const modal = document.getElementById('eventModal');
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalDate').textContent = `Data: ${date}`;
+        document.getElementById('modalTime').textContent = `Ora: ${time}`;
+        document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' ? extraInfo : 'Nessun\'altra informazione disponibile.';
+        modal.style.display = 'flex';
+    }
 
-    // Se "extraInfo" è undefined o vuoto, mostra un messaggio predefinito
-    document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
-        ? extraInfo 
-        : 'Nessun\'altra informazione disponibile.';
-
-    modal.style.display = 'flex';
-}
-
-
-// Funzione per chiudere il modal
-function closeModal() {
-    const modal = document.getElementById('eventModal');
-    modal.style.display = 'none';
-}
+    function closeModal() {
+        const modal = document.getElementById('eventModal');
+        modal.style.display = 'none';
+    }
 
     function showNotification(message) {
         const notification = document.getElementById('notification');
@@ -688,15 +716,37 @@ function closeModal() {
         }, 3000);
     }
 
+    function initCalendar(events) {
+        var calendarEl = document.getElementById('calendar');
+        var calendarEvents = events.slice(1).map(event => {
+            const [dateString, title, time] = event;
+            return {
+                title: title,
+                start: new Date(dateString.split('/').reverse().join('-') + 'T' + time.replace('-', ':')),
+                allDay: false
+            };
+        });
+
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'it', // Traduzione in italiano
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
+            },
+            events: calendarEvents
+        });
+        calendar.render();
+    }
+
     window.onload = function () {
         fetchEvents();
         renderFavorites();
-
-        setInterval(fetchEvents, 60000); // Ricarica gli eventi ogni 60 secondi
     };
 </script>
+
 </body>
 </html>
-
 
 
