@@ -447,8 +447,6 @@
         }
     }
 </style>
-
-
 </head>
 <body>
     <!-- Notifica visiva -->
@@ -482,8 +480,8 @@
             <button class="print-favorites" onclick="window.print()">Stampa Lista Preferiti</button>
         </div>
     </div>
-    
-  <div id="eventModal" class="modal">
+
+    <div id="eventModal" class="modal">
         <div class="modal-content">
             <button class="modal-close" onclick="closeModal()">×</button>
             <h2 id="modalTitle"></h2>
@@ -493,18 +491,19 @@
         </div>
     </div>
 
-
     <script>
     const sheetId = '1JI_R-ziVZHsrJB3xC6zPpuqzTacVewoldqUETIftK1o';
     const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
     const sheetRange = 'calendarioicaltavaldisole';
 
+    // Funzione per recuperare gli eventi dalla Google Sheets API
     async function fetchEvents() {
         try {
             const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetRange}?key=${apiKey}`;
             const response = await fetch(url);
             const data = await response.json();
-            if (data.values && data.values.length > 0) {
+
+            if (data.values && data.values.length > 1) {
                 displayEvents(data.values);
             } else {
                 document.getElementById('eventList').innerHTML = '<p>Nessun evento trovato.</p>';
@@ -517,34 +516,33 @@
 
     // Funzione per mostrare gli eventi sulla pagina
     function displayEvents(events) {
-    const eventList = document.getElementById('eventList');
-    eventList.innerHTML = ''; // Puliamo la lista esistente
+        const eventList = document.getElementById('eventList');
+        eventList.innerHTML = ''; // Puliamo la lista esistente
 
-    events.slice(1).forEach(event => {
-        // Ora estraiamo tutti e 4 i campi: data, titolo, orario, dettagli evento
-        const [dateString, title, time, extraInfo] = event;
-        const [day, month] = parseDate(dateString);
+        events.slice(1).forEach(event => {
+            // Ora estraiamo tutti e 4 i campi: data, titolo, orario, dettagli evento
+            const [dateString, title, time, extraInfo] = event;
+            const [day, month] = parseDate(dateString);
 
-        const eventHtml = `
-            <div class="event" data-date="${month}">
-                <div class="event-date">
-                    <span class="day">${day}</span>
-                    <span class="month">${month}</span>
-                </div>
-                <div class="event-content">
-                    <div class="event-title">${title}</div>
-                    <div class="event-time">Ora: ${time}</div>
-                    <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
-                    <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
-                </div>
-            </div>`;
-        eventList.innerHTML += eventHtml;
-    });
-}
+            const eventHtml = `
+                <div class="event" data-date="${month}">
+                    <div class="event-date">
+                        <span class="day">${day}</span>
+                        <span class="month">${month}</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">${title}</div>
+                        <div class="event-time">Ora: ${time}</div>
+                        <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
+                        <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
+                    </div>
+                </div>`;
+            eventList.innerHTML += eventHtml;
+        });
+    }
 
     // Funzione per parsare la data da "04/06/2025" o "4 Giugno 2025"
     function parseDate(dateString) {
-        // Se la data è in formato standard DD/MM/YYYY, possiamo usare Date()
         const dateParts = dateString.split('/');
 
         if (dateParts.length === 3) {
@@ -553,7 +551,6 @@
             return [day, month];
         }
 
-        // Se è in formato testuale come "4 Giugno 2025"
         const [day, month] = dateString.split(' ');
         return [day, capitalizeFirstLetter(month)];
     }
@@ -568,6 +565,7 @@
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
+    // Filtrare eventi per mese
     function filterEvents(month) {
         const events = document.querySelectorAll('.event');
         events.forEach(event => {
@@ -580,6 +578,7 @@
         toggleFilter();
     }
 
+    // Mostra tutti gli eventi
     function showAllEvents() {
         const events = document.querySelectorAll('.event');
         events.forEach(event => {
@@ -588,32 +587,32 @@
         toggleFilter();
     }
 
+    // Funzione per aprire il menu a tendina
     function toggleFilter() {
         const filterOptions = document.getElementById('filterOptions');
         filterOptions.style.display = filterOptions.style.display === 'block' ? 'none' : 'block';
     }
 
+    // Funzione per alternare tra lista eventi e preferiti
     function toggleFavorites() {
-    const eventList = document.getElementById('eventList');
-    const favoritesSection = document.getElementById('favoritesSection');
-    const toggleBtn = document.getElementById('toggleFavoritesBtn');
+        const eventList = document.getElementById('eventList');
+        const favoritesSection = document.getElementById('favoritesSection');
+        const toggleBtn = document.getElementById('toggleFavoritesBtn');
 
-    // Prima di tutto, renderizza i preferiti
-    renderFavorites();
+        renderFavorites();
 
-    // Poi mostra o nascondi la sezione preferiti
-    if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
-        favoritesSection.style.display = 'block';
-        eventList.style.display = 'none';
-        toggleBtn.textContent = 'Torna alla Lista Eventi';
-    } else {
-        favoritesSection.style.display = 'none';
-        eventList.style.display = 'grid';
-        toggleBtn.textContent = 'Visualizza i Preferiti';
+        if (favoritesSection.style.display === 'none' || !favoritesSection.style.display) {
+            favoritesSection.style.display = 'block';
+            eventList.style.display = 'none';
+            toggleBtn.textContent = 'Torna alla Lista Eventi';
+        } else {
+            favoritesSection.style.display = 'none';
+            eventList.style.display = 'grid';
+            toggleBtn.textContent = 'Visualizza i Preferiti';
+        }
     }
-}
 
-
+    // Aggiungere agli eventi preferiti
     function addToFavorites(title, date, description) {
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         const event = { title, date, description };
@@ -629,6 +628,7 @@
         renderFavorites();
     }
 
+    // Renderizzare la lista dei preferiti
     function renderFavorites() {
         const favoritesList = document.getElementById('favoritesList');
         const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -649,6 +649,7 @@
         }
     }
 
+    // Rimuovere un evento dai preferiti
     function removeFromFavorites(title, date) {
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         favorites = favorites.filter(e => e.title !== title || e.date !== date);
@@ -658,27 +659,26 @@
     }
 
     // Funzione per aprire il modal con i dettagli evento
-function openModal(title, date, time, extraInfo) {
-    const modal = document.getElementById('eventModal');
-    document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalDate').textContent = `Data: ${date}`;
-    document.getElementById('modalTime').textContent = `Ora: ${time}`;
+    function openModal(title, date, time, extraInfo) {
+        const modal = document.getElementById('eventModal');
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalDate').textContent = `Data: ${date}`;
+        document.getElementById('modalTime').textContent = `Ora: ${time}`;
 
-    // Se "extraInfo" è undefined o vuoto, mostra un messaggio predefinito
-    document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
-        ? extraInfo 
-        : 'Nessun\'altra informazione disponibile.';
+        document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
+            ? extraInfo 
+            : 'Nessun\'altra informazione disponibile.';
 
-    modal.style.display = 'flex';
-}
+        modal.style.display = 'flex';
+    }
 
+    // Funzione per chiudere il modal
+    function closeModal() {
+        const modal = document.getElementById('eventModal');
+        modal.style.display = 'none';
+    }
 
-// Funzione per chiudere il modal
-function closeModal() {
-    const modal = document.getElementById('eventModal');
-    modal.style.display = 'none';
-}
-
+    // Mostrare una notifica temporanea
     function showNotification(message) {
         const notification = document.getElementById('notification');
         notification.textContent = message;
@@ -694,7 +694,7 @@ function closeModal() {
 
         setInterval(fetchEvents, 60000); // Ricarica gli eventi ogni 60 secondi
     };
-</script>
+    </script>
 </body>
 </html>
 
