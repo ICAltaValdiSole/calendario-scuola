@@ -514,32 +514,41 @@
         }
     }
 
-    // Funzione per mostrare gli eventi sulla pagina
-    function displayEvents(events) {
-        const eventList = document.getElementById('eventList');
-        eventList.innerHTML = ''; // Puliamo la lista esistente
+  function displayEvents(events) {
+    const eventList = document.getElementById('eventList');
+    eventList.innerHTML = ''; // Puliamo la lista esistente
 
-        events.slice(1).forEach(event => {
-            // Ora estraiamo tutti e 4 i campi: data, titolo, orario, dettagli evento
-            const [dateString, title, time, extraInfo] = event;
-            const [day, month] = parseDate(dateString);
+    // Verifica che ci siano effettivamente dati oltre l'intestazione (eventi.slice(1))
+    events.slice(1).forEach(event => {
+        // Ora estraiamo tutti e 4 i campi: data, titolo, orario, dettagli evento
+        const [dateString, title, time, extraInfo] = event;
 
-            const eventHtml = `
-                <div class="event" data-date="${month}">
-                    <div class="event-date">
-                        <span class="day">${day}</span>
-                        <span class="month">${month}</span>
-                    </div>
-                    <div class="event-content">
-                        <div class="event-title">${title}</div>
-                        <div class="event-time">Ora: ${time}</div>
-                        <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
-                        <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
-                    </div>
-                </div>`;
-            eventList.innerHTML += eventHtml;
-        });
-    }
+        // CONTROLLA se i campi essenziali sono presenti, altrimenti ignora questa riga
+        if (!dateString || !title || !time) {
+            console.warn('Riga vuota o incompleta ignorata:', event);
+            return; // Salta la riga se è incompleta
+        }
+
+        // Se la riga è valida, estrai la data e costruisci l'HTML
+        const [day, month] = parseDate(dateString);
+
+        const eventHtml = `
+            <div class="event" data-date="${month}">
+                <div class="event-date">
+                    <span class="day">${day}</span>
+                    <span class="month">${month}</span>
+                </div>
+                <div class="event-content">
+                    <div class="event-title">${title}</div>
+                    <div class="event-time">Ora: ${time}</div>
+                    <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
+                    <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
+                </div>
+            </div>`;
+        eventList.innerHTML += eventHtml;
+    });
+}
+  
 
     // Funzione per parsare la data da "04/06/2025" o "4 Giugno 2025"
     function parseDate(dateString) {
