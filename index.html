@@ -524,13 +524,16 @@
         const [dateString, title, time, extraInfo] = event;
 
         // CONTROLLA se i campi essenziali sono presenti, altrimenti ignora questa riga
-        if (!dateString || !title || !time) {
+        if (!dateString || !title) {
             console.warn('Riga vuota o incompleta ignorata:', event);
             return; // Salta la riga se è incompleta
         }
 
         // Se la riga è valida, estrai la data e costruisci l'HTML
         const [day, month] = parseDate(dateString);
+
+        // Verifica se l'orario è disponibile, altrimenti lascia vuoto
+        const timeHtml = time ? `<div class="event-time">Ora: ${time}</div>` : '';
 
         const eventHtml = `
             <div class="event" data-date="${month}">
@@ -540,7 +543,7 @@
                 </div>
                 <div class="event-content">
                     <div class="event-title">${title}</div>
-                    <div class="event-time">Ora: ${time}</div>
+                    ${timeHtml}
                     <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
                     <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
                 </div>
@@ -548,6 +551,7 @@
         eventList.innerHTML += eventHtml;
     });
 }
+
   
 
     // Funzione per parsare la data da "04/06/2025" o "4 Giugno 2025"
@@ -669,17 +673,20 @@
 
     // Funzione per aprire il modal con i dettagli evento
     function openModal(title, date, time, extraInfo) {
-        const modal = document.getElementById('eventModal');
-        document.getElementById('modalTitle').textContent = title;
-        document.getElementById('modalDate').textContent = `Data: ${date}`;
-        document.getElementById('modalTime').textContent = `Ora: ${time}`;
+    const modal = document.getElementById('eventModal');
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalDate').textContent = `Data: ${date}`;
+    
+    // Verifica se l'orario è disponibile
+    document.getElementById('modalTime').textContent = time ? `Ora: ${time}` : 'Ora non specificata';
 
-        document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
-            ? extraInfo 
-            : 'Nessun\'altra informazione disponibile.';
+    document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
+        ? extraInfo 
+        : 'Nessun\'altra informazione disponibile.';
 
-        modal.style.display = 'flex';
-    }
+    modal.style.display = 'flex';
+}
+
 
     // Funzione per chiudere il modal
     function closeModal() {
