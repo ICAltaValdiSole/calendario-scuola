@@ -499,6 +499,15 @@
     const apiKey = 'AIzaSyDb29AOwxuCBPuIfm3Gd48pnpD02FTZvlQ';
     const sheetRange = 'calendarioicaltavaldisole';
 
+    let allEvents = []; // Variabile per salvare tutti gli eventi
+
+    // Funzione per ottenere il mese corrente in italiano
+    function getCurrentMonthName() {
+        const now = new Date();
+        const monthNames = ["Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio", "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"];
+        return monthNames[now.getMonth()]; // Restituisce il nome del mese corrente
+    }
+
     // Funzione per recuperare gli eventi dalla Google Sheets API
     async function fetchEvents() {
         try {
@@ -507,7 +516,8 @@
             const data = await response.json();
 
             if (data.values && data.values.length > 1) {
-                displayEvents(data.values);
+                allEvents = data.values.slice(1); // Salva tutti gli eventi tranne l'intestazione
+                displayEvents(allEvents, getCurrentMonthName()); // Visualizza solo gli eventi del mese corrente al caricamento
             } else {
                 document.getElementById('eventList').innerHTML = '<p>Nessun evento trovato.</p>';
             }
@@ -517,56 +527,49 @@
         }
     }
 
-  function displayEvents(events) {
-    const eventList = document.getElementById('eventList');
-    eventList.innerHTML = ''; // Puliamo la lista esistente
+    // Funzione per visualizzare gli eventi, con filtro per mese opzionale
+    function displayEvents(events, filterMonth = null) {
+        const eventList = document.getElementById('eventList');
+        eventList.innerHTML = ''; // Puliamo la lista esistente
 
-    // Verifica che ci siano effettivamente dati oltre l'intestazione (eventi.slice(1))
-    events.slice(1).forEach(event => {
-        // Ora estraiamo tutti e 4 i campi: data, titolo, orario, dettagli evento
-        const [dateString, title, time, extraInfo] = event;
+        events.forEach(event => {
+            const [dateString, title, time, extraInfo] = event;
 
-        // CONTROLLA se i campi essenziali sono presenti, altrimenti ignora questa riga
-        if (!dateString || !title) {
-            console.warn('Riga vuota o incompleta ignorata:', event);
-            return; // Salta la riga se è incompleta
-        }
+            // Ignora la riga se data o titolo sono mancanti
+            if (!dateString || !title) return;
 
-        // Se la riga è valida, estrai la data e costruisci l'HTML
-        const [day, month] = parseDate(dateString);
+            const [day, month] = parseDate(dateString);
 
-        // Verifica se l'orario è disponibile, altrimenti lascia vuoto
-        const timeHtml = time ? `<div class="event-time">Ora: ${time}</div>` : '';
+            // Mostra solo gli eventi del mese corrente se filterMonth è specificato
+            if (filterMonth && month !== filterMonth) return;
 
-        const eventHtml = `
-            <div class="event" data-date="${month}">
-                <div class="event-date">
-                    <span class="day">${day}</span>
-                    <span class="month">${month}</span>
-                </div>
-                <div class="event-content">
-                    <div class="event-title">${title}</div>
-                    ${timeHtml}
-                    <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
-                    <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
-                </div>
-            </div>`;
-        eventList.innerHTML += eventHtml;
-    });
-}
+            const timeHtml = time ? `<div class="event-time">Ora: ${time}</div>` : '';
 
-  
+            const eventHtml = `
+                <div class="event" data-date="${month}">
+                    <div class="event-date">
+                        <span class="day">${day}</span>
+                        <span class="month">${month}</span>
+                    </div>
+                    <div class="event-content">
+                        <div class="event-title">${title}</div>
+                        ${timeHtml}
+                        <button class="open-modal" onclick="openModal('${title}', '${dateString}', '${time}', '${extraInfo}')">Dettagli Evento</button>
+                        <button class="add-to-favorites" onclick="addToFavorites('${title}', '${dateString}', '${time}')">Aggiungi ai Preferiti</button>
+                    </div>
+                </div>`;
+            eventList.innerHTML += eventHtml;
+        });
+    }
 
     // Funzione per parsare la data da "04/06/2025" o "4 Giugno 2025"
     function parseDate(dateString) {
         const dateParts = dateString.split('/');
-
         if (dateParts.length === 3) {
             const day = dateParts[0];
             const month = getMonthName(parseInt(dateParts[1]));
             return [day, month];
         }
-
         const [day, month] = dateString.split(' ');
         return [day, capitalizeFirstLetter(month)];
     }
@@ -581,26 +584,16 @@
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 
-    // Filtrare eventi per mese
+    // Funzione per il filtro per mese (usata dal menu dropdown)
     function filterEvents(month) {
-        const events = document.querySelectorAll('.event');
-        events.forEach(event => {
-            if (event.getAttribute('data-date').toLowerCase().includes(month.toLowerCase())) {
-                event.style.display = 'flex';
-            } else {
-                event.style.display = 'none';
-            }
-        });
-        toggleFilter();
+        displayEvents(allEvents, month);
+        toggleFilter(); // Chiude il menu del filtro
     }
 
-    // Mostra tutti gli eventi
+    // Mostra tutti gli eventi (rimuove il filtro)
     function showAllEvents() {
-        const events = document.querySelectorAll('.event');
-        events.forEach(event => {
-            event.style.display = 'flex';
-        });
-        toggleFilter();
+        displayEvents(allEvents); // Visualizza tutti gli eventi
+        toggleFilter(); // Chiude il menu del filtro
     }
 
     // Funzione per aprire il menu a tendina
@@ -628,7 +621,7 @@
         }
     }
 
-    // Aggiungere agli eventi preferiti
+    // Funzione per aggiungere agli eventi preferiti
     function addToFavorites(title, date, description) {
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         const event = { title, date, description };
@@ -644,7 +637,7 @@
         renderFavorites();
     }
 
-    // Renderizzare la lista dei preferiti
+    // Renderizza la lista dei preferiti
     function renderFavorites() {
         const favoritesList = document.getElementById('favoritesList');
         const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
@@ -665,7 +658,7 @@
         }
     }
 
-    // Rimuovere un evento dai preferiti
+    // Funzione per rimuovere un evento dai preferiti
     function removeFromFavorites(title, date) {
         let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
         favorites = favorites.filter(e => e.title !== title || e.date !== date);
@@ -676,20 +669,13 @@
 
     // Funzione per aprire il modal con i dettagli evento
     function openModal(title, date, time, extraInfo) {
-    const modal = document.getElementById('eventModal');
-    document.getElementById('modalTitle').textContent = title;
-    document.getElementById('modalDate').textContent = `Data: ${date}`;
-    
-    // Verifica se l'orario è disponibile
-    document.getElementById('modalTime').textContent = time ? `Ora: ${time}` : 'Ora non specificata';
-
-    document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' 
-        ? extraInfo 
-        : 'Nessun\'altra informazione disponibile.';
-
-    modal.style.display = 'flex';
-}
-
+        const modal = document.getElementById('eventModal');
+        document.getElementById('modalTitle').textContent = title;
+        document.getElementById('modalDate').textContent = `Data: ${date}`;
+        document.getElementById('modalTime').textContent = time ? `Ora: ${time}` : 'Ora non specificata';
+        document.getElementById('modalExtra').textContent = extraInfo && extraInfo.trim() !== '' ? extraInfo : 'Nessun\'altra informazione disponibile.';
+        modal.style.display = 'flex';
+    }
 
     // Funzione per chiudere il modal
     function closeModal() {
@@ -697,7 +683,7 @@
         modal.style.display = 'none';
     }
 
-    // Mostrare una notifica temporanea
+    // Mostra una notifica temporanea
     function showNotification(message) {
         const notification = document.getElementById('notification');
         notification.textContent = message;
@@ -708,12 +694,10 @@
     }
 
     window.onload = function () {
-        fetchEvents();
-        renderFavorites();
-
-        setInterval(fetchEvents, 60000); // Ricarica gli eventi ogni 60 secondi
+        fetchEvents(); // Al caricamento, carica solo gli eventi del mese corrente
+        renderFavorites(); // Carica la lista dei preferiti
     };
-    </script>
+</script>
 </body>
 </html>
 
